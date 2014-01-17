@@ -27,8 +27,19 @@ public function doAllTests() {
       '50x50' => TRUE,
     );
 
-    // Locate and iterate over the tests.
+    // Create the FileConverter object.
     $fc = \Witti\FileConverter\FileConverter::factory();
+
+    // Build the os suffix.
+    $tmp = $fc->getSettings();
+    $os_suffix = '-' . $tmp['operating_system'] . '_' . $tmp['operating_system_version'];
+    $os_suffix .= '-VERSIONPLACEHOLDER' . '.';
+
+    // Load the version MD5s.
+    $md5s_path = realpath($root . '/version_md5.json');
+    $md5s = json_decode(file_get_contents($md5s_path), TRUE);
+
+    // Locate and iterate over the tests.
     $tests = new \RegexIterator(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($root)), '@/_test.json$@s');
     foreach ($tests as $test) {
       drush_print("TEST: " . basename(dirname($test)));
@@ -58,6 +69,7 @@ public function doAllTests() {
 
         // Do the basic conversion.
         $d_path = str_replace('%', $s_path . "-$test_id", $test_conf['destination']);
+        $d_path .= $os_suffix . pathinfo($d_path, PATHINFO_EXTENSION);
         if (is_array($test_conf['engines'])) {
           foreach ($test_conf['engines'] as $engine_path => $engine_conf) {
             $fc->setConverter($engine_path, $engine_conf);
@@ -68,8 +80,22 @@ public function doAllTests() {
           continue;
         }
 
+        // Replace the version placeholder.
+        $info = $fc->getVersionInfo();
+        if (empty($info)) {
+          $hash = 'UNKNOWNVERSION';
+        }
+        else {
+          $hash = md5(json_encode($info));
+          if (!isset($md5s[$hash])) {
+            $md5s[$hash] = $info;
+          }
+        }
+        $d_path_final = str_replace('VERSIONPLACEHOLDER', $hash, $d_path);
+        rename($d_path, $d_path_final);
+
         // Create derivatives.
-        $s_der = $d_path;
+        $s_der = $d_path_final;
         $s_thumb = NULL;
         $fc_der = \Witti\FileConverter\FileConverter::factory(FALSE);
         foreach ($conf['derivatives'] as $der_id => $der_conf) {
@@ -103,5 +129,13 @@ public function doAllTests() {
         }
       }
     }
+
+    // Rebuild the version md5 file.
+    $lines = array();
+    foreach ($md5s as $md5 => $info) {
+      $lines[] = json_encode($md5) . ":" . json_encode($info);
+    }
+    $dat = "{\n" . implode(",\n", $lines) . "\n}";
+    file_put_contents($md5s_path, $dat);
   }
 }

@@ -33,6 +33,8 @@ class LibreOffice extends EngineBase {
     unlink($s_path);
     // Move the converted temporary file to the destination.
     rename($d_path, $destination);
+
+    return $this;
   }
 
   public function getHelpInstallation($os, $os_version) {
@@ -42,6 +44,14 @@ class LibreOffice extends EngineBase {
     }
 
     return parent::getHelpInstallation();
+  }
+
+  public function getVersionInfo() {
+    $info = array(
+      'LibreOffice' => $this->shell($this->cmd . " --version")
+    );
+    $info["LibreOffice"] = preg_replace('@LibreOffice *@si', '', $info['LibreOffice']);
+    return $info;
   }
 
   public function isAvailable() {

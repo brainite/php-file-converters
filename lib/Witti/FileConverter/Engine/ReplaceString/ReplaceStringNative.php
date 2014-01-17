@@ -2,6 +2,11 @@
 namespace Witti\FileConverter\Engine\ReplaceString;
 
 use Witti\FileConverter\Engine\EngineBase;
+
+/**
+ * Replace strings using native PHP code for some basic file types.
+ * @version 0.1
+ */
 class ReplaceStringNative extends EngineBase {
   public function convertString(&$source, &$destination) {
     $replacements = array();
@@ -127,6 +132,18 @@ class ReplaceStringNative extends EngineBase {
     }
 
     return $this;
+  }
+
+  public function getVersionInfo() {
+    $info = array(
+      'php' => phpversion(),
+      'ReplaceStringNative' => '-1',
+    );
+    $dat = file_get_contents(__FILE__);
+    if (preg_match('~@version\s+([0-9\.]+)~s', $dat, $arr)) {
+      $info['ReplaceStringNative'] = $arr[1];
+    }
+    return $info;
   }
 
   public function isAvailable() {

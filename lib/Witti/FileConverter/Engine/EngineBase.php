@@ -90,21 +90,30 @@ abstract class EngineBase {
     return $tmp;
   }
 
+  public function getVersionInfo() {
+    return array();
+  }
+
   abstract public function isAvailable();
 
   public function shell($command) {
     $cmd = "";
-    foreach ($command as $part) {
-      if ($part instanceof Shell) {
-        $cmd .= ' ' . $part->render();
-      }
-      else {
-        $cmd .= ' ' . escapeshellarg($part);
+    if (is_string($command)) {
+      $cmd = $command;
+    }
+    else {
+      foreach ($command as $part) {
+        if ($part instanceof Shell) {
+          $cmd .= ' ' . $part->render();
+        }
+        else {
+          $cmd .= ' ' . escapeshellarg($part);
+        }
       }
     }
     $cmd .= ' 2>&1 ';
 
-    var_dump($cmd);
+//     var_dump($cmd);
     return trim(shell_exec($cmd));
   }
 

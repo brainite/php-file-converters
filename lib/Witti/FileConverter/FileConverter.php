@@ -31,6 +31,7 @@ class FileConverter {
   protected $configurations = array();
   protected $settings = array();
   protected $missing_engines = array();
+  protected $previous_engines = array();
   protected $replacements = array(
     'string' => array(),
   );
@@ -39,6 +40,8 @@ class FileConverter {
   }
 
   public function convert($type = 'string', $convert_path = 'null->null', $source = '', &$destination = NULL) {
+    $this->previous_engines = array();
+
     // Track the files to cleanup.
     $cleanup_files = array();
     $return = function ($ret) use (&$cleanup_files) {
@@ -78,6 +81,7 @@ class FileConverter {
           }
           foreach ($engines as $engine) {
             if ($engine->$convert($source, $tmp_d)) {
+              $this->previous_engines[] = $engine;
               break;
             }
           }
@@ -95,6 +99,7 @@ class FileConverter {
     // Attempt to convert the file.
     foreach ($engines as $engine) {
       if ($engine->$convert($source, $destination)) {
+        $this->previous_engines[] = $engine;
         return $return(TRUE);
       }
     }
@@ -197,6 +202,15 @@ class FileConverter {
 
   public function getMissingEngines() {
     return $this->missing_engines;
+  }
+
+  public function getVersionInfo() {
+    $info = array();
+    foreach ($this->previous_engines as $engine) {
+      $info = array_merge($info, $engine->getVersionInfo());
+    }
+    ksort($info);
+    return $info;
   }
 
   public function optimize($source = NULL, $destination = NULL, $ext = NULL) {
