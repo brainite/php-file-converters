@@ -47,37 +47,18 @@ class Htmldoc extends EngineBase {
       'default' => '.',
     ),
   );
+  protected $cmd_source_safe = TRUE;
 
-  public function convertFile($source, $destination) {
-    if (!isset($this->cmd)) {
-      return FALSE;
-    }
-
-    // Work with temporary files.
-    $s_path = $this->getTempFile($this->conversion[0]);
-    $d_path = str_replace('.' . $this->conversion[0], '.dest.'
-      . $this->conversion[1], $s_path);
-    copy($source, $s_path);
-
-    // Convert the temporary file to the destination extension.
-    $shell = array();
-    $shell[] = "cat";
-    $shell[] = $s_path;
-    $shell[] = Shell::arg('|', Shell::SHELL_SAFE);
-    $shell[] = $this->cmd;
-    $shell[] = Shell::argOptions($this->cmd_options, $this->configuration, 1);
-    $shell[] = Shell::arg('f', Shell::SHELL_ARG_BASIC_SGL, $d_path);
-    $shell[] = Shell::arg('-', Shell::SHELL_SAFE);
-    $output = $this->shell($shell);
-    if (!is_file($d_path)) {
-      echo $output . "\n";
-    }
-
-    // Remove the original temporary file.
-    unlink($s_path);
-    // Move the converted temporary file to the destination.
-    rename($d_path, $destination);
-    return $this;
+  public function getConvertFileShell($source, &$destination) {
+    return array(
+      "cat",
+      $source,
+      Shell::arg('|', Shell::SHELL_SAFE),
+      $this->cmd,
+      Shell::argOptions($this->cmd_options, $this->configuration, 1),
+      Shell::arg('f', Shell::SHELL_ARG_BASIC_SGL, $destination),
+      Shell::arg('-', Shell::SHELL_SAFE),
+    );
   }
 
   public function getHelpInstallation($os, $os_version) {
