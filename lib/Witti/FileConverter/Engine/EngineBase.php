@@ -23,6 +23,7 @@ abstract class EngineBase {
   protected $configuration = array();
   protected $cmd = NULL;
   protected $cmd_options = array();
+  protected $cmd_source_safe = FALSE;
 
   public function __construct(FileConverter $converter, $convert_path, $settings, $configuration) {
     $this->conversion = explode('->', strtolower($convert_path), 2);
@@ -39,21 +40,33 @@ abstract class EngineBase {
 
       // Get the base converter object.
       // Get a temporary file with the source extension since libre does not accept an output file name.
-      $s_path = $this->getTempFile($this->conversion[0]);
-      $d_path = str_replace('.' . $this->conversion[0], '.dest.'
+      $source_safe = $this->cmd_source_safe;
+      if ($source_safe) {
+        $s_path = $source;
+        $d_path = $this->getTempFile($this->conversion[1]);
+      }
+      else {
+        $s_path = $this->getTempFile($this->conversion[0]);
+        $d_path = str_replace('.' . $this->conversion[0], '.dest.'
           . $this->conversion[1], $s_path);
+      }
 
       // Get the command.
       $cmd = $this->getConvertFileShell($s_path, $d_path);
       if (!is_array($cmd) || empty($cmd)) {
         throw new \ErrorException("Invalid configuration for engine.");
       }
-      copy($source, $s_path);
+      if (!$source_safe) {
+        copy($source, $s_path);
+      }
 
       // Convert the temporary file to the destination extension.
       $output = $this->shell($cmd);
+
       // Remove the original temporary file.
-      unlink($s_path);
+      if (!$source_safe) {
+        unlink($s_path);
+      }
 
       // Throw an exception if the destination was not created.
       if (!is_file($d_path)) {
