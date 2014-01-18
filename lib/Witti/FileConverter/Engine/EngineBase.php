@@ -4,7 +4,10 @@ namespace Witti\FileConverter\Engine;
 use Witti\FileConverter\FileConverter;
 use Witti\FileConverter\Util\Shell;
 /**
- * Each engine must implement EITHER convertFile or convertString.
+ * Each engine must implement at least one of:
+ *   1. $this convertFile($s, $d)
+ *   2. $this convertString($s, &$d)
+ *   3. array getConvertFileShell($s, &$d)
  */
 abstract class EngineBase {
   /**
@@ -28,13 +31,48 @@ abstract class EngineBase {
   }
 
   public function convertFile($source, $destination) {
-    // Read the string, convert it, and write it.
-    $source_string = file_get_contents($source);
-    $destination_string = '';
-    $this->convertString($source_string, $destination_string);
-    file_put_contents($destination, $destination_string);
+    // Handle special cases.
+    if (method_exists($this, 'getConvertFileShell')) {
+      if (!isset($this->cmd)) {
+        throw new \ErrorException("The engine's shell command is not available.");
+      }
 
-    return $this;
+      // Get the base converter object.
+      // Get a temporary file with the source extension since libre does not accept an output file name.
+      $s_path = $this->getTempFile($this->conversion[0]);
+      $d_path = str_replace('.' . $this->conversion[0], '.dest.'
+          . $this->conversion[1], $s_path);
+
+      // Get the command.
+      $cmd = $this->getConvertFileShell($s_path, $d_path);
+      if (!is_array($cmd) || empty($cmd)) {
+        throw new \ErrorException("Invalid configuration for engine.");
+      }
+      copy($source, $s_path);
+
+      // Convert the temporary file to the destination extension.
+      $output = $this->shell($cmd);
+      // Remove the original temporary file.
+      unlink($s_path);
+
+      // Throw an exception if the destination was not created.
+      if (!is_file($d_path)) {
+        throw new \ErrorException($output);
+      }
+
+      // Move the converted temporary file to the destination.
+      rename($d_path, $destination);
+      return $this;
+    }
+    else {
+      // Read the string, convert it, and write it.
+      $source_string = file_get_contents($source);
+      $destination_string = '';
+      $this->convertString($source_string, $destination_string);
+      file_put_contents($destination, $destination_string);
+
+      return $this;
+    }
   }
 
   public function convertString($source, &$destination) {
