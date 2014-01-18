@@ -88,17 +88,20 @@ class Shell {
         if (isset($this->value)) {
           return escapeshellarg('--' . $this->argument . '=' . $this->value);
         }
+        return '';
 
       case Shell::SHELL_ARG_BASIC_DBL_NOEQUAL:
         if (isset($this->value)) {
           return escapeshellarg('--' . $this->argument) . ' ' . escapeshellarg($this->value);
         }
+        return '';
 
       case Shell::SHELL_ARG_BASIC_SGL:
         if (isset($this->value)) {
           return escapeshellarg('-' . $this->argument) . ' '
             . escapeshellarg($this->value);
         }
+        return '';
 
       case Shell::SHELL_ARG_BASIC:
       default:
