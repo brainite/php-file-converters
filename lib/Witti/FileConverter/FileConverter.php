@@ -71,7 +71,7 @@ class FileConverter {
           'replacements' => $replaces,
         ));
         if (!empty($engines)) {
-          $engine =& $engines[0];
+          $engine = &$engines[0];
           if ($type === 'file') {
             $tmp_d = $engine->getTempFile($ext);
             $cleanup_files[] = $tmp_d;
@@ -80,9 +80,11 @@ class FileConverter {
             $tmp_d = '';
           }
           foreach ($engines as $engine) {
-            if ($engine->$convert($source, $tmp_d)) {
+            try {
+              $engine->$convert($source, $tmp_d);
               $this->previous_engines[] = $engine;
               break;
+            } catch (\Exception $e) {
             }
           }
           $source = $tmp_d;
@@ -98,9 +100,11 @@ class FileConverter {
 
     // Attempt to convert the file.
     foreach ($engines as $engine) {
-      if ($engine->$convert($source, $destination)) {
+      try {
+        $engine->$convert($source, $destination);
         $this->previous_engines[] = $engine;
         return $return(TRUE);
+      } catch (\Exception $e) {
       }
     }
 
@@ -213,7 +217,7 @@ class FileConverter {
     return $info;
   }
 
-  public function optimize($source = NULL, $destination = NULL, $ext = NULL) {
+  public function optimizeFile($source = NULL, $destination = NULL, $ext = NULL) {
     if (!isset($source) || !is_file($source)) {
       throw new \InvalidArgumentException("Invalid file path to optimize.");
     }

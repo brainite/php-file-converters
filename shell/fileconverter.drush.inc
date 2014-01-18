@@ -132,6 +132,10 @@ function drush_fileconverter_tests($path_to_tests = NULL) {
     return;
   }
 
-  $tester = \Witti\FileConverter\FileConverterTests::factory($root);
-  $tester->doAllTests();
+  try {
+    $tester = \Witti\FileConverter\FileConverterTests::factory($root);
+    $tester->doAllTests();
+  } catch (\Exception $e) {
+    drush_print($e->getMessage());
+  }
 }

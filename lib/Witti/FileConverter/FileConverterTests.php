@@ -13,7 +13,10 @@ class FileConverterTests {
     }
   }
 
-public function doAllTests() {
+  /**
+   * Run all tests configured in the folder indicated at $this->root.
+   */
+  public function doAllTests() {
     if (!$this->root) {
       return;
     }
@@ -27,12 +30,12 @@ public function doAllTests() {
       '50x50' => TRUE,
     );
 
-    // Create the FileConverter object.
-    $fc = \Witti\FileConverter\FileConverter::factory();
-
     // Build the os suffix.
+    $fc = \Witti\FileConverter\FileConverter::factory();
     $tmp = $fc->getSettings();
-    $os_suffix = '-' . $tmp['operating_system'] . '_' . $tmp['operating_system_version'];
+    $os_suffix = '-' . $tmp['operating_system'] . '_'
+      . $tmp['operating_system_version'];
+    //     $results_base = strtoupper('RESULTS' . $os_suffix);
     $os_suffix .= '-VERSIONPLACEHOLDER' . '.';
 
     // Load the version MD5s.
@@ -42,88 +45,97 @@ public function doAllTests() {
     // Locate and iterate over the tests.
     $tests = new \RegexIterator(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($root)), '@/_test.json$@s');
     foreach ($tests as $test) {
-      drush_print("TEST: " . basename(dirname($test)));
       $conf = json_decode(file_get_contents($test), TRUE);
       if (!is_array($conf)) {
         continue;
       }
+      drush_print("TEST: " . basename(dirname($test)));
+      drush_print($conf['title'], 6);
 
-      // Configure any replacements
-      if (is_array($conf['convert_path_overrides'])) {
-        foreach ($conf['convert_path_overrides'] as $k => $v) {
-          switch ($k) {
-            case 'replace-string':
-              $fc->setReplacements($v, 'string');
-              break;
-          }
-        }
-      }
+      foreach ($conf['tests'] as $subtest => $subtest_conf) {
+        // Create the FileConverter object.
+        $fc = \Witti\FileConverter\FileConverter::factory(FALSE);
 
-      // Display the test configuration.
-      drush_print("TITLE: " . $conf['title'], 2);
-      $tmp = dirname($test) . DIRECTORY_SEPARATOR . basename(dirname($test));
-      $s_paths = glob($tmp . '.*');
-      $s_path = array_shift($s_paths);
-      foreach ($conf['convert_paths'] as $test_id => $test_conf) {
-        drush_print("CONVERSION: " . $test_id, 2);
-
-        // Do the basic conversion.
-        $d_path = str_replace('%', $s_path . "-$test_id", $test_conf['destination']);
-        $d_path .= $os_suffix . pathinfo($d_path, PATHINFO_EXTENSION);
-        if (is_array($test_conf['engines'])) {
-          foreach ($test_conf['engines'] as $engine_path => $engine_conf) {
-            $fc->setConverter($engine_path, $engine_conf);
-          }
-          $fc->convertFile($s_path, $d_path);
-        }
-        if (!is_file($d_path)) {
-          continue;
+        if (isset($subtest_conf['replace-string'])) {
+          $fc->setReplacements($subtest_conf['replace-string'], 'string');
         }
 
-        // Replace the version placeholder.
-        $info = $fc->getVersionInfo();
-        if (empty($info)) {
-          $hash = 'UNKNOWNVERSION';
-        }
-        else {
-          $hash = md5(json_encode($info));
-          if (!isset($md5s[$hash])) {
-            $md5s[$hash] = $info;
-          }
-        }
-        $d_path_final = str_replace('VERSIONPLACEHOLDER', $hash, $d_path);
-        rename($d_path, $d_path_final);
+        // Display the test configuration.
+        $tmp = dirname($test) . DIRECTORY_SEPARATOR . $subtest
+          . DIRECTORY_SEPARATOR . $subtest;
+        $s_paths = glob($tmp . '.*');
+        $s_path = array_shift($s_paths);
+        foreach ($conf['convert_paths'] as $test_id => $test_conf) {
+          drush_print("CONVERSION: " . $test_id, 2);
 
-        // Create derivatives.
-        $s_der = $d_path_final;
-        $s_thumb = NULL;
-        $fc_der = \Witti\FileConverter\FileConverter::factory(FALSE);
-        foreach ($conf['derivatives'] as $der_id => $der_conf) {
-          $d_der = str_replace('%', $s_der . "-$der_id", $der_conf['destination']);
-          foreach ($der_conf['engines'] as $engine_path => $engine_conf) {
-            $fc_der->setConverter($engine_path, $engine_conf);
-          }
-          $fc_der->convertFile($s_der, $d_der);
-          if ($der_id === 'jpg' && is_file($d_der)) {
-            $s_thumb = $d_der;
-          }
-        }
+          // Do the basic conversion.
+          $d_path = str_replace('%', $s_path . "-$test_id", $test_conf['destination']);
+          $d_path .= $os_suffix . pathinfo($d_path, PATHINFO_EXTENSION);
 
-        // Create thumbnails.
-        if (isset($s_thumb)) {
-          $fc_thumb = \Witti\FileConverter\FileConverter::factory(FALSE);
-          foreach ($thumb_sizes as $thumb_size => $thumb_create) {
-            $d_thumb = $s_thumb . "-$thumb_size.jpg";
-            if ($thumb_create) {
-              $fc_thumb->setConverter('jpg->jpg', array(
-                '#engine' => 'Convert\\ImageMagick',
-                'resize' => $thumb_size,
-              ));
-              $fc_thumb->convertFile($s_thumb, $d_thumb);
-              $fc_thumb->optimize($d_thumb);
+          //           drush_print("SRC:  " . $s_path, 4);
+          //           drush_print("DEST: " . $d_path, 4);
+          if (is_array($test_conf['engines'])) {
+            foreach ($test_conf['engines'] as $engine_path => $engine_conf) {
+              $fc->setConverter($engine_path, $engine_conf);
             }
-            elseif (is_file($d_thumb)) {
-              unlink($d_thumb);
+            $fc->convertFile($s_path, $d_path);
+          }
+          if (!is_file($d_path)) {
+            continue;
+          }
+
+          // Replace the version placeholder.
+          $info = $fc->getVersionInfo();
+          if (empty($info)) {
+            $hash = 'UNKNOWNVERSION';
+          }
+          else {
+            $hash = md5(json_encode($info));
+            if (!isset($md5s[$hash])) {
+              $md5s[$hash] = $info;
+            }
+          }
+          $d_path_final = str_replace('VERSIONPLACEHOLDER', $hash, $d_path);
+          rename($d_path, $d_path_final);
+
+          // Create derivatives.
+          $s_der = $d_path_final;
+          $s_thumb = NULL;
+          $fc_der = \Witti\FileConverter\FileConverter::factory(FALSE);
+          foreach ($conf['derivatives'] as $der_id => $der_conf) {
+            drush_print("DERIVATIVE: " . $der_id, 4);
+            $d_der = str_replace('%', $s_der . "-$der_id", $der_conf['destination']);
+            foreach ($der_conf['engines'] as $engine_path => $engine_conf) {
+              $fc_der->setConverter($engine_path, $engine_conf);
+            }
+            //           var_dump($s_der, $d_der);
+            $fc_der->convertFile($s_der, $d_der);
+            if ($der_id === 'jpg' && is_file($d_der)) {
+              $s_thumb = $d_der;
+            }
+          }
+
+          // Create thumbnails.
+          if (isset($s_thumb)) {
+            $fc_thumb = \Witti\FileConverter\FileConverter::factory(FALSE);
+            foreach ($thumb_sizes as $thumb_size => $thumb_create) {
+              drush_print("THUMB: " . $thumb_size, 4);
+              $d_thumb = $s_thumb . "-$thumb_size.jpg";
+              if ($thumb_create) {
+                $fc_thumb->setConverter('jpg->jpg', array(
+                  '#engine' => 'Convert\\ImageMagick',
+                  'resize' => $thumb_size,
+                ));
+                try {
+                  $fc_thumb->convertFile($s_thumb, $d_thumb);
+                  $fc_thumb->optimizeFile($d_thumb);
+                } catch (\Exception $e) {
+                  drush_print("Thumbnail error: " . $e->getMessage(), 6);
+                }
+              }
+              elseif (is_file($d_thumb)) {
+                unlink($d_thumb);
+              }
             }
           }
         }
@@ -137,5 +149,7 @@ public function doAllTests() {
     }
     $dat = "{\n" . implode(",\n", $lines) . "\n}";
     file_put_contents($md5s_path, $dat);
+
+    drush_print("end of command");
   }
 }
