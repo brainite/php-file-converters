@@ -53,6 +53,8 @@ class FileConverterTests {
       drush_print($conf['title'], 6);
 
       foreach ($conf['tests'] as $subtest => $subtest_conf) {
+        drush_print("TITLE: " . $subtest_conf['title'], 2);
+
         // Create the FileConverter object.
         $fc = \Witti\FileConverter\FileConverter::factory(FALSE);
 
@@ -64,16 +66,20 @@ class FileConverterTests {
         $tmp = dirname($test) . DIRECTORY_SEPARATOR . $subtest
           . DIRECTORY_SEPARATOR . $subtest;
         $s_paths = glob($tmp . '.*');
+        if (empty($s_paths)) {
+          drush_print("NO TEST FILE FOUND: $subtest", 4);
+          continue;
+        }
         $s_path = array_shift($s_paths);
         foreach ($conf['convert_paths'] as $test_id => $test_conf) {
-          drush_print("CONVERSION: " . $test_id, 2);
+          drush_print("CONVERSION: " . $test_id, 4);
 
           // Do the basic conversion.
           $d_path = str_replace('%', $s_path . "-$test_id", $test_conf['destination']);
           $d_path .= $os_suffix . pathinfo($d_path, PATHINFO_EXTENSION);
 
-          //           drush_print("SRC:  " . $s_path, 4);
-          //           drush_print("DEST: " . $d_path, 4);
+          // drush_print("SRC:  " . $s_path, 4);
+          // drush_print("DEST: " . $d_path, 4);
           if (is_array($test_conf['engines'])) {
             foreach ($test_conf['engines'] as $engine_path => $engine_conf) {
               $fc->setConverter($engine_path, $engine_conf);
@@ -103,7 +109,7 @@ class FileConverterTests {
           $s_thumb = NULL;
           $fc_der = \Witti\FileConverter\FileConverter::factory(FALSE);
           foreach ($conf['derivatives'] as $der_id => $der_conf) {
-            drush_print("DERIVATIVE: " . $der_id, 4);
+            drush_print("DERIVATIVE: " . $der_id, 6);
             $d_der = str_replace('%', $s_der . "-$der_id", $der_conf['destination']);
             foreach ($der_conf['engines'] as $engine_path => $engine_conf) {
               $fc_der->setConverter($engine_path, $engine_conf);
@@ -119,7 +125,7 @@ class FileConverterTests {
           if (isset($s_thumb)) {
             $fc_thumb = \Witti\FileConverter\FileConverter::factory(FALSE);
             foreach ($thumb_sizes as $thumb_size => $thumb_create) {
-              drush_print("THUMB: " . $thumb_size, 4);
+              drush_print("THUMB: " . $thumb_size, 6);
               $d_thumb = $s_thumb . "-$thumb_size.jpg";
               if ($thumb_create) {
                 $fc_thumb->setConverter('jpg->jpg', array(
@@ -149,7 +155,5 @@ class FileConverterTests {
     }
     $dat = "{\n" . implode(",\n", $lines) . "\n}";
     file_put_contents($md5s_path, $dat);
-
-    drush_print("end of command");
   }
 }
