@@ -3,6 +3,8 @@ namespace Witti\FileConverter\Engine\Convert;
 
 use Witti\FileConverter\Engine\EngineBase;
 class LibreOffice extends EngineBase {
+  protected $cmd_source_safe = FALSE;
+
   public function getConvertFileShell($source, &$destination) {
     $destination = str_replace('.' . $this->conversion[0], '.'
       . $this->conversion[1], $source);
@@ -18,9 +20,12 @@ class LibreOffice extends EngineBase {
   }
 
   public function getHelpInstallation($os, $os_version) {
+    $help = "";
     switch ($os) {
       case 'Ubuntu':
-        return "sudo apt-get install libreoffice";
+        $help .= "/usr/bin/libreoffice is symlink to /usr/lib/libreoffice/program/soffice\n";
+        $help .= "sudo apt-get install libreoffice\n";
+        return $help;
     }
 
     return parent::getHelpInstallation();
@@ -35,7 +40,7 @@ class LibreOffice extends EngineBase {
   }
 
   public function isAvailable() {
-    $this->cmd = $this->shellWhich('soffice');
+    $this->cmd = $this->shellWhich('libreoffice');
     return isset($this->cmd);
   }
 
