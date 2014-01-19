@@ -31,11 +31,15 @@ class ConfigurationDefaults extends ConfigurationBase {
         $settings['operating_system_version'] = trim(`$lsb   -rs`);
       }
     }
-    elseif ($settings['operating_system'] === 'Windows') {
+    elseif ($settings['operating_system'] === 'Windows NT') {
       // Differentiate based on 32/64-bit but NOT based on build number.
-      if (preg_match('@^build (\d+) \((.*?)\) (.*)$@', php_uname('v'), $arr)) {
-        $settings['operating_system'] = preg_replace('@\s@s', '', $arr[2]);
-        $settings['operating_system_version'] = $arr[3];
+      if (preg_match('@^build (\d+) \((Windows [^ ]+ )(.*?)\)$@', php_uname('v'), $arr)) {
+		$settings['operating_system'] = preg_replace('@\s@s', '', $arr[2]);
+        $settings['operating_system_version'] = preg_replace('@\s@s', '', $arr[3] . php_uname('m'));
+		$settings['operating_system_version'] = strtr($settings['operating_system_version'], array(
+		  'Edition' => '',
+		  'ServicePack' => 'SP',
+		));
       }
     }
 
