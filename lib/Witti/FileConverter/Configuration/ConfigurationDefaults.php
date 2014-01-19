@@ -21,7 +21,7 @@ class ConfigurationDefaults extends ConfigurationBase {
       'operating_system_version' => php_uname('r'),
     );
 
-    // Attempt to get better OS information on Linux.
+    // Attempt to get better OS information.
     // lsb_release is available on Ubun
     if ($settings['operating_system'] === 'Linux') {
       $lsb = trim(`which lsb_release`);
@@ -29,6 +29,13 @@ class ConfigurationDefaults extends ConfigurationBase {
         $lsb = escapeshellarg($lsb);
         $settings['operating_system'] = trim(`$lsb   -is`);
         $settings['operating_system_version'] = trim(`$lsb   -rs`);
+      }
+    }
+    elseif ($settings['operating_system'] === 'Windows') {
+      // Differentiate based on 32/64-bit but NOT based on build number.
+      if (preg_match('@^build (\d+) \((.*?)\) (.*)$@', php_uname('v'), $arr)) {
+        $settings['operating_system'] = preg_replace('@\s@s', '', $arr[2]);
+        $settings['operating_system_version'] = $arr[3];
       }
     }
 
