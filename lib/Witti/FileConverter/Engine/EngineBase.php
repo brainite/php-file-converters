@@ -64,7 +64,7 @@ abstract class EngineBase {
       $output = $this->shell($cmd);
 
       // Remove the original temporary file.
-      if (!$source_safe) {
+      if (!$source_safe && $s_path !== $d_path) {
         unlink($s_path);
       }
 
