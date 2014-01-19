@@ -1,6 +1,12 @@
 <?php
 namespace Witti\FileConverter;
 
+if (!function_exists('drush_print')) {
+  function drush_print($msg, $indent = 0) {
+    echo str_repeat(' ', $indent) . $msg . "\n";
+  }
+}
+
 class FileConverterTests {
   static public function factory($root = NULL) {
     return new FileConverterTests($root);
@@ -35,6 +41,7 @@ class FileConverterTests {
     $tmp = $fc->getSettings();
     $os_suffix = '-' . $tmp['operating_system'] . '_'
       . $tmp['operating_system_version'];
+    drush_print("OS: " . substr($os_suffix, 1));
     //     $results_base = strtoupper('RESULTS' . $os_suffix);
     $os_suffix .= '-VERSIONPLACEHOLDER' . '.';
 
