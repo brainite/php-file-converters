@@ -25,7 +25,8 @@ class FileConverter {
       }
       return $singleton;
     }
-    return new FileConverter();
+    $new = new FileConverter();
+    return $new;
   }
 
   protected $configurations = array();
