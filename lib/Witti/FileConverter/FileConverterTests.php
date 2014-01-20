@@ -47,6 +47,10 @@ class FileConverterTests {
 
     // Load the version MD5s.
     $md5s_path = realpath($root . '/version_md5.json');
+    if (!$md5s_path) {
+      drush_print("Invalid path to tests. 'version_md5.json' was not found.");
+      return;
+    }
     $md5s = json_decode(file_get_contents($md5s_path), TRUE);
 
     // Locate and iterate over the tests.
