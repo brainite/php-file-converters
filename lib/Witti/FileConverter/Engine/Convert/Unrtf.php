@@ -5,12 +5,14 @@ use Witti\FileConverter\Engine\EngineBase;
 use Witti\FileConverter\Util\Shell;
 class Unrtf extends EngineBase {
   public function getConvertFileShell($source, &$destination) {
+    $err = $this->getTempFile('err');
     return array(
       $this->cmd,
       '--ps',
       $source,
       Shell::arg('>', Shell::SHELL_SAFE),
       $destination,
+      Shell::arg('STDERR', Shell::SHELL_STDERR, $err),
     );
   }
 
@@ -23,6 +25,13 @@ class Unrtf extends EngineBase {
     }
 
     return parent::getHelpInstallation();
+  }
+
+  public function getVersionInfo() {
+    $info = array(
+      'unrtf' => $this->shell('unrtf --version'),
+    );
+    return $info;
   }
 
   public function isAvailable() {

@@ -10,6 +10,7 @@ class Shell {
   const SHELL_ARG_BOOL_DBL = 5;
   const SHELL_ARG_BOOL_SGL = 7;
   const SHELL_ARG_BASIC_SGL = 6;
+  const SHELL_STDERR = 9;
 
   static public function arg($arg, $mode, $value = NULL) {
     return new Shell($arg, $mode, $value);
@@ -54,6 +55,14 @@ class Shell {
     $this->argument = $arg;
     $this->mode = $mode;
     $this->value = $value;
+  }
+
+  public function getMode() {
+    return $this->mode;
+  }
+
+  public function getValue() {
+    return $this->value;
   }
 
   public function render() {
@@ -102,6 +111,9 @@ class Shell {
             . escapeshellarg($this->value);
         }
         return '';
+
+      case Shell::SHELL_STDERR:
+        return '2>' . escapeshellarg($this->value);
 
       case Shell::SHELL_ARG_BASIC:
       default:

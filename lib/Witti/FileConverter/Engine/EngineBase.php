@@ -25,7 +25,8 @@ abstract class EngineBase {
   protected $cmd_options = array();
   protected $cmd_source_safe = FALSE;
 
-  public function __construct(FileConverter $converter, $convert_path, $settings, $configuration) {
+  public function __construct(FileConverter &$converter, $convert_path, $settings, $configuration) {
+    $this->converter =& $converter;
     $this->conversion = explode('->', strtolower($convert_path), 2);
     $this->settings = $settings;
     $this->configuration = $configuration;
@@ -149,6 +150,7 @@ abstract class EngineBase {
 
   public function shell($command) {
     $cmd = "";
+    $stderr = NULL;
     if (is_string($command)) {
       $cmd = $command;
     }
@@ -156,16 +158,31 @@ abstract class EngineBase {
       foreach ($command as $part) {
         if ($part instanceof Shell) {
           $cmd .= ' ' . $part->render();
+          if ($part->getMode() === Shell::SHELL_STDERR) {
+            $stderr = $part->getValue();
+          }
         }
         else {
           $cmd .= ' ' . escapeshellarg($part);
         }
       }
     }
-    $cmd .= ' 2>&1 ';
+    if (!isset($stderr)) {
+      $cmd .= ' 2>&1 ';
+    }
 
-//     var_dump($cmd);
-    return trim(shell_exec($cmd));
+    //     var_dump($cmd);
+
+    // Get the output. Concat the stderr info, if required.
+    $output = trim(shell_exec($cmd));
+    if (isset($stderr) && is_file($stderr)) {
+      if ($output !== '') {
+        $output .= "\n";
+      }
+      $output .= file_get_contents($stderr);
+      unlink($stderr);
+    }
+    return $output;
   }
 
   public function shellWhich($command) {
