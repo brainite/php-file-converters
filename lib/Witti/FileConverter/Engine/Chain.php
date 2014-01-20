@@ -30,7 +30,7 @@ class Chain extends EngineBase {
   }
 
   public function getHelpInstallation($os, $os_version) {
-    return "This engine is a placeholder and is not yet ready for use.";
+    return "Utilizing the 'Chain' engine is installed, but it requires intermediate engines.";
   }
 
   public function isAvailable() {
