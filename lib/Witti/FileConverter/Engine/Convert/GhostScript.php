@@ -3,15 +3,43 @@ namespace Witti\FileConverter\Engine\Convert;
 
 use Witti\FileConverter\Engine\EngineBase;
 class GhostScript extends EngineBase {
-  public function convertFile($source, $destination) {
-    // One convert function is required to avoid recursion.
+  public function getConvertFileShell($source, &$destination) {
+    return array(
+      'ps2pdf',
+      $source,
+      $destination,
+    );
   }
 
   public function getHelpInstallation($os, $os_version) {
-    return "This engine is a placeholder and is not yet ready for use.";
+    $help = "This engine is managed at http://www.ghostscript.com/\n";
+    switch ($os) {
+      case 'Ubuntu':
+        $help .= "/usr/bin/libreoffice is symlink to /usr/bin/gs\n";
+        $help .= "sudo apt-get install ghostscript\n";
+        return $help;
+    }
+
+    return parent::getHelpInstallation();
+   }
+
+  public function getVersionInfo() {
+    $gsv = $this->shell('gs -v');
+    if (preg_match('@Ghostscript ([0-9\.]+)@s', $gsv, $arr)) {
+      return array(
+        'gs' => $arr[1],
+      );
+    }
+    else {
+      return array(
+        'gs' => 'UNKNOWN',
+      );
+    }
   }
 
+
   public function isAvailable() {
-    return FALSE;
+    $this->cmd = $this->shellWhich('gs');
+    return isset($this->cmd);
   }
 }
