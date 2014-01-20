@@ -33,6 +33,7 @@ class FileConverter {
   protected $settings = array();
   protected $missing_engines = array();
   protected $previous_engines = array();
+  protected $conversion_depth = 0;
   protected $replacements = array(
     'string' => array(),
   );
@@ -41,16 +42,23 @@ class FileConverter {
   }
 
   public function convert($type = 'string', $convert_path = 'null->null', $source = '', &$destination = NULL) {
-    $this->previous_engines = array();
+    $conversion_depth = &$this->conversion_depth;
+    if ($conversion_depth == 0) {
+      $this->previous_engines = array();
+    }
+    $this->conversion_depth++;
+
+    //     drush_print($this->conversion_depth . " depth: " . $convert_path);
 
     // Track the files to cleanup.
     $cleanup_files = array();
-    $return = function ($ret) use (&$cleanup_files) {
+    $return = function ($ret) use (&$cleanup_files, &$conversion_depth) {
       foreach ($cleanup_files as $file) {
         if (is_file($file)) {
           unlink($file);
         }
       }
+      $conversion_depth--;
       return $ret;
     };
 
@@ -64,34 +72,36 @@ class FileConverter {
     ));
 
     // Handle the configured replacements.
-    $ext = preg_replace('@->.*$@', '', $convert_path);
-    foreach ($this->replacements as $mode => $replaces) {
-      if (!empty($replaces)) {
-        $convert_path_replace = "$ext~$mode";
-        $engines = $this->getEngines($convert_path_replace, array(
-          'replacements' => $replaces,
-        ));
-        if (!empty($engines)) {
-          $engine = &$engines[0];
-          if ($type === 'file') {
-            $tmp_d = $engine->getTempFile($ext);
-            $cleanup_files[] = $tmp_d;
+    if ($conversion_depth == 1) {
+      $ext = preg_replace('@->.*$@', '', $convert_path);
+      foreach ($this->replacements as $mode => $replaces) {
+        if (!empty($replaces)) {
+          $convert_path_replace = "$ext~$mode";
+          $engines = $this->getEngines($convert_path_replace, array(
+            'replacements' => $replaces,
+          ));
+          if (!empty($engines)) {
+            $engine = &$engines[0];
+            if ($type === 'file') {
+              $tmp_d = $engine->getTempFile($ext);
+              $cleanup_files[] = $tmp_d;
+            }
+            else {
+              $tmp_d = '';
+            }
+            foreach ($engines as $engine) {
+              try {
+                $engine->$convert($source, $tmp_d);
+                $this->previous_engines[] = $engine;
+                break;
+              } catch (\Exception $e) {
+              }
+            }
+            $source = $tmp_d;
           }
           else {
-            $tmp_d = '';
+            echo "No replacement engines are available.\n";
           }
-          foreach ($engines as $engine) {
-            try {
-              $engine->$convert($source, $tmp_d);
-              $this->previous_engines[] = $engine;
-              break;
-            } catch (\Exception $e) {
-            }
-          }
-          $source = $tmp_d;
-        }
-        else {
-          echo "No replacement engines are available.\n";
         }
       }
     }
@@ -103,7 +113,9 @@ class FileConverter {
     foreach ($engines as $engine) {
       try {
         $engine->$convert($source, $destination);
-        $this->previous_engines[] = $engine;
+//         if ($this->conversion_depth == 1) {
+          $this->previous_engines[] = $engine;
+//         }
         return $return(TRUE);
       } catch (\Exception $e) {
       }
@@ -207,6 +219,10 @@ class FileConverter {
 
   public function getMissingEngines() {
     return $this->missing_engines;
+  }
+
+  public function getPreviousEngines() {
+    return $this->previous_engines;
   }
 
   public function getVersionInfo() {
