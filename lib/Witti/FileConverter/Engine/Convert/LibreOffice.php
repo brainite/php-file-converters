@@ -2,6 +2,7 @@
 namespace Witti\FileConverter\Engine\Convert;
 
 use Witti\FileConverter\Engine\EngineBase;
+use Witti\FileConverter\Util\Shell;
 class LibreOffice extends EngineBase {
   protected $cmd_source_safe = FALSE;
 
@@ -9,6 +10,7 @@ class LibreOffice extends EngineBase {
     $destination = str_replace('.' . $this->conversion[0], '.'
       . $this->conversion[1], $source);
     return array(
+      Shell::arg('export HOME=' . escapeshellarg($this->settings['temp_dir']) . ';', Shell::SHELL_SAFE),
       $this->cmd,
       '--headless',
       '--convert-to',
