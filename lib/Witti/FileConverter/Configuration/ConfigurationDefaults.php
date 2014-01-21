@@ -78,6 +78,9 @@ class ConfigurationDefaults extends ConfigurationBase {
         'unoconv:default' => array(
           '#engine' => 'Convert\\Unoconv',
         ),
+        'abiword:default' => array(
+          '#engine' => 'Convert\\AbiWord',
+        ),
         'rtf->ps->pdf' => array(
           '#engine' => 'Chain',
           'chain' => 'rtf->ps->pdf',
