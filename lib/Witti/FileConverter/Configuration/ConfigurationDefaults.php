@@ -75,6 +75,9 @@ class ConfigurationDefaults extends ConfigurationBase {
         'libreoffice:default' => array(
           '#engine' => 'Convert\\LibreOffice',
         ),
+        'unoconv:default' => array(
+          '#engine' => 'Convert\\Unoconv',
+        ),
         'rtf->ps->pdf' => array(
           '#engine' => 'Chain',
           'chain' => 'rtf->ps->pdf',
