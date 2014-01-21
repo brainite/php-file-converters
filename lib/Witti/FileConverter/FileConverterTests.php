@@ -95,7 +95,10 @@ class FileConverterTests {
             foreach ($test_conf['engines'] as $engine_path => $engine_conf) {
               $fc->setConverter($engine_path, $engine_conf);
             }
+            $time = microtime(TRUE);
             $fc->convertFile($s_path, $d_path);
+            $time = microtime(TRUE) - $time;
+            drush_print("TIME: " . round($time, 3) . ' seconds', 6);
           }
           if (!is_file($d_path)) {
             continue;
