@@ -33,6 +33,17 @@ class Ted extends EngineBase {
     return parent::getHelpInstallation();
   }
 
+  public function getVersionInfo() {
+    $info = array(
+        'ted' => 'unknown',
+    );
+    $v = $this->shell($this->cmd . " --version");
+    if (preg_match('@Ted ([\d\.]+)@', $v, $arr)) {
+      $info['ted'] = $arr[1];
+    }
+    return $info;
+  }
+
   public function isAvailable() {
     $this->cmd = $this->shellWhich('Ted');
     return isset($this->cmd);
