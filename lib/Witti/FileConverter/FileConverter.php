@@ -52,14 +52,13 @@ class FileConverter {
 
     // Track the files to cleanup.
     $cleanup_files = array();
-    $return = function ($ret) use (&$cleanup_files, &$conversion_depth) {
+    $return = function () use (&$cleanup_files, &$conversion_depth) {
       foreach ($cleanup_files as $file) {
         if (is_file($file)) {
           unlink($file);
         }
       }
       $conversion_depth--;
-      return $ret;
     };
 
     // Get the convert function.
@@ -116,12 +115,14 @@ class FileConverter {
 //         if ($this->conversion_depth == 1) {
           $this->previous_engines[] = $engine;
 //         }
-        return $return(TRUE);
+        $return();
+        return $this;
       } catch (\Exception $e) {
       }
     }
 
-    return $return(FALSE);
+    $return();
+    throw new \ErrorException("Unable to convert the file.");
   }
 
   public function convertFile($source, $destination, $convert_path = NULL) {
@@ -129,12 +130,18 @@ class FileConverter {
       $convert_path = pathinfo($source, PATHINFO_EXTENSION) . '->'
         . pathinfo($destination, PATHINFO_EXTENSION);
     }
-    return (bool) $this->convert('file', $convert_path, $source, $destination);
+    $this->convert('file', $convert_path, $source, $destination);
+    return $this;
   }
 
-  public function convertString($source, $convert_path = 'null->null') {
-    $destination = '';
+  public function convertString($source, &$destination, $convert_path = 'null->null') {
     $this->convert('string', $convert_path, $source, $destination);
+    return $this;
+  }
+
+  public function getConvertedString($source, $convert_path = 'null->null') {
+    $destination = '';
+    $this->convertString($source, $destination, $convert_path);
     return $destination;
   }
 

@@ -96,7 +96,11 @@ class FileConverterTests {
               $fc->setConverter($engine_path, $engine_conf);
             }
             $time = microtime(TRUE);
-            $fc->convertFile($s_path, $d_path);
+            try {
+              $fc->convertFile($s_path, $d_path);
+            } catch (\Exception $e) {
+              continue;
+            }
             $time = microtime(TRUE) - $time;
             drush_print("TIME: " . round($time, 3) . ' seconds', 6);
           }
