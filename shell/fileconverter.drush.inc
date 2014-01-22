@@ -117,7 +117,7 @@ function drush_fileconverter_convert(string $source = NULL, string $destination 
 
   // Optimize the file.
   if (drush_get_option('optimize') === TRUE) {
-    $fc->optimize(realpath($source), $destination);
+    $fc->optimizeFile($destination, $destination);
   }
 }
 
