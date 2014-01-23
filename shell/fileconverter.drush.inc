@@ -55,6 +55,12 @@ function fileconverter_drush_command() {
     'arguments' => array(
       'path_to_tests' => 'The path of the test branch',
     ),
+    'options' => array(
+      'test' => array(
+        'description' => 'Specify a certain test group or specific test',
+        'example-value' => 'rdf2pdf or rdf2pdf/001',
+      ),
+    ),
   );
   return $items;
 }
@@ -134,6 +140,7 @@ function drush_fileconverter_tests($path_to_tests = NULL) {
 
   try {
     $tester = \Witti\FileConverter\FileConverterTests::factory($root);
+    $tester->setTestFilter(trim(drush_get_option('test')));
     $tester->doAllTests();
   } catch (\Exception $e) {
     drush_print($e->getMessage());

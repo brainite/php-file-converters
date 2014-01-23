@@ -13,6 +13,7 @@ class FileConverterTests {
   }
 
   protected $root = FALSE;
+  protected $filter = '';
   public function __construct($root = NULL) {
     if (isset($root) && is_dir($root)) {
       $this->root = realpath($root);
@@ -29,6 +30,7 @@ class FileConverterTests {
 
     // Localize the root variable.
     $root = $this->root;
+    $filter = explode('/', $this->filter . '//');
 
     // Configure the thumbnail sizes
     $thumb_sizes = array(
@@ -60,10 +62,17 @@ class FileConverterTests {
       if (!is_array($conf)) {
         continue;
       }
-      drush_print("TEST: " . basename(dirname($test)));
+      $test_basename = basename(dirname($test));
+      if ($filter[0] !== '' && $filter[0] !== $test_basename) {
+        continue;
+      }
+      drush_print("TEST: " . $test_basename);
       drush_print($conf['title'], 6);
 
       foreach ($conf['tests'] as $subtest => $subtest_conf) {
+        if ($filter[1] !== '' && $filter[1] !== $subtest) {
+          continue;
+        }
         drush_print("TITLE: " . $subtest_conf['title'], 2);
 
         // Create the FileConverter object.
@@ -173,5 +182,10 @@ class FileConverterTests {
     }
     $dat = "{\n" . implode(",\n", $lines) . "\n}";
     file_put_contents($md5s_path, $dat);
+  }
+
+  public function setTestFilter($filter) {
+    $this->filter = $filter;
+    return $this;
   }
 }

@@ -8,6 +8,7 @@ function witti_fileconverter_cli() {
   // Parse the CLI arguments.
   $args = array(
     'replace-string' => NULL,
+    'test' => '',
     'optimize' => NULL,
     0 => NULL,
     1 => NULL,
@@ -76,6 +77,7 @@ function witti_fileconverter_cli() {
     case 'tests':
       if (!isset($args[1])) {
         echo "USAGE: filconverter.php tests <path_to_tests>\n";
+        echo "USAGE: filconverter.php tests --test=<ex:rtf2pdf> <path_to_tests>\n";
         return;
       }
       $path_to_tests = $args[1];
@@ -87,6 +89,9 @@ function witti_fileconverter_cli() {
 
       try {
         $tester = \Witti\FileConverter\FileConverterTests::factory($root);
+        if ($args['test'] !== '') {
+          $tester->setTestFilter($args['test']);
+        }
         $tester->doAllTests();
       } catch (\Exception $e) {
         echo $e->getMessage() . "\n";
