@@ -70,6 +70,13 @@ class Htmldoc extends EngineBase {
     return parent::getHelpInstallation();
   }
 
+  public function getVersionInfo() {
+    $info = array(
+        'htmldoc' => $this->shell($this->cmd . " --version")
+    );
+    return $info;
+  }
+
   public function isAvailable() {
     $this->cmd = $this->shellWhich('htmldoc');
     return isset($this->cmd);
