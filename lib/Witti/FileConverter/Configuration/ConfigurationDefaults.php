@@ -27,25 +27,31 @@ class ConfigurationDefaults extends ConfigurationBase {
       $lsb = trim(`which lsb_release`);
       if ($lsb !== '') {
         $lsb = escapeshellarg($lsb);
-        $settings['operating_system'] = trim(`$lsb   -is`);
-        $settings['operating_system_version'] = trim(`$lsb   -rs`);
+        $settings['operating_system'] = trim(`$lsb    -is`);
+        $settings['operating_system_version'] = trim(`$lsb    -rs`);
       }
     }
     elseif ($settings['operating_system'] === 'Windows NT') {
       // Differentiate based on 32/64-bit but NOT based on build number.
       if (preg_match('@^build (\d+) \((Windows [^ ]+ )(.*?)\)$@', php_uname('v'), $arr)) {
-		$settings['operating_system'] = preg_replace('@\s@s', '', $arr[2]);
-        $settings['operating_system_version'] = preg_replace('@\s@s', '', $arr[3] . php_uname('m'));
-		$settings['operating_system_version'] = strtr($settings['operating_system_version'], array(
-		  'Edition' => '',
-		  'ServicePack' => 'SP',
-		));
+        $settings['operating_system'] = preg_replace('@\s@s', '', $arr[2]);
+        $settings['operating_system_version'] = preg_replace('@\s@s', '', $arr[3]
+          . php_uname('m'));
+        $settings['operating_system_version'] = strtr($settings['operating_system_version'], array(
+          'Edition' => '',
+          'ServicePack' => 'SP',
+        ));
       }
     }
 
     // Configure default converter paths.
     // This does NOT mean that the converters are available.
     $this->converters = array(
+      'doc->txt' => array(
+        'catdoc:default' => array(
+          '#engine' => 'Convert\\Catdoc',
+        ),
+      ),
       'html->pdf' => array(
         'htmldoc:default' => array(
           '#engine' => 'Convert\\Htmldoc',
