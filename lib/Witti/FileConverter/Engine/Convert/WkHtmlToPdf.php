@@ -2,72 +2,89 @@
 namespace Witti\FileConverter\Engine\Convert;
 
 use Witti\FileConverter\Engine\EngineBase;
+use Witti\FileConverter\Util\Shell;
 class WkHtmlToPdf extends EngineBase {
-  // Set default properties
-//   $this->set('html', 1)
-//   ->set('base', 'http://' . $_SERVER['HTTP_HOST'] . '/');
-//     // Determine whether this is a web request.
-//     $optStr = '';
-//     if ($this->get('web.request')) {
-//       if (is_file($old)) {
-//         $old = file_get_contents($old);
-//       }
-//       if (!preg_match('@^https?://@', $old)) {
-//         throw new ErrorException("Invalid URL.");
-//       }
+  protected $cmd_options = array(
+    array(
+      'name' => 'quiet',
+      'mode' => Shell::SHELL_ARG_BOOL_DBL,
+      'default' => TRUE,
+    ),
+    array(
+      'name' => 'disable-javascript',
+      'mode' => Shell::SHELL_ARG_BOOL_DBL,
+    ),
+    array(
+      'name' => 'no-background',
+      'mode' => Shell::SHELL_ARG_BOOL_DBL,
+    ),
+    array(
+      'name' => 'allow',
+      'description' => 'Specify a folder whose files can be included',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
+    ),
+    array(
+      'name' => 'margin-top',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
+      'default' => '10mm',
+    ),
+    array(
+      'name' => 'margin-bottom',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
+      'default' => '10mm',
+    ),
+    array(
+      'name' => 'margin-left',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
+      'default' => '10mm',
+    ),
+    array(
+      'name' => 'margin-right',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
+      'default' => '10mm',
+    ),
+  );
 
-//       // Add the cookies to the command.
-//       if ($this->get('web.request.usercookies')) {
-//         foreach ($_COOKIE as $k => $v) {
-//           if ($v) {
-//             $optStr .= sprintf(' --cookie %s %s ', escapeshellarg($k), escapeshellarg($v));
-//           }
-//         }
-//       }
-//     }
-//     else {
-//       if (strpos($old, '..') !== FALSE) {
-//         throw new ErrorException("Directory dots are not allowed for file conversion.");
-//       }
-//     }
-
-//     // Build the make options.
-//     $validOpts = Array(
-//         'margin-top',
-//         'margin-right',
-//         'margin-bottom',
-//         'margin-left',
-//         'title',
-//         'user-style-sheet',
-//         'javascript-delay',
-//     );
-//     foreach ($this->getByArray($validOpts) as $k => $v) {
-//       if ($v) {
-//         $optStr .= " --$k ";
-//         if ($v != 1) {
-//           $optStr .= $v . ' ';
-//         }
-//       }
-//     }
-
-//     // Convert the HTML using pisa
-//     $oldE = escapeshellarg($old);
-//     $newE = escapeshellarg($new);
-
-//     // Using an older static version -- page-breaks work better than in 11.0rc1
-//     // $cmd = "/go/bin/lib/wkhtmltopdf-0.11.0_rc1-static-amd64 -q $optStr $oldE $newE";
-//     $cmd = "/go/bin/lib/wkhtmltopdf-0.10.0_rc2-static-amd64 -q $optStr $oldE $newE";
-//     // $cmd = "/usr/bin/xvfb-run /usr/bin/wkhtmltopdf -q $optStr $oldE $newE";
-
-  public function convertFile($source, $destination) {
-    // One convert function is required to avoid recursion.
+  public function getConvertFileShell($source, &$destination) {
+    return array(
+      $this->cmd,
+      Shell::argOptions($this->cmd_options, $this->configuration),
+      $source,
+      $destination,
+    );
   }
 
   public function getHelpInstallation($os, $os_version) {
-    return "This engine is a placeholder and is not yet ready for use.";
+    $output = "wkhtmltopdf can be found online at https://code.google.com/p/wkhtmltopdf/\n";
+    switch ($os) {
+      case 'Ubuntu':
+        $output .= " Ubuntu (12.04)\n";
+        $output .= "  sudo apt-get install wkhtmltopdf\n";
+        return $output;
+    }
+
+    return parent::getHelpInstallation();
+  }
+
+  public function getVersionInfo() {
+    $info = array(
+      'wkhtmltopdf' => $this->shell($this->cmd . " --version")
+    );
+    if (preg_match('@wkhtmltopdf ([\d\.]+)@', $info['wkhtmltopdf'], $arr)) {
+      $info['wkhtmltopdf'] = $arr[1];
+    }
+    return $info;
   }
 
   public function isAvailable() {
-    return FALSE;
+    $bin = realpath(__DIR__ . '/../../../../../bin');
+    if (is_dir($bin) && is_file("$bin/wkhtmltopdf-0.11.0rc1-amd64")) {
+      $this->cmd = "$bin/wkhtmltopdf-0.11.0rc1-amd64";
+    }
+    else {
+      $this->cmd = $this->shellWhich('wkhtmltopdf');
+    }
+
+    return isset($this->cmd);
   }
 }
