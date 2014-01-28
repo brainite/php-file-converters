@@ -76,7 +76,7 @@ function fileconverter_drush_init() {
   }
 
   // Load ALL of the classes.
-  require_once __DIR__ . '/../lib/Witti/FileConverter/Util/Loader.php';
+  require_once __DIR__ . '/../src/Witti/FileConverter/Util/Loader.php';
   \Witti\FileConverter\Util\Loader::loadAll();
 
   if (drush_get_context('DRUSH_VERBOSE')) {

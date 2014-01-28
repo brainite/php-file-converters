@@ -2,7 +2,7 @@
 // Wrap the command in a function to avoid global namespace clutter.
 function witti_fileconverter_cli() {
   // Load ALL of the FileConverter classes.
-  require_once __DIR__ . '/../lib/Witti/FileConverter/Util/Loader.php';
+  require_once __DIR__ . '/../src/Witti/FileConverter/Util/Loader.php';
   \Witti\FileConverter\Util\Loader::loadAll();
 
   // Parse the CLI arguments.
