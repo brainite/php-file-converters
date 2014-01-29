@@ -170,10 +170,25 @@ class FileConverter {
     foreach ($this->configurations as $conf) {
       // See whether a configuration matches.
       $converters_all = $conf->getAllConverters();
-      if (!isset($converters_all[$convert_path])) {
+      $converters_potential = isset($converters_all[$convert_path]) ? $converters_all[$convert_path] : array();
+
+      foreach ($converters_all as $convert_path_match => $converters_match) {
+        if (strpos($convert_path_match, '(') === FALSE) {
+          continue;
+        }
+        $regex = '@^' . str_replace('@', '\\@', $convert_path_match) . '$@s';
+        if (preg_match($regex, $convert_path)) {
+          $converters_potential = array_merge($converters_match, $converters_potential);
+        }
+      }
+
+      // Continue to the next configuration when there are no matches.
+      if (empty($converters_potential)) {
         continue;
       }
-      foreach ($converters_all[$convert_path] as $conf_id => $configuration) {
+
+      // Check all configurations to load the engines.
+      foreach ($converters_potential as $conf_id => $configuration) {
         if (is_string($configuration)) {
           if (!isset($force_id)) {
             $engines = array();

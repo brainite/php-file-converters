@@ -27,8 +27,8 @@ class ConfigurationDefaults extends ConfigurationBase {
       $lsb = trim(`which lsb_release`);
       if ($lsb !== '') {
         $lsb = escapeshellarg($lsb);
-        $settings['operating_system'] = trim(`$lsb    -is`);
-        $settings['operating_system_version'] = trim(`$lsb    -rs`);
+        $settings['operating_system'] = trim(`$lsb     -is`);
+        $settings['operating_system_version'] = trim(`$lsb     -rs`);
       }
     }
     elseif ($settings['operating_system'] === 'Windows NT') {
@@ -77,10 +77,12 @@ class ConfigurationDefaults extends ConfigurationBase {
           '#engine' => 'Convert\\GhostScript',
         ),
       ),
-      'rtf->pdf' => array(
+      '(bib|doc|pdb|psw|rtf|ltx|sdw|sxw|txt|vor|html)->pdf' => array(
         'libreoffice:default' => array(
           '#engine' => 'Convert\\LibreOffice',
         ),
+      ),
+      'rtf->pdf' => array(
         'unoconv:default' => array(
           '#engine' => 'Convert\\Unoconv',
         ),
