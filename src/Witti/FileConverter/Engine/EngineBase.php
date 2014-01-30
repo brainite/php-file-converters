@@ -189,6 +189,13 @@ abstract class EngineBase {
   }
 
   public function shellWhich($command) {
+    // Look in the bin folder (symlinks work fine).
+    $bin = realpath(__DIR__ . '/../../../../bin/' . $command);
+    if ($bin !== FALSE && is_executable($bin)) {
+      return $bin;
+    }
+
+    // Use the which/where command to locate the binary.
     $which = preg_match('@Win@', $this->settings['operating_system']) ? 'where'
       : 'which';
     $path = $this->shell(array(
