@@ -1,0 +1,3 @@
+[submodule "lib/witti-project-utils"]
+	path = lib/witti-project-utils
+	url = https://github.com/wittiws/witti-project-utils.git
