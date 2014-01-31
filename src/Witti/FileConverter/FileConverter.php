@@ -178,7 +178,7 @@ class FileConverter {
         }
         $regex = '@^' . str_replace('@', '\\@', $convert_path_match) . '$@s';
         if (preg_match($regex, $convert_path)) {
-          $converters_potential = array_merge($converters_match, $converters_potential);
+          $converters_potential = array_merge($converters_potential, $converters_match);
         }
       }
 
