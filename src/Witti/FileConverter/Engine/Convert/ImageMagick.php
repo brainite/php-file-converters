@@ -38,6 +38,12 @@ class ImageMagick extends EngineBase {
   );
 
   public function getConvertFileShell($source, &$destination) {
+    $multipage = array('pdf');
+    if (in_array($this->conversion[0], $multipage)) {
+      if (!in_array($this->conversion[1], $multipage)) {
+        $source .= '[0]';
+      }
+    }
     return array(
       $this->cmd,
       Shell::argOptions($this->cmd_options, $this->configuration, 1),
