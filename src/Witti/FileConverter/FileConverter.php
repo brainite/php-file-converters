@@ -170,9 +170,12 @@ class FileConverter {
     foreach ($this->configurations as $conf) {
       // See whether a configuration matches.
       $converters_all = $conf->getAllConverters();
-      $converters_potential = isset($converters_all[$convert_path]) ? $converters_all[$convert_path] : array();
-
+      $converters_potential = array();
       foreach ($converters_all as $convert_path_match => $converters_match) {
+        if ($convert_path_match === $convert_path) {
+          $converters_potential = array_merge($converters_potential, $converters_match);
+          continue;
+        }
         if (strpos($convert_path_match, '(') === FALSE) {
           continue;
         }
