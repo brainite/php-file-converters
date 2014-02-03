@@ -115,6 +115,10 @@ abstract class EngineBase {
     return $this;
   }
 
+  public function getConfiguration() {
+    return $this->configuration;
+  }
+
   public function getHelp($type = 'installation') {
     $os = $this->settings['operating_system'];
     $os_version = $this->settings['operating_system_version'];
