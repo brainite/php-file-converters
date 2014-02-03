@@ -9,7 +9,7 @@ class Loader {
     $dir = __DIR__ . strtr('/../', '/', DIRECTORY_SEPARATOR);
     $ritit = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::SELF_FIRST);
     foreach ($ritit as $path) {
-      if (is_file($path) && substr($path, -4) === '.php') {
+      if (is_file($path) && substr($path, -4) === '.php' && strpos($path, DIRECTORY_SEPARATOR . 'Tests' . DIRECTORY_SEPARATOR) === FALSE) {
         if (strpos($path, 'Base') !== FALSE) {
           require_once $path;
         }
