@@ -163,7 +163,7 @@ class FileConverter {
     return new Engine\Invalid($this, $convert_path, $this->settings, $configuration);
   }
 
-  public function getEngines($convert_path, $configuration_overrides = NULL) {
+  public function getEngines($convert_path, $configuration_overrides = NULL, $confirm_available = TRUE) {
     // Select a converter.
     $force_id = NULL;
     $engines = array();
@@ -209,7 +209,7 @@ class FileConverter {
           $configuration = array_merge($configuration, $configuration_overrides);
         }
         $engine = $this->getEngine($convert_path, $configuration);
-        if ($engine->isAvailable()) {
+        if (!$confirm_available || $engine->isAvailable()) {
           $engines[] = $engine;
         }
         else {
