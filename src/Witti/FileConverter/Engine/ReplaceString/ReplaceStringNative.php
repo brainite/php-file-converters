@@ -26,6 +26,7 @@ class ReplaceStringNative extends EngineBase {
           $v = strtr($v, array(
             '}' => '\}',
             '{' => '\{',
+            "\r\n" => '\\par ',
             "\r" => '\\line',
             "\n" => '\\par ',
             "\t" => '\\tab',
