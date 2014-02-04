@@ -1,0 +1,25 @@
+{
+    "name":"wittiws/php-file-converters",
+    "type":"library",
+    "description":"Standardized file converter library.",
+    "keywords":[
+        "converter"
+    ],
+    "homepage":"http://www.witti.ws/project/php-file-converters",
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"Greg Payne",
+            "email":"greg.payne@gmail.com"
+        }
+    ],
+    "require":{
+        "php":">=5.3.3"
+    },
+    "autoload":{
+        "psr-4":{
+            "Witti\\FileConverter\\": "src/Witti/FileConverter/"
+        }
+    },
+    "minimum-stability": "dev"
+}
