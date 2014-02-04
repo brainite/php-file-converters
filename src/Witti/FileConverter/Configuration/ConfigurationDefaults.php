@@ -62,6 +62,9 @@ class ConfigurationDefaults extends ConfigurationBase {
         'xhtml2pdf:default' => array(
           '#engine' => 'Convert\\Xhtml2Pdf',
         ),
+        'phantomjs:default' => array(
+          '#engine' => 'Convert\\PhantomJs',
+        ),
         'html->ps->pdf' => array(
           '#engine' => 'Chain',
           'chain' => 'html->ps->pdf',
