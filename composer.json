@@ -17,8 +17,8 @@
         "php":">=5.3.3"
     },
     "autoload":{
-        "psr-0":{
-            "Witti\\": "src/"
+        "psr-4":{
+            "Witti\\FileConverter\\": "src/Witti/FileConverter/"
         }
     },
     "minimum-stability": "dev"
