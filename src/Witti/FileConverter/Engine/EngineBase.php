@@ -130,7 +130,7 @@ abstract class EngineBase {
     return '';
   }
 
-  public function getHelpInstallation($os = NULL, $os_version = NULL) {
+  public function getHelpInstallation($os, $os_version) {
     if (isset($os)) {
       return "No installation instructions available.";
     }
