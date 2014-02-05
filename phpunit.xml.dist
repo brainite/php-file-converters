@@ -19,7 +19,7 @@
 
     <testsuites>
         <testsuite name="FileConverter">
-            <directory>./src/Witti/FileConverter/Tests/</directory>
+            <directory>./src/Tests/</directory>
         </testsuite>
     </testsuites>
 

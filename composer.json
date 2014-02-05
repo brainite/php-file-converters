@@ -18,7 +18,7 @@
     },
     "autoload":{
         "psr-4":{
-            "Witti\\FileConverter\\": "src/Witti/FileConverter/"
+            "Witti\\FileConverter\\": "src/"
         }
     },
     "minimum-stability": "dev"
