@@ -1,3 +1,3 @@
 <?php
-require_once __DIR__ . '/src/Witti/FileConverter/Util/Loader.php';
-\Witti\FileConverter\Util\Loader::loadAll();
+$loader = require_once __DIR__.'/vendor/autoload.php';
+return $loader;

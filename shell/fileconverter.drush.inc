@@ -76,8 +76,7 @@ function fileconverter_drush_init() {
   }
 
   // Load ALL of the classes.
-  require_once __DIR__ . '/../src/Witti/FileConverter/Util/Loader.php';
-  \Witti\FileConverter\Util\Loader::loadAll();
+  require_once dirname(__DIR__) . '/autoload.php.dist';
 
   if (drush_get_context('DRUSH_VERBOSE')) {
     drush_print("File Converter Default Settings:");
