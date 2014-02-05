@@ -18,7 +18,7 @@ function fileconverter_drush_command() {
   $items = array();
   $items['fileconverter-convert'] = array(
     'description' => 'Convert a file.',
-    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_CONFIGURATION,
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUSH,
     'aliases' => array(
       'convert'
     ),
@@ -51,7 +51,7 @@ function fileconverter_drush_command() {
   );
   $items['fileconverter-tests'] = array(
     'description' => 'Run all FileConverter tests',
-    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_CONFIGURATION,
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUSH,
     'arguments' => array(
       'path_to_tests' => 'The path of the test branch',
     ),
@@ -88,6 +88,12 @@ function fileconverter_drush_init() {
 }
 
 function drush_fileconverter_convert(string $source = NULL, string $destination = NULL) {
+  // Require the arguments.
+  if (!isset($source) || !isset($destination)) {
+    drush_print("USAGE: fileconverter 'source.ext1' 'destination.ext2'");
+    return;
+  }
+
   // Normalize the file paths.
   if (!is_file($source)) {
     if (is_file(drush_cwd() . '/' . $source)) {
