@@ -194,7 +194,7 @@ abstract class EngineBase {
 
   public function shellWhich($command) {
     // Look in the bin folder (symlinks work fine).
-    $bin = realpath(__DIR__ . '/../../../../bin/' . $command);
+    $bin = realpath(__DIR__ . '/../../bin/' . $command);
     if ($bin !== FALSE && is_executable($bin)) {
       return $bin;
     }
