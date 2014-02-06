@@ -67,7 +67,7 @@ class Htmldoc extends EngineBase {
         return "sudo apt-get install htmldoc";
     }
 
-    return parent::getHelpInstallation();
+    return parent::getHelpInstallation($os, $os_version);
   }
 
   public function getVersionInfo() {

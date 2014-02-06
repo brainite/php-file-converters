@@ -63,7 +63,7 @@ class Xhtml2Pdf extends EngineBase {
         return $output;
     }
 
-    return parent::getHelpInstallation();
+    return parent::getHelpInstallation($os, $os_version);
   }
 
   public function getVersionInfo() {

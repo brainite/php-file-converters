@@ -61,7 +61,7 @@ class PhantomJs extends EngineBase {
         return $help;
     }
 
-    return parent::getHelpInstallation();
+    return parent::getHelpInstallation($os, $os_version);
   }
 
   public function getVersionInfo() {

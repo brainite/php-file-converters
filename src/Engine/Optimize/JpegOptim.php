@@ -35,7 +35,7 @@ class JpegOptim extends EngineBase {
         return $output;
     }
 
-    return $output .= parent::getHelpInstallation();
+    return $output .= parent::getHelpInstallation($os, $os_version);
   }
 
   public function isAvailable() {
