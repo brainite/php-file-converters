@@ -75,7 +75,7 @@ function fileconverter_drush_init() {
   }
 
   // Load ALL of the classes.
-  require_once dirname(__DIR__) . '/autoload.php.dist';
+  require_once dirname(dirname(__DIR__)) . '/autoload.php.dist';
 
   if (drush_get_context('DRUSH_VERBOSE')) {
     drush_print("File Converter Default Settings:");

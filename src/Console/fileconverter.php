@@ -2,7 +2,7 @@
 // Wrap the command in a function to avoid global namespace clutter.
 function witti_fileconverter_cli() {
   // Load ALL of the FileConverter classes.
-  require_once dirname(__DIR__) . '/autoload.php.dist';
+  require_once dirname(dirname(__DIR__)) . '/autoload.php.dist';
 
   // Parse the CLI arguments.
   $args = array(
