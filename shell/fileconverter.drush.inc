@@ -37,7 +37,6 @@ function fileconverter_drush_command() {
       ),
       'optimize' => array(
         'description' => 'Optimize the destination file',
-        'example-value' => '',
       ),
       'replace-string' => array(
         'description' => 'JSON Object: Configure text replacements',
