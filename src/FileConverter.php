@@ -57,8 +57,6 @@ class FileConverter {
     }
     $this->conversion_depth++;
 
-    //     drush_print($this->conversion_depth . " depth: " . $convert_path);
-
     // Track the files to cleanup.
     $cleanup_files = array();
     $return = function () use (&$cleanup_files, &$conversion_depth) {
