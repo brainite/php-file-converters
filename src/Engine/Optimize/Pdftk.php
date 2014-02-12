@@ -13,6 +13,9 @@ class Pdftk extends EngineBase {
     // pdftk source.pdf dump_data | sed 's/Value: .*/Value:/' > empty.txt
     // pdftk source.pdf update_info empty.txt output destination.pdf flatten compress
 
+    // Use sed to replace the ID with a new MD5 that will not vary.
+    // /ID [<e8c87bb7a19df73c042da3b2a01dc7ff> <e8c87bb7a19df73c042da3b2a01dc7ff>]
+
     return $this;
   }
 
@@ -24,7 +27,7 @@ class Pdftk extends EngineBase {
         return "sudo apt-get install pdftk";
     }
 
-    return parent::getHelpInstallation();
+    return parent::getHelpInstallation($os, $os_version);
   }
 
   public function isAvailable() {
