@@ -14,7 +14,8 @@
         }
     ],
     "require":{
-        "php":">=5.3.3"
+        "php":">=5.3.3",
+	"drush/drush":"dev-master-fulltest"
     },
     "autoload":{
         "psr-4":{

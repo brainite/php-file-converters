@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+SELF_DIRNAME="`dirname -- "$0"`"
+ROOT_DIRNAME="`dirname -- "$SELF_DIRNAME"`"
+
+# http://symfony.com/doc/current/components/console/introduction.html
+# https://packagist.org/packages/symfony/console
+
+case "$1" in
+  tests)
+    shift
+    DRUSH_CMD=fileconverter-tests
+    ;;
+  convert)
+    shift
+  	DRUSH_CMD=fileconverter-convert
+    ;;
+  *)
+  	DRUSH_CMD=fileconverter-convert
+  	;;
+esac
+set -- "$DRUSH_CMD" $@
+
+exec "$ROOT_DIRNAME/vendor/bin/drush" --root="$ROOT_DIRNAME" --include="$ROOT_DIRNAME" "$@"
