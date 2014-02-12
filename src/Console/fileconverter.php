@@ -1,4 +1,13 @@
 <?php
+/*
+ * This file is part of the Witti FileConverter package.
+ *
+ * (c) Greg Payne
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 // Wrap the command in a function to avoid global namespace clutter.
 function witti_fileconverter_cli() {
   // Load ALL of the FileConverter classes.
