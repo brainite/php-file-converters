@@ -28,7 +28,7 @@ class Pdftk extends EngineBase {
     return $this;
   }
 
-  public function getHelpInstallation($os, $os_version) {
+  protected function getHelpInstallation($os, $os_version) {
     return "This engine is a placeholder and is not yet ready for use.";
 
     switch ($os) {

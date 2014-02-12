@@ -23,7 +23,7 @@ class AbiWord extends EngineBase {
     );
   }
 
-  public function getHelpInstallation($os, $os_version) {
+  protected function getHelpInstallation($os, $os_version) {
     $help = "AbiWord is managed at http://www.abisource.com/\n";
     switch ($os) {
       case 'Ubuntu':

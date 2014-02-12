@@ -59,7 +59,7 @@ class PhantomJs extends EngineBase {
     return $shell;
   }
 
-  public function getHelpInstallation($os, $os_version) {
+  protected function getHelpInstallation($os, $os_version) {
     $help = "Maintained at http://phantomjs.org/\n";
     $help .= "Need to locate rasterize.js\n";
     switch ($os) {

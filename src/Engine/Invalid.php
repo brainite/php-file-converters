@@ -15,7 +15,7 @@ class Invalid extends EngineBase {
     return $this;
   }
 
-  public function getHelpInstallation($os, $os_version) {
+  protected function getHelpInstallation($os, $os_version) {
     return "Invalid engine configuration provided.";
   }
 

@@ -70,7 +70,7 @@ class Htmldoc extends EngineBase {
     );
   }
 
-  public function getHelpInstallation($os, $os_version) {
+  protected function getHelpInstallation($os, $os_version) {
     switch ($os) {
       case 'Ubuntu':
         return "sudo apt-get install htmldoc";

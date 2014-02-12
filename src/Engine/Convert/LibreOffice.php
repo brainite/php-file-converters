@@ -30,7 +30,7 @@ class LibreOffice extends EngineBase {
     );
   }
 
-  public function getHelpInstallation($os, $os_version) {
+  protected function getHelpInstallation($os, $os_version) {
     $help = "";
     switch ($os) {
       case 'Ubuntu':

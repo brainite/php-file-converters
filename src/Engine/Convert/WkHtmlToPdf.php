@@ -63,7 +63,7 @@ class WkHtmlToPdf extends EngineBase {
     );
   }
 
-  public function getHelpInstallation($os, $os_version) {
+  protected function getHelpInstallation($os, $os_version) {
     $output = "wkhtmltopdf can be found online at https://code.google.com/p/wkhtmltopdf/\n";
     switch ($os) {
       case 'Ubuntu':

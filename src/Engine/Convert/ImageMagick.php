@@ -61,7 +61,7 @@ class ImageMagick extends EngineBase {
     );
   }
 
-  public function getHelpInstallation($os, $os_version) {
+  protected function getHelpInstallation($os, $os_version) {
     $output = "ImageMagick is maintained at http://www.imagemagick.org/\n";
     switch ($os) {
       case 'Ubuntu':

@@ -25,7 +25,7 @@ class Unrtf extends EngineBase {
     );
   }
 
-  public function getHelpInstallation($os, $os_version) {
+  protected function getHelpInstallation($os, $os_version) {
     $output = "Unrtf is managed at http://www.gnu.org/software/unrtf/\n";
     switch ($os) {
       case 'Ubuntu':

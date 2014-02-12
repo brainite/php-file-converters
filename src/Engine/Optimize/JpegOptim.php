@@ -35,7 +35,7 @@ class JpegOptim extends EngineBase {
     );
   }
 
-  public function getHelpInstallation($os, $os_version) {
+  protected function getHelpInstallation($os, $os_version) {
     $output = "JpegOptim is maintained at http://freecode.com/projects/jpegoptim\n";
     switch ($os) {
       case 'Ubuntu':

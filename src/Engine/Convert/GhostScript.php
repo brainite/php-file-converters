@@ -20,7 +20,7 @@ class GhostScript extends EngineBase {
     );
   }
 
-  public function getHelpInstallation($os, $os_version) {
+  protected function getHelpInstallation($os, $os_version) {
     $help = "This engine is managed at http://www.ghostscript.com/\n";
     switch ($os) {
       case 'Ubuntu':

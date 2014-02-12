@@ -26,7 +26,7 @@ class Unoconv extends EngineBase {
     );
   }
 
-  public function getHelpInstallation($os, $os_version) {
+  protected function getHelpInstallation($os, $os_version) {
     $help = "Unoconv is managed at http://dag.wiee.rs/home-made/unoconv/\n";
     switch ($os) {
       case 'Ubuntu':

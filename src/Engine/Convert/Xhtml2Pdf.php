@@ -63,7 +63,7 @@ class Xhtml2Pdf extends EngineBase {
     );
   }
 
-  public function getHelpInstallation($os, $os_version) {
+  protected function getHelpInstallation($os, $os_version) {
     $output = "Xhtml2Pdf can be found online at http://www.xhtml2pdf.com/\n";
     switch ($os) {
       case 'Ubuntu':
