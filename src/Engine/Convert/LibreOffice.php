@@ -31,11 +31,17 @@ class LibreOffice extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    $help = "";
+    $help = array(
+      'title' => 'LibreOffice',
+    );
     switch ($os) {
       case 'Ubuntu':
-        $help .= "/usr/bin/libreoffice is symlink to /usr/lib/libreoffice/program/soffice\n";
-        $help .= "sudo apt-get install libreoffice\n";
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['apt-get'] = 'libreoffice';
+        $help['notes'] = array(
+          "/usr/bin/libreoffice is symlink to /usr/lib/libreoffice/program/soffice",
+          "/usr/bin/soffice (competes with other apps) is symlink to /usr/lib/libreoffice/program/soffice",
+        );
         return $help;
     }
 

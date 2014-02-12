@@ -133,7 +133,11 @@ abstract class EngineBase {
     $os_version = $this->settings['operating_system_version'];
     switch ($type) {
       case 'installation':
-        return $this->getHelpInstallation($os, $os_version);
+        $help = $this->getHelpInstallation($os, $os_version);
+        if (isset($help) && !is_string($help)) {
+          $help = var_export($help, 1);
+        }
+        return $help;
     }
 
     return '';
