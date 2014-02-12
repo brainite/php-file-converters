@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
-SELF_DIRNAME="`dirname -- "$0"`"
+SELF_PATH="`readlink -f "$0"`"
+SELF_DIRNAME="`dirname -- "$SELF_PATH"`"
 ROOT_DIRNAME="`dirname -- "$SELF_DIRNAME"`"
 
 # http://symfony.com/doc/current/components/console/introduction.html
