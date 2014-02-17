@@ -16,13 +16,15 @@ class Shell {
   const SHELL_ARG_BASIC = 3;
   const SHELL_ARG_BASIC_DBL = 4;
   const SHELL_ARG_BASIC_DBL_NOEQUAL = 8;
+  const SHELL_ARG_PAIR_DBL_NOEQUAL = 11;
   const SHELL_ARG_BOOL_DBL = 5;
   const SHELL_ARG_BOOL_SGL = 7;
   const SHELL_ARG_BASIC_SGL = 6;
+  const SHELL_ARG_MULTIPLE = 10;
   const SHELL_STDERR = 9;
 
-  static public function arg($arg, $mode, $value = NULL) {
-    return new Shell($arg, $mode, $value);
+  static public function arg($arg, $mode, $value = NULL, $conf = NULL) {
+    return new Shell($arg, $mode, $value, $conf);
   }
 
   static public function argDouble($arg, $value = TRUE, $mode = NULL) {
@@ -60,10 +62,12 @@ class Shell {
   private $argument = NULL;
   private $mode = NULL;
   private $value = NULL;
-  public function __construct($arg, $mode, $value = NULL) {
+  private $conf = array();
+  public function __construct($arg, $mode, $value = NULL, $conf = NULL) {
     $this->argument = $arg;
     $this->mode = $mode;
     $this->value = $value;
+    $this->conf = (array) $conf;
   }
 
   public function getMode() {
@@ -79,11 +83,30 @@ class Shell {
       case Shell::SHELL_SAFE:
         return $this->argument;
 
+      case Shell::SHELL_ARG_MULTIPLE:
+        $ret = '';
+        if (isset($this->value)) {
+          $sub_conf = isset($this->conf['each']) ? $this->conf['each']
+            : array(
+              'mode' => NULL,
+              'delimiter' => NULL,
+            );
+          $sub_type = $sub_conf['mode'];
+          foreach ((array) $this->value as $part) {
+            $sub = Shell::arg($this->argument, $sub_type, $part, $sub_conf);
+            $tmp = $sub->render();
+            if ($tmp != '') {
+              $ret .= ' ' . $tmp;
+            }
+          }
+        }
+        return $ret;
+
       case Shell::SHELL_OPTIONS:
         $output = '';
         foreach ($this->value as $opt) {
           $tmp = Shell::arg($opt['name'], $opt['mode'] ? $opt['mode']
-            : Shell::SHELL_ARG_BASIC, $opt['value'])->render();
+            : Shell::SHELL_ARG_BASIC, $opt['value'], $opt)->render();
           if ($tmp !== '') {
             $output .= ' ' . $tmp;
           }
@@ -110,7 +133,21 @@ class Shell {
 
       case Shell::SHELL_ARG_BASIC_DBL_NOEQUAL:
         if (isset($this->value)) {
-          return escapeshellarg('--' . $this->argument) . ' ' . escapeshellarg($this->value);
+          return escapeshellarg('--' . $this->argument) . ' '
+            . escapeshellarg($this->value);
+        }
+        return '';
+
+      case Shell::SHELL_ARG_PAIR_DBL_NOEQUAL:
+        if (isset($this->value)) {
+          $ret = escapeshellarg('--' . $this->argument);
+          $delim = isset($this->conf['delimiter']) ? $this->conf['delimiter']
+            : ':';
+          $parts = explode($delim, $this->value, 2);
+          foreach ($parts as $part) {
+            $ret .= ' ' . escapeshellarg($part);
+          }
+          return $ret;
         }
         return '';
 

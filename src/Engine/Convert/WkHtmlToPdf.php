@@ -30,6 +30,23 @@ class WkHtmlToPdf extends EngineBase {
     array(
       'name' => 'allow',
       'description' => 'Specify a folder whose files can be included',
+      'mode' => Shell::SHELL_ARG_MULTIPLE,
+      'each' => array(
+        'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
+      ),
+    ),
+    array(
+      'name' => 'cookie',
+      'description' => 'Name:Value for a cookie',
+      'mode' => Shell::SHELL_ARG_MULTIPLE,
+      'each' => array(
+        'mode' => Shell::SHELL_ARG_PAIR_DBL_NOEQUAL,
+        'delimiter' => ':',
+      ),
+    ),
+    array(
+      'name' => 'cookie-jar',
+      'description' => 'Path to a curl-style cookie jar file',
       'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
     ),
     array(
