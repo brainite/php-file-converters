@@ -145,10 +145,14 @@ abstract class EngineBase {
 
   protected function getHelpInstallation($os, $os_version) {
     if (isset($os)) {
-      return "No installation instructions available.";
+      return array(
+        'title' => "No installation instructions available.",
+      );
     }
     else {
-      return "No installation instructions available for your platform.";
+      return array(
+        'title' => "No installation instructions available for your platform.",
+      );
     }
   }
 
@@ -191,7 +195,7 @@ abstract class EngineBase {
       $cmd .= ' 2>&1 ';
     }
 
-    //     var_dump($cmd);
+    //var_dump($cmd);
 
     // Get the output. Concat the stderr info, if required.
     $output = trim(shell_exec($cmd));

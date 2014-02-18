@@ -9,7 +9,6 @@
  */
 
 namespace Witti\FileConverter\Engine\Convert;
-
 use Witti\FileConverter\Engine\EngineBase;
 use Witti\FileConverter\Util\Shell;
 class Xhtml2Pdf extends EngineBase {
@@ -64,12 +63,15 @@ class Xhtml2Pdf extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    $output = "Xhtml2Pdf can be found online at http://www.xhtml2pdf.com/\n";
+    $help = array(
+      'title' => 'Xhtml2Pdf',
+      'url' => 'http://www.xhtml2pdf.com/',
+    );
     switch ($os) {
       case 'Ubuntu':
-        $output .= " Ubuntu (12.04)\n";
-        $output .= "  sudo apt-get install python-pisa\n";
-        return $output;
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['apt-get'] = 'python-pisa';
+        return $help;
     }
 
     return parent::getHelpInstallation($os, $os_version);

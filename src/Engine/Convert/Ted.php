@@ -16,7 +16,6 @@
  */
 
 namespace Witti\FileConverter\Engine\Convert;
-
 use Witti\FileConverter\Engine\EngineBase;
 class Ted extends EngineBase {
   public function getConvertFileShell($source, &$destination) {
@@ -29,14 +28,18 @@ class Ted extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
+    $help = array(
+      'title' => 'Ted',
+    );
     switch ($os) {
       case 'Ubuntu':
-        $output = array(
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['notes'] = array(
           'Download .deb file from http://www.nllgg.nl/Ted/#How_to_install_Ted',
           'sudo dpkg -i <package-details>.deb',
           'Ex: sudo dpkg -i ted-2.23-amd64.deb',
         );
-        return join("\n", $output);
+        return $help;
     }
 
     return parent::getHelpInstallation($os, $os_version);
@@ -44,7 +47,7 @@ class Ted extends EngineBase {
 
   public function getVersionInfo() {
     $info = array(
-        'ted' => 'unknown',
+      'ted' => 'unknown',
     );
     $v = $this->shell($this->cmd . " --version");
     if (preg_match('@Ted ([\d\.]+)@', $v, $arr)) {

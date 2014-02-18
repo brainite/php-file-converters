@@ -9,7 +9,6 @@
  */
 
 namespace Witti\FileConverter\Engine\Convert;
-
 use Witti\FileConverter\Engine\EngineBase;
 use Witti\FileConverter\Util\Shell;
 class WkHtmlToPdf extends EngineBase {
@@ -81,12 +80,15 @@ class WkHtmlToPdf extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    $output = "wkhtmltopdf can be found online at https://code.google.com/p/wkhtmltopdf/\n";
+    $help = array(
+      'title' => 'WkHtmlToPdf',
+      'url' => 'https://code.google.com/p/wkhtmltopdf/',
+    );
     switch ($os) {
       case 'Ubuntu':
-        $output .= " Ubuntu (12.04)\n";
-        $output .= "  sudo apt-get install wkhtmltopdf\n";
-        return $output;
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['apt-get'] = 'wkhtmltopdf';
+        return $help;
     }
 
     return parent::getHelpInstallation($os, $os_version);

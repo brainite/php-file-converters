@@ -26,11 +26,15 @@ class Unrtf extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    $output = "Unrtf is managed at http://www.gnu.org/software/unrtf/\n";
+    $help = array(
+      'title' => 'Unrtf',
+      'url' => 'http://www.gnu.org/software/unrtf/',
+    );
     switch ($os) {
       case 'Ubuntu':
-        $output .= "sudo apt-get install unrtf\n";
-        return $output;
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['apt-get'] = 'unrtf';
+        return $help;
     }
 
     return parent::getHelpInstallation($os, $os_version);

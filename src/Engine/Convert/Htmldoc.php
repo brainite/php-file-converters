@@ -71,9 +71,14 @@ class Htmldoc extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
+    $help = array(
+      'title' => 'HtmlDoc',
+    );
     switch ($os) {
       case 'Ubuntu':
-        return "sudo apt-get install htmldoc";
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['apt-get'] = 'htmldoc';
+        return $help;
     }
 
     return parent::getHelpInstallation($os, $os_version);

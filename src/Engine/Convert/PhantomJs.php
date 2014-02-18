@@ -60,13 +60,18 @@ class PhantomJs extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    $help = "Maintained at http://phantomjs.org/\n";
-    $help .= "Need to locate rasterize.js\n";
+    $help = array(
+      'title' => 'PhantomJs',
+      'url' => 'http://phantomjs.org/',
+    );
     switch ($os) {
       case 'Ubuntu (12.04 LTS)':
-        $help .= "Ubuntu 12.04 runs version 1.4, which still requires xvfb.\n";
-        $help .= " sudo apt-get install phantomjs xvfb\n";
-        $help .= "Alternately, download a no-xvfb binary from http://phantomjs.org/download.html\n";
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['apt-get'] = 'phantomjs xvfb';
+        $help['notes'] = array(
+          "Ubuntu 12.04 runs version 1.4, which still requires xvfb.",
+          "Alternately, download a no-xvfb binary from http://phantomjs.org/download.html",
+        );
         return $help;
     }
 

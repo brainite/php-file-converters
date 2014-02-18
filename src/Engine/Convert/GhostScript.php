@@ -21,16 +21,19 @@ class GhostScript extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    $help = "This engine is managed at http://www.ghostscript.com/\n";
+    $help = array(
+      'title' => 'GhostScript',
+      'url' => 'http://www.ghostscript.com/',
+    );
     switch ($os) {
       case 'Ubuntu':
-        $help .= "/usr/bin/libreoffice is symlink to /usr/bin/gs\n";
-        $help .= "sudo apt-get install ghostscript\n";
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['apt-get'] = 'ghostscript';
         return $help;
     }
 
     return parent::getHelpInstallation($os, $os_version);
-   }
+  }
 
   public function getVersionInfo() {
     $gsv = $this->shell('gs -v');

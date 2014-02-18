@@ -49,10 +49,14 @@ class Catdoc extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    $help = "Maintained at http://www.wagner.pp.ru/~vitus/software/catdoc/\n";
+    $help = array(
+      'title' => 'CatDoc',
+      'url' => 'http://www.wagner.pp.ru/~vitus/software/catdoc/',
+    );
     switch ($os) {
       case 'Ubuntu':
-        $help .= "sudo apt-get install catdoc\n";
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['apt-get'] = 'catdoc';
         return $help;
     }
 

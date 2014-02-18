@@ -39,7 +39,12 @@ class Chain extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    return "Utilizing the 'Chain' engine is installed, but it requires intermediate engines.";
+    return array(
+      'title' => 'Chain Engine',
+      'notes' => array(
+        "Utilizing the 'Chain' engine is installed, but it requires intermediate engines.",
+      ),
+    );
   }
 
   public function isAvailable() {

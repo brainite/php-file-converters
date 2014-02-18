@@ -62,15 +62,18 @@ class ImageMagick extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    $output = "ImageMagick is maintained at http://www.imagemagick.org/\n";
+    $help = array(
+      'title' => 'ImageMagick',
+      'url' => 'http://www.imagemagick.org/',
+    );
     switch ($os) {
       case 'Ubuntu':
-        $output .= " Ubuntu (12.04)\n";
-        $output .= "  sudo apt-get install imagemagick\n";
-        return $output;
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['apt-get'] = 'imagemagick';
+        return $help;
     }
 
-    return $output .= parent::getHelpInstallation($os, $os_version);
+    return parent::getHelpInstallation($os, $os_version);
   }
 
   public function isAvailable() {

@@ -24,10 +24,14 @@ class AbiWord extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    $help = "AbiWord is managed at http://www.abisource.com/\n";
+    $help = array(
+      'title' => 'AbiWord',
+      'url' => 'http://www.abisource.com/',
+    );
     switch ($os) {
       case 'Ubuntu':
-        $help .= "sudo apt-get install abiword\n";
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['apt-get'] = 'abiword';
         return $help;
     }
 

@@ -36,12 +36,15 @@ class JpegOptim extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    $output = "JpegOptim is maintained at http://freecode.com/projects/jpegoptim\n";
+    $help = array(
+      'title' => 'JpegOptim',
+      'url' => 'http://freecode.com/projects/jpegoptim',
+    );
     switch ($os) {
       case 'Ubuntu':
-        $output .= " Ubuntu (12.04)\n";
-        $output .= "  sudo apt-get install jpegoptim\n";
-        return $output;
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['apt-get'] = 'jpegoptim';
+        return $help;
     }
 
     return $output .= parent::getHelpInstallation($os, $os_version);

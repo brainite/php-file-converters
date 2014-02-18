@@ -9,7 +9,6 @@
  */
 
 namespace Witti\FileConverter\Engine\Optimize;
-
 use Witti\FileConverter\Engine\EngineBase;
 /**
  * @todo Add support for field replacement by creating xfdf XML that pdftk can use.
@@ -29,11 +28,14 @@ class Pdftk extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    return "This engine is a placeholder and is not yet ready for use.";
-
+    $help = array(
+      'title' => 'PdfTk',
+    );
     switch ($os) {
       case 'Ubuntu':
-        return "sudo apt-get install pdftk";
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['apt-get'] = 'pdftk';
+        return $help;
     }
 
     return parent::getHelpInstallation($os, $os_version);

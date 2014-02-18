@@ -9,7 +9,6 @@
  */
 
 namespace Witti\FileConverter\Engine\Convert;
-
 use Witti\FileConverter\Engine\EngineBase;
 use Witti\FileConverter\Util\Shell;
 class Unoconv extends EngineBase {
@@ -27,10 +26,14 @@ class Unoconv extends EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    $help = "Unoconv is managed at http://dag.wiee.rs/home-made/unoconv/\n";
+    $help = array(
+      'title' => 'Unoconv',
+      'url' => 'http://dag.wiee.rs/home-made/unoconv/',
+    );
     switch ($os) {
       case 'Ubuntu':
-        $help .= "sudo apt-get install unoconv\n";
+        $help['os'] = 'confirmed on Ubuntu 12.04';
+        $help['apt-get'] = 'unoconv';
         return $help;
     }
 
