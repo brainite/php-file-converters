@@ -195,7 +195,12 @@ abstract class EngineBase {
       $cmd .= ' 2>&1 ';
     }
 
-    //var_dump($cmd);
+    if (function_exists('drush_get_context')
+      && drush_get_context('DRUSH_VERBOSE')) {
+      drush_print(dt('SHELL: !cmd', array(
+        '!cmd' => $cmd,
+      )));
+    }
 
     // Get the output. Concat the stderr info, if required.
     $output = trim(shell_exec($cmd));
