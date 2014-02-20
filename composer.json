@@ -16,6 +16,7 @@
     "require":{
         "php":">=5.3.3",
         "soqrate/html2pdf":"4.*",
+        "symfony/console":"2.4.*",
         "drush/drush":"dev-master-fulltest"
     },
     "autoload":{
