@@ -15,7 +15,8 @@
     ],
     "require":{
         "php":">=5.3.3",
-	"drush/drush":"dev-master-fulltest"
+        "soqrate/html2pdf":"4.*",
+        "drush/drush":"dev-master-fulltest"
     },
     "autoload":{
         "psr-4":{
