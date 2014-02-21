@@ -15,7 +15,7 @@
     ],
     "require":{
         "php":">=5.3.3",
-        "soqrate/html2pdf":"4.*",
+        "ensepar/html2pdf":"dev-master",
         "symfony/console":"2.4.*",
         "drush/drush":"dev-master-fulltest"
     },
