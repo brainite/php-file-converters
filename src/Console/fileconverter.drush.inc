@@ -68,6 +68,10 @@ function fileconverter_drush_command() {
         'description' => 'Specify a certain test group or specific test',
         'example-value' => 'rdf2pdf or rdf2pdf/001',
       ),
+      'converter' => array(
+        'description' => 'Specify converters (csv) to test using the key from _test.json.',
+        'example-value' => 'pandoc or pandoc,htmldoc',
+      ),
     ),
   );
   return $items;
@@ -154,6 +158,7 @@ function drush_fileconverter_tests($path_to_tests = NULL) {
   try {
     $tester = \Witti\FileConverter\FileConverterTests::factory($root);
     $tester->setTestFilter(trim(drush_get_option('test')));
+    $tester->setTestConverters(trim(drush_get_option('converter')));
     $tester->doAllTests();
   } catch (\Exception $e) {
     drush_print($e->getMessage());

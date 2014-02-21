@@ -23,6 +23,7 @@ class FileConverterTests {
 
   protected $root = FALSE;
   protected $filter = '';
+  protected $filter_converters = array();
   public function __construct($root = NULL) {
     if (isset($root) && is_dir($root)) {
       $this->root = realpath($root);
@@ -101,6 +102,9 @@ class FileConverterTests {
         }
         $s_path = array_shift($s_paths);
         foreach ($conf['convert_paths'] as $test_id => $test_conf) {
+          if (!empty($this->filter_converters) && !in_array($test_id, $this->filter_converters)) {
+            continue;
+          }
           drush_print("CONVERSION: " . $test_id, 4);
 
           // Do the basic conversion.
@@ -197,6 +201,11 @@ class FileConverterTests {
     }
     $dat = "{\n" . implode(",\n", $lines) . "\n}";
     file_put_contents($md5s_path, $dat);
+  }
+
+  public function setTestConverters($filter) {
+    $this->filter_converters = explode(',', $filter);
+    return $this;
   }
 
   public function setTestFilter($filter) {
