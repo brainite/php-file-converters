@@ -77,6 +77,9 @@ class ConfigurationDefaults extends ConfigurationBase {
         'docverter:default' => array(
           '#engine' => 'Convert\\Docverter',
         ),
+        'pandoc:default' => array(
+          '#engine' => 'Convert\\Pandoc',
+        ),
         'html->ps->pdf' => array(
           '#engine' => 'Chain',
           'chain' => 'html->ps->pdf',
