@@ -74,6 +74,9 @@ class ConfigurationDefaults extends ConfigurationBase {
         'phantomjs:default' => array(
           '#engine' => 'Convert\\PhantomJs',
         ),
+        'docverter:default' => array(
+          '#engine' => 'Convert\\Docverter',
+        ),
         'html->ps->pdf' => array(
           '#engine' => 'Chain',
           'chain' => 'html->ps->pdf',
