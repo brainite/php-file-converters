@@ -53,8 +53,8 @@ function fileconverter_drush_command() {
       ),
     ),
     'examples' => array(
-      'Simple jpg->png conversion' => 'drush convert source.jpg destination.png',
-      'HTML to PDF using Xhtml2Pdf' => 'drush convert --converter:html->pdf=xhtml2pdf:default source.html destination.pdf',
+      'Simple jpg->png conversion' => 'fileconverter source.jpg destination.png',
+      'HTML to PDF using Xhtml2Pdf' => 'fileconverter --engines=\'{"html->pdf":"xhtml2pdf:default"}\' source.html destination.pdf',
     ),
   );
   $items['fileconverter-tests'] = array(
