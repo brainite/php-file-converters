@@ -13,9 +13,27 @@ namespace Witti\FileConverter\Engine\Convert;
 use Witti\FileConverter\Engine\EngineBase;
 use Witti\FileConverter\Util\Shell;
 class Pandoc extends EngineBase {
+  protected $cmd_options = array(
+    array(
+      'name' => 'from',
+      'description' => 'Provide a pandoc format constant (e.g., markdown, markdown_github, etc.)',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL,
+    ),
+    array(
+      'name' => 'to',
+      'description' => 'Provide a pandoc format constant (e.g., markdown, markdown_github, etc.)',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL,
+    ),
+    array(
+      'name' => 'data-dir',
+      'description' => 'Pandoc user data directory, defaults to $HOME/.pandoc',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL,
+    ),
+  );
   public function getConvertFileShell($source, &$destination) {
     return array(
       $this->cmd['pandoc'],
+      Shell::argOptions($this->cmd_options, $this->configuration),
       $source,
       Shell::arg('o', Shell::SHELL_ARG_BASIC_SGL, $destination),
     );
@@ -62,11 +80,10 @@ class Pandoc extends EngineBase {
     return $info;
   }
 
-
   public function isAvailable() {
     $this->cmd = array(
-        'pandoc' => $this->shellWhich('pandoc'),
-        'latex' => $this->shellWhich('pdflatex'),
+      'pandoc' => $this->shellWhich('pandoc'),
+      'latex' => $this->shellWhich('pdflatex'),
     );
     return isset($this->cmd['pandoc']) && isset($this->cmd['latex']);
   }
