@@ -84,7 +84,7 @@ class ConfigurationDefaults extends ConfigurationBase {
           '#engine' => 'Convert\\PhantomJs',
         ),
       ),
-      '(html|txt|md|rst|dbk|textile|opml|tex)->(pdf|html|docx|dbk|md|txt|opml|rtf|epub|epub3|fb2|man)' => array(
+      '(html|txt|md|rst|dbk|textile|opml|tex)->(pdf|html|docx|odt|dbk|md|txt|opml|rtf|epub|epub3|fb2|man)' => array(
         'pandoc:default' => array(
           '#engine' => 'Convert\\Pandoc',
         ),
