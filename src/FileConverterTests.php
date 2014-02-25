@@ -120,7 +120,7 @@ class FileConverterTests {
             $time = microtime(TRUE);
             try {
               $fc->convertFile($s_path, $d_path);
-              if (isset($conf['optimize']) && $conf['optimize']) {
+              if (isset($conf['optimize']) && $conf['optimize']['optimize']) {
                 foreach ((array) $conf['optimize']['engines'] as $engine_path => $engine_conf) {
                   $fc->setConverter($engine_path, $engine_conf);
                 }
