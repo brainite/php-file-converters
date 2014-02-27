@@ -15,6 +15,10 @@ case "$1" in
     shift
   	DRUSH_CMD=fileconverter-convert
     ;;
+  list)
+    shift
+  	DRUSH_CMD=fileconverter-list
+    ;;
   *)
   	DRUSH_CMD=fileconverter-convert
   	;;

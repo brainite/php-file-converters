@@ -57,6 +57,19 @@ function fileconverter_drush_command() {
       'HTML to PDF using Xhtml2Pdf' => 'fileconverter --engines=\'{"html->pdf":"xhtml2pdf:default"}\' source.html destination.pdf',
     ),
   );
+  $items['fileconverter-list'] = array(
+    'description' => 'List FileConverter details',
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUSH,
+    'arguments' => array(
+      'list_name' => 'The list to display (converters)',
+      'example-value' => 'converters',
+    ),
+    'options' => array(
+      'show-paths' => array(
+        'description' => 'Show all paths for each converter.',
+      ),
+    ),
+  );
   $items['fileconverter-tests'] = array(
     'description' => 'Run all FileConverter tests',
     'bootstrap' => DRUSH_BOOTSTRAP_DRUSH,
@@ -144,9 +157,47 @@ function drush_fileconverter_convert(string $source = NULL, string $destination 
   }
 }
 
+function drush_fileconverter_list($list_name = NULL) {
+  $items = array();
+
+  switch ($list_name) {
+    case 'converters':
+      $fc = Witti\FileConverter\FileConverter::factory();
+      foreach ($fc->getEngineConfigurations() as $configurations) {
+        foreach ($configurations->getAllConverters() as $convert_path => $converters) {
+          foreach ($converters as $id => $converter) {
+            $item = array(
+              '#title' => preg_replace('@^.*\\\\@', '', $converter['#engine']),
+            );
+            if ($converter['chain']) {
+              $item['#title'] .= ' ' . $converter['chain'];
+            }
+            $items[$id] = $item;
+          }
+        }
+      }
+      break;
+
+    default:
+      drush_print("Usage: fileconverter list [converters]");
+      return;
+  }
+
+  // Sort and display the items.
+  ksort($items);
+  foreach ($items as $id => $item) {
+    drush_print($item['#title']);
+    foreach ($item as $k => $v) {
+      if ($k{0} !== '#') {
+        drush_print($v, 3);
+      }
+    }
+  }
+}
+
 function drush_fileconverter_tests($path_to_tests = NULL) {
   if (!isset($path_to_tests)) {
-    drush_print("USAGE: drush fileconverter-tests <path_to_tests>");
+    drush_print("USAGE: fileconverter tests <path_to_tests>");
     return;
   }
   $root = realpath(drush_cwd() . '/' . $path_to_tests);

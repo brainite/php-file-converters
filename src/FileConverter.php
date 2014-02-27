@@ -156,6 +156,10 @@ class FileConverter {
     return $this->settings;
   }
 
+  public function getEngineConfigurations() {
+    return $this->configurations;
+  }
+
   public function getEngine($convert_path, $configuration) {
     $engine_id = $configuration['#engine'];
     if ($engine_id{0} !== '\\') {
