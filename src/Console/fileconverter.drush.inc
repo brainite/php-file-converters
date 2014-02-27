@@ -167,11 +167,13 @@ function drush_fileconverter_list($list_name = NULL) {
         foreach ($configurations->getAllConverters() as $convert_path => $converters) {
           foreach ($converters as $id => $converter) {
             $item = array(
-              '#title' => preg_replace('@^.*\\\\@', '', $converter['#engine']),
+              '#title' => $id,
             );
+            $item['Engine'] = preg_replace('@^.*\\\\@', '', $converter['#engine']);
             if ($converter['chain']) {
-              $item['#title'] .= ' ' . $converter['chain'];
+              $item['Engine'] .= ' ' . $converter['chain'];
             }
+
             $items[$id] = $item;
           }
         }
