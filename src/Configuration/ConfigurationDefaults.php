@@ -36,8 +36,8 @@ class ConfigurationDefaults extends ConfigurationBase {
       $lsb = trim(`which lsb_release`);
       if ($lsb !== '') {
         $lsb = escapeshellarg($lsb);
-        $settings['operating_system'] = trim(`$lsb      -is`);
-        $settings['operating_system_version'] = trim(`$lsb      -rs`);
+        $settings['operating_system'] = trim(`$lsb       -is`);
+        $settings['operating_system_version'] = trim(`$lsb       -rs`);
       }
     }
     elseif ($settings['operating_system'] === 'Windows NT') {
@@ -73,6 +73,9 @@ class ConfigurationDefaults extends ConfigurationBase {
         ),
         'docverter:default' => array(
           '#engine' => 'Convert\\Docverter',
+        ),
+        'mpdf:default' => array(
+          '#engine' => 'Convert\\Mpdf',
         ),
         'html->ps->pdf' => array(
           '#engine' => 'Chain',
