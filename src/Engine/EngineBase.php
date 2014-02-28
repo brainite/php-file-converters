@@ -88,6 +88,7 @@ abstract class EngineBase {
 
       // Move the converted temporary file to the destination.
       rename($d_path, $destination);
+      chmod($destination, 0644);
       return $this;
     }
     else {
@@ -215,9 +216,15 @@ abstract class EngineBase {
   }
 
   public function shellWhich($command) {
+    static $cache = array();
+    if (array_key_exists($command, $cache)) {
+      return $cache[$command];
+    }
+
     // Look in the bin folder (symlinks work fine).
     $bin = realpath(__DIR__ . '/../../bin/' . $command);
     if ($bin !== FALSE && is_executable($bin)) {
+      $cache[$command] = $bin;
       return $bin;
     }
 
@@ -231,6 +238,7 @@ abstract class EngineBase {
     if (!$path || !is_file($path) || !is_executable($path)) {
       $path = NULL;
     }
+    $cache[$command] = $path;
     return $path;
   }
 
