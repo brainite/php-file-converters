@@ -24,8 +24,9 @@ class Pdftk extends EngineBase {
     $remove_meta = isset($this->configuration['remove-metadata'])
       && $this->configuration['remove-metadata'];
     if ($remove_meta) {
+      // Only remove metadata if this is a 1.4 PDF and there is some metadata
       $pdfVersion = file_get_contents($source, FALSE, NULL, 0, 1024);
-      if (preg_match('@^%PDF-(\d+\.\d+).*/Metadata @s', $pdfVersion, $arr)) {
+      if (preg_match('@^%PDF-(\d+\.\d+).*/(?:Metadata|M) @s', $pdfVersion, $arr)) {
         $pdfVersion = (float) $arr[1];
         if ($pdfVersion < 1.4) {
           $remove_meta = FALSE;
@@ -95,6 +96,11 @@ class Pdftk extends EngineBase {
             if ($arr[1] === 'Metadata') {
               continue;
             }
+            // Remove the date modified.
+            // This should specifically affect type = Annot (i.e., annotations)
+            if ($arr[1] === 'M') {
+              continue;
+            }
             $def[$arr[1]] = trim($arr[2]);
           }
           $buffer .= $line;
@@ -107,7 +113,6 @@ class Pdftk extends EngineBase {
           // Remove it.
           if (isset($def['Length'])) {
             $len = (int) $def['Length'];
-//             fread($fp, $len);
             while ($len > 0 && !feof($fp)) {
               $line = fgets($fp);
               $len -= strlen($line);
@@ -123,7 +128,6 @@ class Pdftk extends EngineBase {
           fputs($fout, $buffer);
           if (isset($def['Length'])) {
             $len = (int) $def['Length'];
-//             fwrite($fout, fread($fp, $len));
             while ($len > 0 && !feof($fp)) {
               $line = fgets($fp);
               $len -= strlen($line);
