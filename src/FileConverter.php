@@ -119,9 +119,7 @@ class FileConverter {
     foreach ($engines as $engine) {
       try {
         $engine->$convert($source, $destination);
-//         if ($this->conversion_depth == 1) {
-          $this->previous_engines[] = $engine;
-//         }
+        $this->previous_engines[] = $engine;
         $return();
         return $this;
       } catch (\Exception $e) {
