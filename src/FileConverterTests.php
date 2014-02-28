@@ -204,7 +204,7 @@ class FileConverterTests {
   }
 
   public function setTestConverters($filter) {
-    $this->filter_converters = explode(',', $filter);
+    $this->filter_converters = (trim($filter) === '') ? array() : explode(',', $filter);
     return $this;
   }
 
