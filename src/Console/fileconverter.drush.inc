@@ -114,27 +114,65 @@ function fileconverter_drush_init() {
 
 function drush_fileconverter_convert(string $source = NULL, string $destination = NULL) {
   // Require the arguments.
-  if (!isset($source) || !isset($destination)) {
+  if (!isset($source) || !isset($destination) || $destination === '') {
     drush_print("USAGE: fileconverter 'source.ext1' 'destination.ext2'");
     return;
   }
 
   // Normalize the file paths.
-  if (!is_file($source)) {
-    if (is_file(drush_cwd() . '/' . $source)) {
-      $source = drush_cwd() . '/' . $source;
+  $fc = Witti\FileConverter\FileConverter::factory();
+  $stdin = $stdout = FALSE;
+  $force_conversion = trim(drush_get_option('conversion'));
+  if (preg_match('@^(.*):(.*)$@', $force_conversion, $arr)) {
+    $force_conversion = array(
+      $arr[1],
+      $arr[2],
+    );
+  }
+  else {
+    $force_conversion = NULL;
+  }
+  if ($source === '-') {
+    if (!isset($force_conversion)) {
+      drush_print("Error: When using stdin, you must explicitly define conversion.");
+      drush_print("Usage: fileconverter - output.dat --conversion=misc:dat");
+      return;
+    }
+    $stdin = TRUE;
+    $source = $fc->getEngine(NULL, NULL)->getTempFile($force_conversion[0]);
+    $source_fp = fopen($source, 'w');
+    while (!feof(STDIN)) {
+      fputs($source_fp, fgets(STDIN));
+    }
+    fclose($source_fp);
+  }
+  else {
+    if (!is_file($source)) {
+      if (is_file(drush_cwd() . '/' . $source)) {
+        $source = drush_cwd() . '/' . $source;
+      }
+    }
+    if (!is_file($source)) {
+      drush_print(dt("Error: Unable to locate source file."));
+      return;
     }
   }
-  if (!is_file($source)) {
-    drush_print(dt("Error: Unable to locate source file."));
-    return;
-  }
-  if (isset($destination) && $destination{0} !== '/') {
-    $destination = drush_cwd() . '/' . $destination;
+  if ($destination{0} !== '/') {
+    if ($destination === '-') {
+      if (!isset($force_conversion)) {
+        drush_print("Error: When using stdout, you must explicitly define conversion.");
+        drush_print("Usage: fileconverter input.dat - --conversion=misc:dat");
+        return;
+      }
+      $stdout = TRUE;
+      $destination = $fc->getEngine(NULL, NULL)->getTempFile($force_conversion[1]);
+    }
+    else {
+      $destination = drush_cwd() . '/' . $destination;
+    }
   }
 
   // Create the file converter and apply any cli options.
-  $fc = Witti\FileConverter\FileConverter::factory();
   $replace = drush_get_option('replace-string');
   if ($replace) {
     $dat = json_decode($replace, TRUE);
@@ -142,7 +180,10 @@ function drush_fileconverter_convert(string $source = NULL, string $destination 
       $fc->setReplacements($dat, 'string');
     }
   }
-  if (isset($destination) && realpath($source) !== realpath($destination)) {
+
+  // Convert the file.
+  $fc = Witti\FileConverter\FileConverter::factory();
+  if (realpath($source) !== realpath($destination)) {
     $fc->convertFile(realpath($source), $destination);
   }
 
@@ -154,6 +195,14 @@ function drush_fileconverter_convert(string $source = NULL, string $destination 
   // Optimize the file.
   if (drush_get_option('optimize') === TRUE) {
     $fc->optimizeFile($destination, $destination);
+  }
+
+  if ($stdin) {
+    unlink($source);
+  }
+  if ($stdout) {
+    readfile($destination);
+    unlink($destination);
   }
 }
 
