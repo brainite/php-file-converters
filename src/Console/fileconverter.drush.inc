@@ -61,7 +61,7 @@ function fileconverter_drush_command() {
     'description' => 'List FileConverter details',
     'bootstrap' => DRUSH_BOOTSTRAP_DRUSH,
     'arguments' => array(
-      'list_name' => 'The list to display (converters)',
+      'list_name' => 'The list to display (converters|convert-paths)',
       'example-value' => 'converters',
     ),
     'options' => array(
@@ -180,8 +180,25 @@ function drush_fileconverter_list($list_name = NULL) {
       }
       break;
 
+    case 'convert-paths':
+        $fc = Witti\FileConverter\FileConverter::factory();
+      foreach ($fc->getEngineConfigurations() as $configurations) {
+        foreach ($configurations->getAllConverters() as $convert_path => $converters) {
+          $items[$convert_path]['#title'] = $convert_path;
+          foreach ($converters as $id => $converter) {
+            $engine = preg_replace('@^.*\\\\@', '', $converter['#engine']);
+            if ($converter['chain']) {
+              $engine .= ' ' . $converter['chain'];
+            }
+            $item = sprintf('%- 28s %s', $id, $engine);
+            $items[$convert_path][] = $item;
+          }
+        }
+      }
+      break;
+
     default:
-      drush_print("Usage: fileconverter list [converters]");
+      drush_print("Usage: fileconverter list [converters|convert-paths]");
       return;
   }
 
@@ -191,7 +208,17 @@ function drush_fileconverter_list($list_name = NULL) {
     drush_print($item['#title']);
     foreach ($item as $k => $v) {
       if ($k{0} !== '#') {
-        drush_print($v, 3);
+        if (is_array($v)) {
+          drush_print($v['#title'], 3);
+          foreach ($v as $k1 => $v1) {
+            if ($k1{0} !== '#') {
+              drush_print($v1, 6);
+            }
+          }
+        }
+        else {
+          drush_print($v, 3);
+        }
       }
     }
   }
