@@ -159,6 +159,9 @@ class FileConverter {
   }
 
   public function getEngine($convert_path, $configuration) {
+    if (!isset($convert_path)) {
+      return new Engine\Invalid($this, $convert_path, $this->settings, $configuration);
+    }
     $engine_id = $configuration['#engine'];
     if ($engine_id{0} !== '\\') {
       $class = '\Witti\FileConverter\Engine\\' . $engine_id;
