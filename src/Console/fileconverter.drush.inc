@@ -61,7 +61,7 @@ function fileconverter_drush_command() {
     'description' => 'List FileConverter details',
     'bootstrap' => DRUSH_BOOTSTRAP_DRUSH,
     'arguments' => array(
-      'list_name' => 'The list to display (converters|convert-paths)',
+      'list_name' => 'The list to display (converters|convert-paths|extension-table)',
       'example-value' => 'converters',
     ),
     'options' => array(
@@ -230,7 +230,7 @@ function drush_fileconverter_list($list_name = NULL) {
       break;
 
     case 'convert-paths':
-        $fc = Witti\FileConverter\FileConverter::factory();
+      $fc = Witti\FileConverter\FileConverter::factory();
       foreach ($fc->getEngineConfigurations() as $configurations) {
         foreach ($configurations->getAllConverters() as $convert_path => $converters) {
           $items[$convert_path]['#title'] = $convert_path;
@@ -246,8 +246,65 @@ function drush_fileconverter_list($list_name = NULL) {
       }
       break;
 
+    case 'extension-table':
+      $rows = array();
+      $fc = Witti\FileConverter\FileConverter::factory();
+      $all_tos = array();
+      foreach ($fc->getEngineConfigurations() as $configurations) {
+        foreach ($configurations->getAllConverters() as $convert_path => $converters) {
+          if (preg_match('@^(.*)->(.*)$@', $convert_path, $arr)) {
+            $froms = explode('|', trim($arr[1], '()'));
+            $tos = explode('|', trim($arr[2], '()'));
+          }
+          elseif (preg_match('@^(.*)~optimize$@', $convert_path, $arr)) {
+            $froms = $tos = array(
+              $arr[1],
+            );
+          }
+          else {
+            continue;
+          }
+          foreach ($froms as $from) {
+            if (!isset($rows[$from])) {
+              $rows[$from] = array();
+            }
+            foreach ($tos as $to) {
+              $all_tos[] = $to;
+              if (!isset($rows[$to])) {
+                $rows[$to] = array();
+              }
+              $rows[$from][$to] += sizeof($converters);
+            }
+          }
+        }
+      }
+
+      // Build the table.
+      $all_tos = array_unique($all_tos);
+      sort($all_tos);
+      ksort($rows);
+      $exts = array_keys($rows);
+      echo "source | " . join(" | ", $all_tos) . "\n";
+      echo str_repeat("--- | ", sizeof($all_tos)) . "---\n";
+      foreach ($rows as $from => $row) {
+        if (empty($row)) {
+          continue;
+        }
+        echo $from;
+        foreach ($all_tos as $to) {
+          if (isset($row[$to]) && $row[$to]) {
+            echo " | " . $row[$to];
+          }
+          else {
+            echo " | ";
+          }
+        }
+        echo "\n";
+      }
+      break;
+
     default:
-      drush_print("Usage: fileconverter list [converters|convert-paths]");
+      drush_print("Usage: fileconverter list [converters|convert-paths|extension-table]");
       return;
   }
 
