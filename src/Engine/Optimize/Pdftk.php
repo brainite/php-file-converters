@@ -25,7 +25,7 @@ class Pdftk extends EngineBase {
       && $this->configuration['remove-metadata'];
     if ($remove_meta) {
       // Only remove metadata if this is a 1.4 PDF and there is some metadata
-      $pdfVersion = file_get_contents($source, FALSE, NULL, 0, 1024);
+      $pdfVersion = file_get_contents($source, FALSE, NULL, 0, 10000);
       if (preg_match('@^%PDF-(\d+\.\d+).*/(?:Metadata|M) @s', $pdfVersion, $arr)) {
         $pdfVersion = (float) $arr[1];
         if ($pdfVersion < 1.4) {
