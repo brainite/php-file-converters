@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Witti\FileConverter\Engine\Optimize;
-use Witti\FileConverter\Engine\EngineBase;
-use Witti\FileConverter\Util\Shell;
+namespace FileConverter\Engine\Optimize;
+use FileConverter\Engine\EngineBase;
+use FileConverter\Util\Shell;
 /**
  * @todo Add support for field replacement by creating xfdf XML that pdftk can use.
  * @link http://partners.adobe.com/public/developer/en/xml/XFDF_Spec_3.0.pdf

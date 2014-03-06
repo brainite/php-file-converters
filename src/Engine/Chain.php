@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Witti\FileConverter\Engine;
+namespace FileConverter\Engine;
 
 class Chain extends EngineBase {
   public function convertFile($source, $destination) {

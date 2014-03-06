@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Witti\FileConverter\Tests;
+namespace FileConverter\Tests;
 
 class DefaultConfigTest extends \PHPUnit_Framework_TestCase {
   /**
    * @dataProvider getConfigurationDefaults
    */
   public function testConfigurationDefaults($convert_path, $expected) {
-    $fc = \Witti\FileConverter\FileConverter::factory(FALSE);
+    $fc = \FileConverter\FileConverter::factory(FALSE);
     $engines = $fc->getEngines($convert_path, NULL, FALSE);
     $test = array();
     foreach ($engines as $engine) {
@@ -31,7 +31,7 @@ class DefaultConfigTest extends \PHPUnit_Framework_TestCase {
       array(
         'pdf->jpg',
         array(
-          'Witti\FileConverter\Engine\Convert\ImageMagick' => array(
+          'FileConverter\Engine\Convert\ImageMagick' => array(
             '#engine' => 'Convert\\ImageMagick',
           ),
         ),
@@ -39,16 +39,16 @@ class DefaultConfigTest extends \PHPUnit_Framework_TestCase {
       array(
         'rtf->pdf',
         array(
-          'Witti\FileConverter\Engine\Convert\LibreOffice' => array(
+          'FileConverter\Engine\Convert\LibreOffice' => array(
             '#engine' => 'Convert\\LibreOffice',
           ),
-          'Witti\FileConverter\Engine\Convert\Unoconv' => array(
+          'FileConverter\Engine\Convert\Unoconv' => array(
             '#engine' => 'Convert\\Unoconv',
           ),
-          'Witti\FileConverter\Engine\Convert\AbiWord' => array(
+          'FileConverter\Engine\Convert\AbiWord' => array(
             '#engine' => 'Convert\\AbiWord',
           ),
-          'Witti\FileConverter\Engine\Chain' => array(
+          'FileConverter\Engine\Chain' => array(
             '#engine' => 'Chain',
             'chain' => 'rtf->ps->pdf',
           ),

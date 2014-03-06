@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Witti\FileConverter\Configuration;
+namespace FileConverter\Configuration;
 
 abstract class ConfigurationBase {
   abstract public function getAllConverters();

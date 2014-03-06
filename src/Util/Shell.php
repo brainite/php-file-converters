@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Witti\FileConverter\Util;
+namespace FileConverter\Util;
 
 class Shell {
   const SHELL_SAFE = 1;

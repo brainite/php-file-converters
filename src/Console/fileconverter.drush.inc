@@ -105,7 +105,7 @@ function fileconverter_drush_init() {
 
   if (drush_get_context('DRUSH_VERBOSE')) {
     drush_print("File Converter Default Settings:");
-    $fc = Witti\FileConverter\FileConverter::factory();
+    $fc = FileConverter\FileConverter::factory();
     foreach ($fc->getSettings() as $k => $v) {
       drush_print(sprintf('% -25s: %s', $k, $v), 3);
     }
@@ -120,7 +120,7 @@ function drush_fileconverter_convert(string $source = NULL, string $destination 
   }
 
   // Normalize the file paths.
-  $fc = Witti\FileConverter\FileConverter::factory();
+  $fc = FileConverter\FileConverter::factory();
   $stdin = $stdout = FALSE;
   $force_conversion = trim(drush_get_option('conversion'));
   if (preg_match('@^(.*):(.*)$@', $force_conversion, $arr)) {
@@ -182,7 +182,7 @@ function drush_fileconverter_convert(string $source = NULL, string $destination 
   }
 
   // Convert the file.
-  $fc = Witti\FileConverter\FileConverter::factory();
+  $fc = FileConverter\FileConverter::factory();
   if (realpath($source) !== realpath($destination)) {
     $fc->convertFile(realpath($source), $destination);
   }
@@ -211,7 +211,7 @@ function drush_fileconverter_list($list_name = NULL) {
 
   switch ($list_name) {
     case 'converters':
-      $fc = Witti\FileConverter\FileConverter::factory();
+      $fc = FileConverter\FileConverter::factory();
       foreach ($fc->getEngineConfigurations() as $configurations) {
         foreach ($configurations->getAllConverters() as $convert_path => $converters) {
           foreach ($converters as $id => $converter) {
@@ -230,7 +230,7 @@ function drush_fileconverter_list($list_name = NULL) {
       break;
 
     case 'convert-paths':
-      $fc = Witti\FileConverter\FileConverter::factory();
+      $fc = FileConverter\FileConverter::factory();
       foreach ($fc->getEngineConfigurations() as $configurations) {
         foreach ($configurations->getAllConverters() as $convert_path => $converters) {
           $items[$convert_path]['#title'] = $convert_path;
@@ -248,7 +248,7 @@ function drush_fileconverter_list($list_name = NULL) {
 
     case 'extension-table':
       $rows = array();
-      $fc = Witti\FileConverter\FileConverter::factory();
+      $fc = FileConverter\FileConverter::factory();
       $all_tos = array();
       foreach ($fc->getEngineConfigurations() as $configurations) {
         foreach ($configurations->getAllConverters() as $convert_path => $converters) {
@@ -342,7 +342,7 @@ function drush_fileconverter_tests($path_to_tests = NULL) {
   }
 
   try {
-    $tester = \Witti\FileConverter\FileConverterTests::factory($root);
+    $tester = \FileConverter\FileConverterTests::factory($root);
     $tester->setTestFilter(trim(drush_get_option('test')));
     $tester->setTestConverters(trim(drush_get_option('converter')));
     $tester->doAllTests();

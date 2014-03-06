@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Witti\FileConverter\Engine\Convert;
-use Witti\FileConverter\Engine\EngineBase;
-use Witti\FileConverter\Util\Shell;
+namespace FileConverter\Engine\Convert;
+use FileConverter\Engine\EngineBase;
+use FileConverter\Util\Shell;
 class Mpdf extends EngineBase {
   public function convertFile($source, $destination) {
     $html = file_get_contents($source);

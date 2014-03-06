@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Witti\FileConverter\Engine\Convert;
+namespace FileConverter\Engine\Convert;
 
-use Witti\FileConverter\Engine\EngineBase;
-use Witti\FileConverter\Util\Shell;
+use FileConverter\Engine\EngineBase;
+use FileConverter\Util\Shell;
 class Unrtf extends EngineBase {
   public function getConvertFileShell($source, &$destination) {
     $err = $this->getTempFile('err');

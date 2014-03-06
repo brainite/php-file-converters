@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Witti\FileConverter;
+namespace FileConverter;
 
 if (!function_exists('drush_print')) {
   function drush_print($msg, $indent = 0) {
@@ -49,7 +49,7 @@ class FileConverterTests {
     );
 
     // Build the os suffix.
-    $fc = \Witti\FileConverter\FileConverter::factory();
+    $fc = \FileConverter\FileConverter::factory();
     $tmp = $fc->getSettings();
     $os_suffix = '-' . $tmp['operating_system'] . '_'
       . $tmp['operating_system_version'];
@@ -86,7 +86,7 @@ class FileConverterTests {
         drush_print("TITLE: " . $subtest_conf['title'], 2);
 
         // Create the FileConverter object.
-        $fc = \Witti\FileConverter\FileConverter::factory(FALSE);
+        $fc = \FileConverter\FileConverter::factory(FALSE);
 
         if (isset($subtest_conf['replace-string'])) {
           $fc->setReplacements($subtest_conf['replace-string'], 'string');
@@ -153,7 +153,7 @@ class FileConverterTests {
           // Create derivatives.
           $s_der = $d_path_final;
           $s_thumb = NULL;
-          $fc_der = \Witti\FileConverter\FileConverter::factory(FALSE);
+          $fc_der = \FileConverter\FileConverter::factory(FALSE);
           foreach ($conf['derivatives'] as $der_id => $der_conf) {
             drush_print("DERIVATIVE: " . $der_id, 6);
             $d_der = str_replace('%', $s_der . "-$der_id", $der_conf['destination']);
@@ -169,7 +169,7 @@ class FileConverterTests {
 
           // Create thumbnails.
           if (isset($s_thumb)) {
-            $fc_thumb = \Witti\FileConverter\FileConverter::factory(FALSE);
+            $fc_thumb = \FileConverter\FileConverter::factory(FALSE);
             foreach ($thumb_sizes as $thumb_size => $thumb_create) {
               drush_print("THUMB: " . $thumb_size, 6);
               $d_thumb = $s_thumb . "-$thumb_size.jpg";

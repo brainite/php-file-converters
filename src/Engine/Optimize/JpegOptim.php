@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Witti\FileConverter\Engine\Optimize;
+namespace FileConverter\Engine\Optimize;
 
-use Witti\FileConverter\Engine\EngineBase;
-use Witti\FileConverter\Util\Shell;
+use FileConverter\Engine\EngineBase;
+use FileConverter\Util\Shell;
 class JpegOptim extends EngineBase {
   protected $cmd_options = array(
     array(

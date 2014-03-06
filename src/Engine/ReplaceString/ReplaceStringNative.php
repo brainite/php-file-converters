@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Witti\FileConverter\Engine\ReplaceString;
+namespace FileConverter\Engine\ReplaceString;
 
-use Witti\FileConverter\Engine\EngineBase;
+use FileConverter\Engine\EngineBase;
 
 /**
  * Replace strings using native PHP code for some basic file types.

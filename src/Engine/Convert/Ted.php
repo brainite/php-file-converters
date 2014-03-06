@@ -15,8 +15,8 @@
  * @link http://www.nllgg.nl/Ted/
  */
 
-namespace Witti\FileConverter\Engine\Convert;
-use Witti\FileConverter\Engine\EngineBase;
+namespace FileConverter\Engine\Convert;
+use FileConverter\Engine\EngineBase;
 class Ted extends EngineBase {
   public function getConvertFileShell($source, &$destination) {
     return array(

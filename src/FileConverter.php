@@ -13,9 +13,9 @@
  *
  * Provide an OO point of entry for the File Converter tools.
  */
-namespace Witti\FileConverter;
-use Witti\FileConverter\Configuration\ConfigurationDefaults;
-use Witti\FileConverter\Configuration\ConfigurationOverride;
+namespace FileConverter;
+use FileConverter\Configuration\ConfigurationDefaults;
+use FileConverter\Configuration\ConfigurationOverride;
 
 /**
  * The controlling FileConverter class.
@@ -24,7 +24,7 @@ class FileConverter {
   /**
    * Get a new converter object, reusing the converter when requested.
    * @param bool $get_singleton
-   * @return \Witti\FileConverter\FileConverter
+   * @return \FileConverter\FileConverter
    */
   static public function &factory($get_singleton = TRUE) {
     static $singleton = NULL;
@@ -164,7 +164,7 @@ class FileConverter {
     }
     $engine_id = $configuration['#engine'];
     if ($engine_id{0} !== '\\') {
-      $class = '\Witti\FileConverter\Engine\\' . $engine_id;
+      $class = '\FileConverter\Engine\\' . $engine_id;
       if (class_exists($class)) {
         return new $class($this, $convert_path, $this->settings, $configuration);
       }

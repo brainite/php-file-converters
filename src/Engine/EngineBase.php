@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Witti\FileConverter\Engine;
+namespace FileConverter\Engine;
 
-use Witti\FileConverter\FileConverter;
-use Witti\FileConverter\Util\Shell;
+use FileConverter\FileConverter;
+use FileConverter\Util\Shell;
 /**
  * Each engine must implement at least one of:
  *   1. $this convertFile($s, $d)

@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Witti\FileConverter\Engine\Convert;
+namespace FileConverter\Engine\Convert;
 
-use Witti\FileConverter\Engine\EngineBase;
+use FileConverter\Engine\EngineBase;
 class GhostScript extends EngineBase {
   public function getConvertFileShell($source, &$destination) {
     return array(
