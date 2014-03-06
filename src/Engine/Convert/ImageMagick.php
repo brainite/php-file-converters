@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the Witti FileConverter package.
+ * This file is part of the FileConverter package.
  *
  * (c) Greg Payne
  *
