@@ -48,6 +48,32 @@ class LibreOffice extends EngineBase {
     return parent::getHelpInstallation($os, $os_version);
   }
 
+  public function getInfo() {
+    $info = array(
+      'title' => 'LibreOffice',
+      'url' => 'http://www.libreoffice.org/',
+      'profile' => array(
+        'Ubuntu 12.04' => array(
+          'os' => 'confirmed on Ubuntu 12.04',
+          'apt-get' => 'libreoffice',
+          'notes' => array(
+            "/usr/bin/libreoffice is symlink to /usr/lib/libreoffice/program/soffice",
+            "/usr/bin/soffice (competes with other apps) is symlink to /usr/lib/libreoffice/program/soffice",
+          ),
+        ),
+      ),
+      'version' => array(
+        'LibreOffice' => NULL,
+      ),
+    );
+
+    if ($this->isAvailable()) {
+      $info['version'] = $this->getVersionInfo();
+    }
+
+    return $info;
+  }
+
   public function getVersionInfo() {
     $info = array(
       'LibreOffice' => $this->shell($this->cmd . " --version")
