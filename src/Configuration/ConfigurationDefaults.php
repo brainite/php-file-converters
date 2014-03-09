@@ -36,8 +36,8 @@ class ConfigurationDefaults extends ConfigurationBase {
       $lsb = trim(`which lsb_release`);
       if ($lsb !== '') {
         $lsb = escapeshellarg($lsb);
-        $settings['operating_system'] = trim(`$lsb       -is`);
-        $settings['operating_system_version'] = trim(`$lsb       -rs`);
+        $settings['operating_system'] = trim(`$lsb          -is`);
+        $settings['operating_system_version'] = trim(`$lsb          -rs`);
       }
     }
     elseif ($settings['operating_system'] === 'Windows NT') {
@@ -87,7 +87,19 @@ class ConfigurationDefaults extends ConfigurationBase {
           '#engine' => 'Convert\\PhantomJs',
         ),
       ),
-      '(html|txt|md|rst|dbk|textile|opml|tex)->(pdf|html|docx|odt|dbk|md|txt|opml|rtf|epub|epub3|fb2|man)' => array(
+      'wiki->html' => array(
+        'wikiwym:default' => array(
+          '#engine' => 'Convert\\Wikiwym',
+          'code-block-lang' => 'php',
+        ),
+      ),
+      'wiki->md' => array(
+        'googlecode->github' => array(
+          '#engine' => 'Chain',
+          'chain' => 'wiki->html->md',
+        ),
+      ),
+      '(html|txt|md|rst|dbk|textile|opml|tex|wiki)->(pdf|html|docx|odt|dbk|md|txt|opml|rtf|epub|epub3|fb2|man)' => array(
         'pandoc:default' => array(
           '#engine' => 'Convert\\Pandoc',
         ),
