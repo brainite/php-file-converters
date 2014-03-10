@@ -14,11 +14,12 @@
         }
     ],
     "require":{
-        "php":">=5.3.3",
+        "drush/drush":"dev-master-fulltest",
         "ensepar/html2pdf":"dev-master",
-        "symfony/console":"2.4.*",
         "mpdf/mpdf":"v5.7.1",
-        "drush/drush":"dev-master-fulltest"
+        "php":">=5.3.3",
+        "symfony/console":"2.4.*",
+        "wittiws/phpquery":"dev-master"
     },
     "autoload":{
         "psr-4":{
