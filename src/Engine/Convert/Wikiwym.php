@@ -25,7 +25,7 @@ class Wikiwym extends PhantomJs {
   public function getVersionInfo() {
     $info = array(
       'phantomjs' => $this->shell($this->cmd . " --version"),
-      'wikiwym' => 'stable',
+      'wikiwym' => '20140309',
     );
     return $info;
   }
