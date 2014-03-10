@@ -25,7 +25,6 @@ try {
     source_content = source_content.replace(/\n==/g, "\n\n==");
     source_content = source_content.replace(/http:\/\/code.google.com\/p\/[^\/]+\/wiki\/([^ ]+)/g, '$1.md');
     destination_content = parser.parse(source_content);
-//    destination_content = destination_content.replace(/\n==(.*)==\n/, "\n$1\n======\n");
     destination_fp = fs.open(destination_path, "w");
     destination_fp.write(destination_content);
 } catch (e) {
