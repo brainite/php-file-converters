@@ -36,8 +36,8 @@ class ConfigurationDefaults extends ConfigurationBase {
       $lsb = trim(`which lsb_release`);
       if ($lsb !== '') {
         $lsb = escapeshellarg($lsb);
-        $settings['operating_system'] = trim(`$lsb          -is`);
-        $settings['operating_system_version'] = trim(`$lsb          -rs`);
+        $settings['operating_system'] = trim(`$lsb           -is`);
+        $settings['operating_system_version'] = trim(`$lsb           -rs`);
       }
     }
     elseif ($settings['operating_system'] === 'Windows NT') {
@@ -147,6 +147,11 @@ class ConfigurationDefaults extends ConfigurationBase {
       'txt~string' => array(
         'native:default' => array(
           '#engine' => 'ReplaceString\\ReplaceStringNative'
+        ),
+      ),
+      'html~optimize' => array(
+        'email:archive' => array(
+          "#engine" => "Optimize\\FcHtmlWord"
         ),
       ),
       'jpg~optimize' => array(
