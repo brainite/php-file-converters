@@ -184,6 +184,7 @@ class FileConverter {
       $converters_all = $conf->getAllConverters();
       $converters_potential = array();
       foreach ($converters_all as $convert_path_match => $converters_match) {
+        $convert_path_match = preg_replace('@^(.*)~optimize$@', '\1->\1', $convert_path_match);
         if ($convert_path_match === $convert_path) {
           $converters_potential = array_merge($converters_potential, $converters_match);
           continue;
@@ -281,7 +282,7 @@ class FileConverter {
     if (!isset($destination)) {
       $destination = $source;
     }
-    $engines = $this->getEngines("$ext~optimize");
+    $engines = $this->getEngines("$ext->$ext");
     foreach ($engines as $engine) {
       if ($engine->convertFile($source, $destination)) {
         return $this;
