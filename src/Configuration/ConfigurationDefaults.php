@@ -153,6 +153,12 @@ class ConfigurationDefaults extends ConfigurationBase {
         'email:archive' => array(
           "#engine" => "Optimize\\FcHtmlWord"
         ),
+        'htmlawed:safe' => array(
+          "#engine" => "Optimize\\HtmLawed",
+          'comment' => '0',
+          'elements' => 'a, abbr, acronym, address, area, b, bdo, big, blockquote, br, caption, center, cite, code, col, colgroup, dd, del, dfn, dir, div, dl, dt, em, font, h1, h2, h3, h4, h5, h6, hr, i, img, ins, kbd, label, legend, li, map, ol, p, pre, q, s, samp, small, span, strike, strong, sub, sup, table, tbody, td, textarea, tfoot, th, thead, tr, tt, u, ul',
+          'tidy' => 1,
+        ),
       ),
       'jpg~optimize' => array(
         'jpegoptim:default' => array(

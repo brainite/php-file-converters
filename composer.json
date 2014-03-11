@@ -19,6 +19,7 @@
         "mpdf/mpdf":"v5.7.1",
         "php":">=5.3.3",
         "symfony/console":"2.4.*",
+        "wittiws/htmlawed":"dev-master",
         "wittiws/phpquery":"dev-master"
     },
     "autoload":{
