@@ -33,6 +33,8 @@ class DefaultConfigTest extends \PHPUnit_Framework_TestCase {
         array(
           'FileConverter\Engine\Convert\ImageMagick' => array(
             '#engine' => 'Convert\\ImageMagick',
+            "colorspace" => "sRGB",
+            "flatten" => 1,
           ),
         ),
       ),
