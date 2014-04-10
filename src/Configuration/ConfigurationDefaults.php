@@ -106,7 +106,9 @@ class ConfigurationDefaults extends ConfigurationBase {
       ),
       'pdf->jpg' => array(
         'imagemagick:default' => array(
-          '#engine' => 'Convert\\ImageMagick'
+          '#engine' => 'Convert\\ImageMagick',
+          "colorspace" => "sRGB",
+          "flatten" => 1,
         ),
       ),
       'ps->pdf' => array(
