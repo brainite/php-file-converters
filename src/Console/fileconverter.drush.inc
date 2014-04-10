@@ -112,7 +112,7 @@ function fileconverter_drush_init() {
   }
 }
 
-function drush_fileconverter_convert(string $source = NULL, string $destination = NULL) {
+function drush_fileconverter_convert($source = NULL, $destination = NULL) {
   // Require the arguments.
   if (!isset($source) || !isset($destination) || $destination === '') {
     drush_print("USAGE: fileconverter 'source.ext1' 'destination.ext2'");
