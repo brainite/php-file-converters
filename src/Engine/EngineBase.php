@@ -61,7 +61,7 @@ abstract class EngineBase {
       else {
         $s_path = $this->getTempFile($this->conversion[0]);
         $d_path = str_replace('.' . $this->conversion[0], '.dest.'
-          . $this->conversion[1], $s_path);
+          . preg_replace('@/.*$@', '', $this->conversion[1]), $s_path);
       }
 
       // Get the command.
@@ -161,8 +161,9 @@ abstract class EngineBase {
     $dir = $this->settings['temp_dir'];
     $tmp = tempnam($dir, 'file-converter-');
     if (isset($file_extension)) {
-      rename($tmp, $tmp . '.' . $file_extension);
-      return $tmp . '.' . $file_extension;
+      $ret = $tmp . '.' . preg_replace('@/.*$@', '', $file_extension);
+      rename($tmp, $ret);
+      return $ret;
     }
     return $tmp;
   }

@@ -116,6 +116,11 @@ class ConfigurationDefaults extends ConfigurationBase {
           '#engine' => 'Convert\\GhostScript',
         ),
       ),
+      'pdf->pdf/grayscale' => array(
+        'pdfgrayscale:default' => array(
+          '#engine' => 'Convert\\PdfGrayscale',
+        ),
+      ),
       '(bib|doc|pdb|psw|rtf|ltx|sdw|sxw|txt|vor|html)->pdf' => array(
         'libreoffice:default' => array(
           '#engine' => 'Convert\\LibreOffice',

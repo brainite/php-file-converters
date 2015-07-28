@@ -184,7 +184,8 @@ function drush_fileconverter_convert($source = NULL, $destination = NULL) {
   // Convert the file.
   $fc = FileConverter\FileConverter::factory();
   if (realpath($source) !== realpath($destination)) {
-    $fc->convertFile(realpath($source), $destination);
+    $convert_path = isset($force_conversion) ? join('->', $force_conversion) : NULL;
+    $fc->convertFile(realpath($source), $destination, $convert_path);
   }
 
   // Further commands can work on a single file, so use a default destination.
