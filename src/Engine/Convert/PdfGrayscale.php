@@ -21,7 +21,7 @@ class PdfGrayscale extends EngineBase {
       "-sDEVICE=pdfwrite",
       "-sColorConversionStrategy=Gray",
       "-dProcessColorModel=/DeviceGray",
-      "-dCompatibilityLevel=1.3",
+      "-dCompatibilityLevel=1.4",
       "-dNOPAUSE",
       "-dBATCH",
       $source,
