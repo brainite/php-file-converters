@@ -291,13 +291,14 @@ class FileConverter {
     return $this;
   }
 
-  public function setConverter($convert_path = 'null->null', $configuration = 'null:default') {
+  public function &setConverter($convert_path = 'null->null', $configuration = 'null:default') {
     $conf = new ConfigurationOverride($this->settings);
     $conf->setConverter($convert_path, $configuration);
     array_unshift($this->configurations, $conf);
+    return $this;
   }
 
-  public function setReplacements($hash, $mode = 'string') {
+  public function &setReplacements($hash, $mode = 'string') {
     if (!isset($this->replacements[$mode])) {
       throw new \UnexpectedValueException("Invalid replacement mode.");
     }
@@ -305,12 +306,12 @@ class FileConverter {
     return $this;
   }
 
-  public function setSetting($key, $value) {
+  public function &setSetting($key, $value) {
     $this->settings[$key] = $value;
     return $this;
   }
 
-  public function setSettings($settings) {
+  public function &setSettings($settings) {
     $this->settings = array_merge($this->settings, (array) $settings);
     return $this;
   }
