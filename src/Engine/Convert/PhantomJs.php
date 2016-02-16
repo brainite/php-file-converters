@@ -51,7 +51,7 @@ class PhantomJs extends EngineBase {
       $this->cmd,
       Shell::argOptions($this->cmd_options, $this->configuration, 1),
       realpath(__DIR__ . '/Resources/PhantomJs-rasterize.js'),
-      'file://' . $source,
+      (strpos($source, '://') === FALSE ? 'file://' . $source : $source),
       $destination,
       $dimensions,
       $zoom,
@@ -65,6 +65,7 @@ class PhantomJs extends EngineBase {
       'url' => 'http://phantomjs.org/',
     );
     switch ($os) {
+      case 'Ubuntu':
       case 'Ubuntu (12.04 LTS)':
         $help['os'] = 'confirmed on Ubuntu 12.04';
         $help['apt-get'] = 'phantomjs xvfb';

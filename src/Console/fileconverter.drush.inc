@@ -1,4 +1,5 @@
 <?php
+use FileConverter\drush_print;
 /*
  * This file is part of the FileConverter package.
  *
@@ -46,6 +47,9 @@ function fileconverter_drush_command() {
       ),
       'optimize' => array(
         'description' => 'Optimize the destination file',
+      ),
+      'allow-remote' => array(
+        'description' => 'Allow remote paths (e.g., http://)',
       ),
       'replace-string' => array(
         'description' => 'JSON Object: Configure text replacements',
@@ -123,6 +127,7 @@ function drush_fileconverter_convert($source = NULL, $destination = NULL) {
   $fc = FileConverter\FileConverter::factory();
   $stdin = $stdout = FALSE;
   $force_conversion = trim(drush_get_option('conversion'));
+  $is_remote = FALSE;
   if (preg_match('@^(.*):(.*)$@', $force_conversion, $arr)) {
     $force_conversion = array(
       $arr[1],
@@ -153,8 +158,13 @@ function drush_fileconverter_convert($source = NULL, $destination = NULL) {
       }
     }
     if (!is_file($source)) {
-      drush_print(dt("Error: Unable to locate source file."));
-      return;
+      if (drush_get_option('allow-remote') === TRUE && strpos($source, '://') !== FALSE) {
+        $is_remote = TRUE;
+      }
+      else {
+        drush_print(dt("Error: Unable to locate source file."));
+        return;
+      }
     }
   }
   if ($destination{0} !== '/') {
@@ -183,9 +193,14 @@ function drush_fileconverter_convert($source = NULL, $destination = NULL) {
 
   // Convert the file.
   $fc = FileConverter\FileConverter::factory();
-  if (realpath($source) !== realpath($destination)) {
+  if ($is_remote || realpath($source) !== realpath($destination)) {
     $convert_path = isset($force_conversion) ? join('->', $force_conversion) : NULL;
-    $fc->convertFile(realpath($source), $destination, $convert_path);
+    try {
+      $fc->convertFile($is_remote ? $source : realpath($source), $destination, $convert_path);
+    } catch (\Exception $e) {
+      drush_print($e->getMessage());
+      return;
+    }
   }
 
   // Further commands can work on a single file, so use a default destination.

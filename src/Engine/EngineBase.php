@@ -135,8 +135,10 @@ abstract class EngineBase {
     switch ($type) {
       case 'installation':
         $help = $this->getHelpInstallation($os, $os_version);
-        if (isset($help) && !is_string($help)) {
-          $help = var_export($help, 1);
+        if (isset($help)) {
+          if (!is_string($help)) {
+            $help = var_export($help, 1);
+          }
         }
         return $help;
     }
@@ -145,16 +147,9 @@ abstract class EngineBase {
   }
 
   protected function getHelpInstallation($os, $os_version) {
-    if (isset($os)) {
-      return array(
-        'title' => "No installation instructions available.",
-      );
-    }
-    else {
-      return array(
-        'title' => "No installation instructions available for your platform.",
-      );
-    }
+    return array(
+      'title' => "Unable to confirm installation instructions for OS='$os' Ver='$os_version'",
+    );
   }
 
   public function getTempFile($file_extension = NULL) {
