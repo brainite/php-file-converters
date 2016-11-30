@@ -61,6 +61,11 @@ class ConfigurationDefaults extends ConfigurationBase {
           '#engine' => 'Convert\\Catdoc',
         ),
       ),
+      'html->eml' => array(
+        'nativearchive:default' => array(
+          '#engine' => 'Convert\\NativeArchive',
+        ),
+      ),
       'html->pdf' => array(
         'htmldoc:default' => array(
           '#engine' => 'Convert\\Htmldoc',
