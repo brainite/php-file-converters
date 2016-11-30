@@ -36,8 +36,8 @@ class ConfigurationDefaults extends ConfigurationBase {
       $lsb = trim(`which lsb_release`);
       if ($lsb !== '') {
         $lsb = escapeshellarg($lsb);
-        $settings['operating_system'] = trim(`$lsb           -is`);
-        $settings['operating_system_version'] = trim(`$lsb           -rs`);
+        $settings['operating_system'] = trim(`$lsb -is`);
+        $settings['operating_system_version'] = trim(`$lsb -rs`);
       }
     }
     elseif ($settings['operating_system'] === 'Windows NT') {
@@ -76,9 +76,6 @@ class ConfigurationDefaults extends ConfigurationBase {
         'xhtml2pdf:default' => array(
           '#engine' => 'Convert\\Xhtml2Pdf',
         ),
-        'docverter:default' => array(
-          '#engine' => 'Convert\\Docverter',
-        ),
         'mpdf:default' => array(
           '#engine' => 'Convert\\Mpdf',
         ),
@@ -102,6 +99,11 @@ class ConfigurationDefaults extends ConfigurationBase {
         'googlecode->github' => array(
           '#engine' => 'Chain',
           'chain' => 'wiki->html->md',
+        ),
+      ),
+      '(html|markdown|textile|rst|docbook|latex)->(pdf|markdown|html|latex|context|mediawiki|textile|org|texinfo|docbook|docx|epub|mobi|asciidoc|rtf)' => array(
+        'docverter:default' => array(
+          '#engine' => 'Convert\\Docverter',
         ),
       ),
       '(html|txt|md|rst|dbk|textile|opml|tex|wiki)->(pdf|html|docx|odt|dbk|md|txt|opml|rtf|epub|epub3|fb2|man)' => array(
