@@ -14,6 +14,15 @@ class Chain extends EngineBase {
   public function convertFile($source, $destination) {
     $links = explode('->', $this->configuration['chain']);
 
+    // Allow wildcards for the start/end
+    if ($links[0] === '*') {
+      $links[0] = $this->conversion[0];
+    }
+    if ($links[sizeof($links) - 1] === '*') {
+      $links[sizeof($links) - 1] = $this->conversion[1];
+    }
+
+    // Iterate through the chain.
     $s_path = $this->getTempFile(array_shift($links));
     copy($source, $s_path);
     while (!empty($links)) {

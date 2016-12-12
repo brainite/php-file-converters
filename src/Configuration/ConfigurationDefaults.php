@@ -150,10 +150,10 @@ class ConfigurationDefaults extends ConfigurationBase {
           'chain' => 'rtf->ps->pdf',
         ),
       ),
-      'webp->jpg' => array(
-        'webp->png->jpg' => array(
+      'webp->(jpg|gif|svg|tiff|wmf)' => array(
+        'webp->png->img' => array(
           '#engine' => 'Chain',
-          'chain' => 'webp->png->jpg',
+          'chain' => 'webp->png->*',
         ),
       ),
       'webp->png' => array(
@@ -161,10 +161,10 @@ class ConfigurationDefaults extends ConfigurationBase {
           '#engine' => 'Convert\\WebP',
         ),
       ),
-      'jpg->webp' => array(
+      '(jpg|gif|svg|tiff|wmf)->webp' => array(
         'jpg->png->webp' => array(
           '#engine' => 'Chain',
-          'chain' => 'jpg->png->webp',
+          'chain' => '*->png->webp',
         ),
       ),
       'png->webp' => array(
