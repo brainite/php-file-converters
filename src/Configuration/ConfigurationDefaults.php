@@ -36,8 +36,8 @@ class ConfigurationDefaults extends ConfigurationBase {
       $lsb = trim(`which lsb_release`);
       if ($lsb !== '') {
         $lsb = escapeshellarg($lsb);
-        $settings['operating_system'] = trim(`$lsb -is`);
-        $settings['operating_system_version'] = trim(`$lsb -rs`);
+        $settings['operating_system'] = trim(`$lsb  -is`);
+        $settings['operating_system_version'] = trim(`$lsb  -rs`);
       }
     }
     elseif ($settings['operating_system'] === 'Windows NT') {
@@ -111,6 +111,11 @@ class ConfigurationDefaults extends ConfigurationBase {
           '#engine' => 'Convert\\Pandoc',
         ),
       ),
+      '(jpg|png|gif|svg|tiff|wmf)->(jpg|png|gif|svg|tiff|wmf)' => array(
+        'imagemagick:default' => array(
+          '#engine' => 'Convert\\ImageMagick',
+        ),
+      ),
       'pdf->jpg' => array(
         'imagemagick:default' => array(
           '#engine' => 'Convert\\ImageMagick',
@@ -143,6 +148,28 @@ class ConfigurationDefaults extends ConfigurationBase {
         'rtf->ps->pdf' => array(
           '#engine' => 'Chain',
           'chain' => 'rtf->ps->pdf',
+        ),
+      ),
+      'webp->jpg' => array(
+        'webp->png->jpg' => array(
+          '#engine' => 'Chain',
+          'chain' => 'webp->png->jpg',
+        ),
+      ),
+      'webp->png' => array(
+        'webp:default' => array(
+          '#engine' => 'Convert\\WebP',
+        ),
+      ),
+      'jpg->webp' => array(
+        'jpg->png->webp' => array(
+          '#engine' => 'Chain',
+          'chain' => 'jpg->png->webp',
+        ),
+      ),
+      'png->webp' => array(
+        'webp:default' => array(
+          '#engine' => 'Convert\\WebP',
         ),
       ),
       'rtf->ps' => array(
