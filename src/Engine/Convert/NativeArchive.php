@@ -14,6 +14,8 @@ use Zend\Mail\Message;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Mime;
 use Zend\Mime\Part as MimePart;
+use QuipXml\Encoding\CharacterEncoding;
+use QuipXml\OneLiner\OneLiner;
 
 class NativeArchive extends EngineBase {
   /**
@@ -49,6 +51,8 @@ class NativeArchive extends EngineBase {
         $ret = $matches['a'] . $src . $matches['b'];
         return $ret;
       }, $html);
+      $html = CharacterEncoding::toHtml($html);
+      $html = OneLiner::minifyHtml($html);
 
       // Build the message.
       $parts['html'] = new MimePart($html);
