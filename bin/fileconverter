@@ -23,6 +23,6 @@ case "$1" in
   	DRUSH_CMD=fileconverter-convert
   	;;
 esac
-set -- "$DRUSH_CMD" $@
+set -- "$DRUSH_CMD" "$@"
 
 exec "$ROOT_DIRNAME/vendor/bin/drush" --root="$ROOT_DIRNAME" --include="$ROOT_DIRNAME" "$@"
