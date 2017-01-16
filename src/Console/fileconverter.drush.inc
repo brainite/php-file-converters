@@ -158,11 +158,14 @@ function drush_fileconverter_convert($source = NULL, $destination = NULL) {
       }
     }
     if (!is_file($source)) {
-      if (drush_get_option('allow-remote') === TRUE && strpos($source, '://') !== FALSE) {
+      if (drush_get_option('allow-remote') === TRUE
+        && strpos($source, '://') !== FALSE) {
         $is_remote = TRUE;
       }
       else {
-        drush_print(dt("Error: Unable to locate source file."));
+        drush_print(dt("Error: Unable to locate source file: !source", array(
+          'source' => $source,
+        )));
         return;
       }
     }
@@ -194,7 +197,8 @@ function drush_fileconverter_convert($source = NULL, $destination = NULL) {
   // Convert the file.
   $fc = FileConverter\FileConverter::factory();
   if ($is_remote || realpath($source) !== realpath($destination)) {
-    $convert_path = isset($force_conversion) ? join('->', $force_conversion) : NULL;
+    $convert_path = isset($force_conversion) ? join('->', $force_conversion)
+      : NULL;
     try {
       $fc->convertFile($is_remote ? $source : realpath($source), $destination, $convert_path);
     } catch (\Exception $e) {
