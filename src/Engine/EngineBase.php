@@ -51,6 +51,14 @@ abstract class EngineBase {
         throw new \ErrorException("The engine's shell command is not available.");
       }
 
+      // Confirm that the source exists and can be read.
+      if (!file_exists($source)) {
+        throw new \ErrorException("The source file does not exist.");
+      }
+      if (!is_readable($source)) {
+        throw new \ErrorException("The source file cannot be read.");
+      }
+
       // Get the base converter object.
       // Get a temporary file with the source extension since libre does not accept an output file name.
       $source_safe = $this->cmd_source_safe;
@@ -70,7 +78,9 @@ abstract class EngineBase {
         throw new \ErrorException("Invalid configuration for engine.");
       }
       if (!$source_safe) {
-        copy($source, $s_path);
+        if ($source !== $s_path && !copy($source, $s_path)) {
+          throw new \ErrorException("Unable to copy source to '$s_path'");
+        }
       }
 
       // Convert the temporary file to the destination extension.

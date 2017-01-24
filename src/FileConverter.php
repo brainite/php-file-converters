@@ -116,6 +116,7 @@ class FileConverter {
     $engines = $this->getEngines($convert_path);
 
     // Attempt to convert the file.
+    $errors = array();
     foreach ($engines as $engine) {
       try {
         $engine->$convert($source, $destination);
@@ -123,11 +124,15 @@ class FileConverter {
         $return();
         return $this;
       } catch (\Exception $e) {
+        $errors[] = $e->getMessage();
       }
     }
 
     $return();
-    throw new \ErrorException("Unable to convert the file.");
+    $error = "Unable to convert the file. ";
+    $errors = array_unique($errors);
+    $error .= join(' ', $errors);
+    throw new \ErrorException($error);
   }
 
   public function convertFile($source, $destination, $convert_path = NULL) {
