@@ -138,6 +138,14 @@ class ConfigurationDefaults extends ConfigurationBase {
           '#engine' => 'Convert\\LibreOffice',
         ),
       ),
+      '(ppt|pptx)->pdf' => array(
+        'libreoffice:default' => array(
+          '#engine' => 'Convert\\LibreOffice',
+        ),
+        'unoconv:default' => array(
+          '#engine' => 'Convert\\Unoconv',
+        ),
+      ),
       'rtf->pdf' => array(
         'unoconv:default' => array(
           '#engine' => 'Convert\\Unoconv',
