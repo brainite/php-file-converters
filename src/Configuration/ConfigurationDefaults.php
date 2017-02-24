@@ -146,6 +146,11 @@ class ConfigurationDefaults extends ConfigurationBase {
           '#engine' => 'Convert\\Unoconv',
         ),
       ),
+      'pptx->json' => array(
+        'nativemeta:default' => array(
+          '#engine' => 'Convert\\NativeMeta',
+        ),
+      ),
       'rtf->pdf' => array(
         'unoconv:default' => array(
           '#engine' => 'Convert\\Unoconv',

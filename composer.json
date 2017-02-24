@@ -22,6 +22,7 @@
         "wittiws/htmlawed":"dev-master",
         "wittiws/phpquery":"dev-master",
         "wittiws/quipxml":"dev-master",
+        "wittiws/splash":"dev-master",
         "zendframework/zend-mail":"2.7.*"
     },
     "autoload":{
