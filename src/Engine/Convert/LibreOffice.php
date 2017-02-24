@@ -16,6 +16,32 @@ class LibreOffice extends EngineBase {
   protected $cmd_source_safe = FALSE;
 
   public function getConvertFileShell($source, &$destination) {
+    // Attempt to initialize and override registrymodifications.xcu
+    if (!is_dir($this->settings['temp_dir']) . '/libreoffice') {
+      // Run a basic conversion to attempt to init the system.
+      $tmp = $this->getTempFile('txt');
+      file_put_contents($tmp, "Init LibreOffice configs");
+      $this->shell(array(
+        Shell::arg('export HOME=' . escapeshellarg($this->settings['temp_dir']) . ';', Shell::SHELL_SAFE),
+        $this->cmd,
+        '--headless',
+        '--convert-to',
+        $this->conversion[1],
+        '--outdir',
+        $this->settings['temp_dir'],
+        $tmp
+      ));
+      @unlink($tmp);
+      @unlink(str_replace('.txt', "." . $this->conversion[1], $tmp));
+
+      // Update the registry, if it was properly initialized.
+      $reg = $this->settings['temp_dir'] . "/libreoffice/4/user/registrymodifications.xcu";
+      if (is_file($reg)) {
+        copy(__DIR__ . "/Resources/LibreOffice-registrymodifications.xcu", $reg);
+      }
+    }
+
+    // Build the conversion command.
     $destination = str_replace('.' . $this->conversion[0], '.'
       . $this->conversion[1], $source);
     return array(
