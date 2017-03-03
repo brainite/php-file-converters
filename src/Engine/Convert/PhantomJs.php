@@ -21,6 +21,12 @@ class PhantomJs extends EngineBase {
       'group' => 1,
     ),
     array(
+      'name' => 'ssl-protocol',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL,
+      'default' => 'any',
+      'group' => 1,
+    ),
+    array(
       'name' => 'output-width',
       'default' => '8.5in',
       'group' => 'rasterize',
