@@ -52,10 +52,13 @@ abstract class EngineBase {
       }
 
       // Confirm that the source exists and can be read.
-      if (!file_exists($source)) {
+      if (preg_match('@^https?://.{3,}@', $source)) {
+        // Allow web-based source files.
+      }
+      elseif (!file_exists($source)) {
         throw new \ErrorException("The source file does not exist.");
       }
-      if (!is_readable($source)) {
+      elseif (!is_readable($source)) {
         throw new \ErrorException("The source file cannot be read.");
       }
 
