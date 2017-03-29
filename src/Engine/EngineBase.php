@@ -26,7 +26,7 @@ abstract class EngineBase {
   protected $converter = NULL;
   protected $conversion = array(
     'null',
-    'null'
+    'null',
   );
   protected $settings = array();
   protected $configuration = array();
@@ -142,6 +142,23 @@ abstract class EngineBase {
     return $this->configuration;
   }
 
+  /**
+   * Get the conversion type
+   * @param string $target source|destination
+   * @param number $depth 0=full|1=top|2=2-levels
+   * @return string
+   */
+  public function getConversion($target = 'source', $depth = 0) {
+    $type = $this->conversion[$target === 'source' ? 0 : 1];
+    if ($depth < 1 || $depth > 1 + substr_count($type, '/')) {
+      return $type;
+    }
+    $tmp = explode('/', $type, $depth + 1);
+    array_pop($tmp);
+    $type = join('/', $tmp);
+    return $type;
+  }
+
   public function getHelp($type = 'installation') {
     $os = $this->settings['operating_system'];
     $os_version = $this->settings['operating_system_version'];
@@ -181,6 +198,26 @@ abstract class EngineBase {
   }
 
   abstract public function isAvailable();
+
+  protected function isTempWritable($path) {
+    $dir = $this->settings['temp_dir'];
+    $path = preg_replace('@/[^/]*$@s', '', $path);
+    if (strpos($path, $dir) !== 0) {
+      return FALSE;
+    }
+    if (is_dir($path)) {
+      return TRUE;
+    }
+    $tmp = explode('/', $path);
+    $path = '';
+    while (!empty($tmp)) {
+      $path .= '/' . array_shift($tmp);
+      if (!is_dir($path)) {
+        mkdir($path);
+      }
+    }
+    return (bool) is_dir($path);
+  }
 
   public function shell($command) {
     $cmd = "";
