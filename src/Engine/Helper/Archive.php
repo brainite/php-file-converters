@@ -59,8 +59,24 @@ class Archive {
           Shell::arg($temp, Shell::SHELL_ARG_BASIC),
           Shell::arg('.', Shell::SHELL_SAFE),
         );
-        echo $this->engine->shell($cmd);
+        $this->engine->shell($cmd);
         rename($temp, $destination);
+        break;
+
+      case 'directory':
+        if (!is_dir($destination)) {
+          mkdir($destination);
+          if (!is_dir($destination)) {
+            throw new \ErrorException("Unable to create the destination directory.");
+          }
+        }
+        $cmd = array(
+          $this->engine->shellWhich('rsync'),
+          Shell::arg('a', Shell::SHELL_ARG_BOOL_SGL, TRUE),
+          Shell::arg(rtrim($this->getTempDirectory(), '/') . '/', Shell::SHELL_ARG_BASIC),
+          Shell::arg(rtrim($destination, '/') . '/', Shell::SHELL_ARG_BASIC),
+        );
+        $this->engine->shell($cmd);
         break;
 
       default:

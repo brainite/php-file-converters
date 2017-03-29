@@ -48,7 +48,7 @@ class ImageMagick extends EngineBase {
   );
 
   public function convertFile($source, $destination) {
-    if (preg_match('@zip/(?<ext>.*)$@s', $this->conversion[1], $arr)) {
+    if (preg_match('@(?:zip|directory)/(?<ext>.*)$@s', $this->conversion[1], $arr)) {
       // Create a temp directory and convert the images.
       $ext = $arr['ext'];
       $imageArchive = new Archive($this);

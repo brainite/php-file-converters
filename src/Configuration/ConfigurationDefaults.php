@@ -123,7 +123,7 @@ class ConfigurationDefaults extends ConfigurationBase {
           "flatten" => 1,
         ),
       ),
-      'pdf->(zip/png)' => array(
+      'pdf->(zip/png|directory/png)' => array(
         'imagemagick:default' => array(
           '#engine' => 'Convert\\ImageMagick',
           "colorspace" => "sRGB",
