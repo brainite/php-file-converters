@@ -65,6 +65,9 @@ class Archive {
 
       case 'directory':
         if (!is_dir($destination)) {
+          if (is_file($destination) && !filesize($destination)) {
+            unlink($destination);
+          }
           mkdir($destination);
           if (!is_dir($destination)) {
             throw new \ErrorException("Unable to create the destination directory.");

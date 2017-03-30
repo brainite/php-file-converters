@@ -23,27 +23,35 @@ class Chain extends EngineBase {
     }
 
     // Iterate through the chain.
-    $s_path = $this->getTempFile(array_shift($links));
+    $c0 = array_shift($links);
+    $s_path = $this->getTempFile($c0);
     copy($source, $s_path);
     while (!empty($links)) {
       try {
-        $d_path = $this->getTempFile(array_shift($links));
-        $this->converter->convertFile($s_path, $d_path);
+        $c1 = array_shift($links);
+        if (empty($links)) {
+          $d_path = $destination;
+        }
+        else {
+          $d_path = $this->getTempFile($c1);
+        }
+        $this->converter->convertFile($s_path, $d_path, "$c0->$c1");
         unlink($s_path);
-        if (!is_file($d_path)) {
+        if (!is_file($d_path) && !is_dir($d_path)) {
           throw new \ErrorException("Conversion failed.");
         }
         $s_path = $d_path;
+        $c0 = $c1;
       } catch (\Exception $e) {
-        unlink($s_path);
-        if (is_file($d_path)) {
+        if (is_file($s_path) && $s_path !== $source) {
+          unlink($s_path);
+        }
+        if (is_file($d_path) && $d_path !== $destination) {
           unlink($d_path);
         }
         throw $e;
       }
     }
-
-    rename($d_path, $destination);
     return $this;
   }
 

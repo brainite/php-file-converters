@@ -37,7 +37,7 @@ class NativeMeta extends EngineBase {
         $files = Splash::fromArray($files);
 
         // Build the slides.
-        $meta['slides'] = array();
+        $meta['items'] = array();
         foreach ($files->regex("@ppt/slides/slide\d+.xml$@") as $file) {
           $slide = array();
           $number = preg_replace('@^ppt/slides/slide(\d+)\.xml$@s', '\1', $file);
@@ -74,9 +74,9 @@ class NativeMeta extends EngineBase {
             $slide['notes'] = $note;
           }
 
-          $meta['slides'][$number - 1] = $slide;
+          $meta['items'][$number - 1] = $slide;
         }
-        ksort($meta['slides']);
+        ksort($meta['items']);
 
         break;
 

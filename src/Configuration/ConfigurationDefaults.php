@@ -36,8 +36,8 @@ class ConfigurationDefaults extends ConfigurationBase {
       $lsb = trim(`which lsb_release`);
       if ($lsb !== '') {
         $lsb = escapeshellarg($lsb);
-        $settings['operating_system'] = trim(`$lsb  -is`);
-        $settings['operating_system_version'] = trim(`$lsb  -rs`);
+        $settings['operating_system'] = trim(`$lsb        -is`);
+        $settings['operating_system_version'] = trim(`$lsb        -rs`);
       }
     }
     elseif ($settings['operating_system'] === 'Windows NT') {
@@ -123,10 +123,21 @@ class ConfigurationDefaults extends ConfigurationBase {
           "flatten" => 1,
         ),
       ),
+      'pdf->(zip/jpg|directory/jpg)' => array(
+        'imagemagick:default' => array(
+          '#engine' => 'Convert\\ImageMagick',
+          "colorspace" => "sRGB",
+          // Double-resolution output
+          'density' => '144',
+        ),
+      ),
       'pdf->(zip/png|directory/png)' => array(
         'imagemagick:default' => array(
           '#engine' => 'Convert\\ImageMagick',
           "colorspace" => "sRGB",
+          // Supersampling with double-resolution output
+          'density' => '288',
+          'resize' => '50%',
         ),
       ),
       'ps->pdf' => array(
@@ -152,9 +163,22 @@ class ConfigurationDefaults extends ConfigurationBase {
           '#engine' => 'Convert\\Unoconv',
         ),
       ),
+      '(ppt|pptx)->(directory/jpg|zip/jpg)' => array(
+        'pptx->pdf->img' => array(
+          '#engine' => 'Chain',
+          'chain' => 'pptx->pdf->*',
+        ),
+      ),
       'pptx->json' => array(
         'nativemeta:default' => array(
           '#engine' => 'Convert\\NativeMeta',
+        ),
+      ),
+      'pptx->(directory/slideshow|zip/slideshow)' => array(
+        'nativeslideshow:schedule' => array(
+          '#engine' => 'Convert\\NativeSlideshow',
+          'mode' => 'schedule',
+          'captions' => FALSE,
         ),
       ),
       'rtf->pdf' => array(

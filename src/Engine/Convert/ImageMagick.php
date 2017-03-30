@@ -16,6 +16,16 @@ use FileConverter\Engine\Helper\Archive;
 class ImageMagick extends EngineBase {
   protected $cmd_options = array(
     array(
+      'name' => 'density',
+      'mode' => Shell::SHELL_ARG_BASIC_SGL,
+      // Density is important when converting from PDF or vector
+      //  System default: 72
+      //  Higher density effectively increases the image size
+      //  Higher density can combine with `-resize 50%` for "supersampling"
+      'default' => NULL,
+      'group' => 1,
+    ),
+    array(
       'name' => 'resize',
       'mode' => Shell::SHELL_ARG_BASIC_SGL,
       'default' => NULL,
@@ -65,14 +75,14 @@ class ImageMagick extends EngineBase {
       $tmp = $archive->getTempDirectory();
       // Rename the multiple image files in a standardized way
       if (is_file("$imagePath/page.$ext")) {
-        $path = "$tmp/img/page1.$ext";
+        $path = "$tmp/page1.$ext";
         $this->isTempWritable($path);
         rename("$imagePath/page.$ext", $path);
       }
       else {
         $i = 0;
         while (is_file("$imagePath/page-$i.$ext")) {
-          $path = "$tmp/img/page" . ($i + 1) . ".$ext";
+          $path = "$tmp/page" . ($i + 1) . ".$ext";
           $this->isTempWritable($path);
           rename("$imagePath/page-$i.$ext", $path);
           ++$i;
