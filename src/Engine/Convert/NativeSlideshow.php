@@ -12,6 +12,7 @@ namespace FileConverter\Engine\Convert;
 use FileConverter\Engine\EngineBase;
 use FileConverter\Engine\Helper\Archive;
 use GuzzleHttp\json_decode;
+use QuipXml\OneLiner\OneLiner;
 
 class NativeSlideshow extends EngineBase {
   /**
@@ -48,12 +49,7 @@ class NativeSlideshow extends EngineBase {
 
       // Apply the slideshow mode.
       foreach ($slideshow['items'] as $i => &$slide) {
-        if (!isset($slide['notes'])) {
-          if ($slideshow['mode'] === 'schedule') {
-            unset($slideshow['items'][$i]);
-          }
-        }
-        else {
+        if (isset($slide['notes'])) {
           // Extract settings from the slide notes.
           $keys = array(
             '@(?<k>SLIDESHOW\.[^:]+):(?<v>[^\n]+)(?:\n|$)@s',
@@ -72,6 +68,10 @@ class NativeSlideshow extends EngineBase {
             }
           }
           unset($slide['notes']);
+        }
+        if ($slideshow['mode'] === 'schedule'
+          && (!isset($slide['begin']) || empty($slide['begin']))) {
+          unset($slideshow['items'][$i]);
         }
       }
       unset($slide);
@@ -110,15 +110,40 @@ class NativeSlideshow extends EngineBase {
     $this->isTempWritable($to);
     copy(__DIR__ . '/Resources/Slideshow/slideshow.css', $to);
 
+    // Build the strtr replacements.
+    $tr = array(
+      '{{ slideshow.title|escape }}' => htmlspecialchars($slideshow['title']),
+      '{{ slideshow|json_encode() }}' => json_encode($slideshow),
+      '{{ debug }}' => '',
+    );
+
+    // Build a debug page.
+    $debug = '';
+    foreach ($slideshow['items'] as $slide) {
+      $row = '';
+      $img = OneLiner::wrap('img', '', TRUE, array(
+        'src' => "img/slide{$slide[number]}.jpg",
+        'style' => 'width:95%;border:1px solid #000',
+      ));
+      $row .= OneLiner::wrap('<div class="col-sm-3">', $img);
+      $details = '';
+      $details .= OneLiner::wrap('strong', 'BEGIN:' . $slide['begin']);
+      $details .= '<br />' . json_encode($slide);
+      $row .= OneLiner::wrap('<div class="col-sm-9">', $details);
+      $debug .= OneLiner::wrap('<div class="row">', $row);
+    }
+    $tr['{{ debug }}'] = $debug;
+    $to = "$tmp/debug.htm";
+    $content = file_get_contents(__DIR__ . '/Resources/Slideshow/debug.htm');
+    $content = strtr($content, $tr);
+    file_put_contents($to, $content);
+
     // The index file involves template variables.
     // Provide a raw
     $to = "$tmp/index.htm";
     $this->isTempWritable($to);
     $content = file_get_contents(__DIR__ . '/Resources/Slideshow/index.htm');
-    $content = strtr($content, array(
-      '{{ slideshow.title|escape }}' => htmlspecialchars($slideshow['title']),
-      '{{ slideshow|json_encode() }}' => json_encode($slideshow),
-    ));
+    $content = strtr($content, $tr);
     file_put_contents($to, $content);
 
     // Save the slideshow.
