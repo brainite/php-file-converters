@@ -121,6 +121,7 @@ class ConfigurationDefaults extends ConfigurationBase {
           '#engine' => 'Convert\\ImageMagick',
           "colorspace" => "sRGB",
           "flatten" => 1,
+          "define" => 'pdf:use-cropbox=true',
         ),
       ),
       'pdf->(zip/jpg|directory/jpg)' => array(

@@ -55,6 +55,12 @@ class ImageMagick extends EngineBase {
       'default' => NULL,
       'group' => 1,
     ),
+    array(
+      'name' => 'define',
+      'mode' => Shell::SHELL_ARG_BASIC_SGL,
+      'default' => NULL,
+      'group' => 1,
+    ),
   );
 
   public function convertFile($source, $destination) {
