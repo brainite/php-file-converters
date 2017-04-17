@@ -66,6 +66,10 @@ function slideshow(s) {
   switch (s.mode) {
   case 'schedule':
     setInterval(function(){
+      if (document.location.hash.indexOf('slideshow=preview') != -1) {
+        $carousel.carousel('next');
+        return;
+      }
       // Select the slide to show.
       var ms = (new Date()).getTime();
       for (i = 0; i < s.items.length; ++i) {
