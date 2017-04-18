@@ -35,6 +35,7 @@ class DefaultConfigTest extends \PHPUnit_Framework_TestCase {
             '#engine' => 'Convert\\ImageMagick',
             "colorspace" => "sRGB",
             "flatten" => 1,
+            "define" => 'pdf:use-cropbox=true',
           ),
         ),
       ),
