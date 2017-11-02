@@ -119,9 +119,17 @@ function fileconverter_drush_init() {
 function drush_fileconverter_convert($source = NULL, $destination = NULL) {
   // Require the arguments.
   if (!isset($source) || !isset($destination) || $destination === '') {
-    drush_print("USAGE: fileconverter 'source.ext1' 'destination.ext2'");
-    return;
+    if (drush_get_option('optimize') === TRUE && isset($source)) {
+      $destination = $source;
+    }
+    else {
+      drush_print("USAGE: fileconverter 'source.ext1' 'destination.ext2'");
+      return;
+    }
   }
+
+  // Remember the file stats of the source file.
+  $file_stat = NULL;
 
   // Normalize the file paths.
   $fc = FileConverter\FileConverter::factory();
@@ -168,6 +176,9 @@ function drush_fileconverter_convert($source = NULL, $destination = NULL) {
         )));
         return;
       }
+    }
+    else {
+      $file_stat = stat($source);
     }
   }
   if ($destination{0} !== '/') {
@@ -223,6 +234,12 @@ function drush_fileconverter_convert($source = NULL, $destination = NULL) {
   if ($stdout) {
     readfile($destination);
     unlink($destination);
+  }
+  elseif (isset($file_stat)) {
+    // Preserve the same owner/mode as the source.
+    chown($destination, $file_stat['uid']);
+    chgrp($destination, $file_stat['gid']);
+    chmod($destination, $file_stat['mode']);
   }
 }
 
