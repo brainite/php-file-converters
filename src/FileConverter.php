@@ -115,6 +115,12 @@ class FileConverter {
     // Select a converter.
     $engines = $this->getEngines($convert_path);
 
+    // Remember the file stats of the source file.
+    $file_stat = NULL;
+    if ($type === 'file' && is_file($source)) {
+      $file_stat = stat($source);
+    }
+
     // Attempt to convert the file.
     $errors = array();
     foreach ($engines as $engine) {
@@ -122,6 +128,13 @@ class FileConverter {
         $engine->$convert($source, $destination);
         $this->previous_engines[] = $engine;
         $return();
+
+        // Preserve the same owner/mode as the source.
+        if ($type === 'file' && is_file($destination) && isset($file_stat)) {
+          chown($destination, $file_stat['uid']);
+          chgrp($destination, $file_stat['gid']);
+          chmod($destination, $file_stat['mode']);
+        }
         return $this;
       } catch (\Exception $e) {
         $errors[] = $e->getMessage();
@@ -287,13 +300,7 @@ class FileConverter {
     if (!isset($destination)) {
       $destination = $source;
     }
-    $engines = $this->getEngines("$ext->$ext");
-    foreach ($engines as $engine) {
-      if ($engine->convertFile($source, $destination)) {
-        return $this;
-      }
-    }
-    return $this;
+    return $this->convert('file', "$ext->$ext", $source, $destination);
   }
 
   public function &setConverter($convert_path = 'null->null', $configuration = 'null:default') {

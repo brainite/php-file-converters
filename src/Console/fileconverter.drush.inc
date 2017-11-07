@@ -128,9 +128,6 @@ function drush_fileconverter_convert($source = NULL, $destination = NULL) {
     }
   }
 
-  // Remember the file stats of the source file.
-  $file_stat = NULL;
-
   // Normalize the file paths.
   $fc = FileConverter\FileConverter::factory();
   $stdin = $stdout = FALSE;
@@ -176,9 +173,6 @@ function drush_fileconverter_convert($source = NULL, $destination = NULL) {
         )));
         return;
       }
-    }
-    else {
-      $file_stat = stat($source);
     }
   }
   if ($destination{0} !== '/') {
@@ -234,12 +228,6 @@ function drush_fileconverter_convert($source = NULL, $destination = NULL) {
   if ($stdout) {
     readfile($destination);
     unlink($destination);
-  }
-  elseif (isset($file_stat)) {
-    // Preserve the same owner/mode as the source.
-    chown($destination, $file_stat['uid']);
-    chgrp($destination, $file_stat['gid']);
-    chmod($destination, $file_stat['mode']);
   }
 }
 
