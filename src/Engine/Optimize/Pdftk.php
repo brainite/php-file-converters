@@ -49,32 +49,48 @@ class Pdftk extends EngineBase {
       $this->cmd,
       $source,
       'dump_data',
-      Shell::arg('|', Shell::SHELL_SAFE),
+      Shell::arg('2>&1 |', Shell::SHELL_SAFE),
       Shell::arg("sed 's/Value: .*/Value:/' > ", Shell::SHELL_SAFE),
       $empty,
     ));
 
-    // pdftk source.pdf update_info empty.txt output destination.pdf flatten compress
-    $cmd = array(
-      $this->cmd,
-      $source,
-      'update_info',
-      $empty,
-      'output',
-      '-',
-      'flatten',
-      ($remove_meta ? 'uncompress' : 'compress'),
-    );
-    if (isset($this->configuration['remove-id'])
-      && $this->configuration['remove-id']) {
-      // /ID [<e8c87bb7a19df73c042da3b2a01dc7ff> <e8c87bb7a19df73c042da3b2a01dc7ff>]
-      $cmd[] = Shell::arg(" | grep -va '^\\/ID \\[' ", Shell::SHELL_SAFE);
+    // Determine whether InfoKey exists.
+    $infoKey = preg_match("@(?:^|\n)InfoKey:@s", file_get_contents($empty));
+    if ($infoKey || $remove_meta) {
+      // pdftk source.pdf update_info empty.txt output destination.pdf flatten compress
+      $cmd = array(
+        $this->cmd,
+        $source,
+        'update_info',
+        $empty,
+        'output',
+        '-',
+        'flatten',
+        ($remove_meta ? 'uncompress' : 'compress'),
+      );
+      if (isset($this->configuration['remove-id'])
+        && $this->configuration['remove-id']) {
+        // /ID [<e8c87bb7a19df73c042da3b2a01dc7ff> <e8c87bb7a19df73c042da3b2a01dc7ff>]
+        $cmd[] = Shell::arg(" | grep -va '^\\/ID \\[' ", Shell::SHELL_SAFE);
+      }
+      $cmd[] = Shell::arg('>', Shell::SHELL_SAFE);
+      $cmd[] = $cleaned;
+      $this->shell($cmd);
     }
-    $cmd[] = Shell::arg('>', Shell::SHELL_SAFE);
-    $cmd[] = $cleaned;
-    $this->shell($cmd);
+    else {
+      $cleaned = $source;
+    }
 
     // Clean up and finalize files.
+    if (function_exists('drush_get_context')
+      && drush_get_context('DRUSH_VERBOSE')) {
+      drush_print(dt('PDFTK InfoKey: !bool', array(
+        '!bool' => var_export($infoKey, 1),
+      )));
+      drush_print(dt('PDFTK remove_meta: !bool', array(
+        '!bool' => var_export($remove_meta, 1),
+      )));
+    }
     if ($remove_meta) {
       $temp = $this->getTempFile('pdf');
       $fp = fopen($cleaned, 'r');
