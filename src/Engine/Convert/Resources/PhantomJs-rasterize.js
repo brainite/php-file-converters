@@ -31,6 +31,16 @@ var page = require('webpage').create(),
 system = require('system'),
 address, output, size;
 
+// Reference: https://stackoverflow.com/questions/16854788/phantomjs-webpage-timeout
+// Add resource timeout to avoid a permanent hang.
+page.settings.resourceTimeout = 10000; // ms
+page.onResourceTimeout = function(e) {
+  console.log(e.errorCode);   // it'll probably be 408 
+  console.log(e.errorString); // it'll probably be 'Network timeout on resource'
+  console.log(e.url);         // the url whose request timed out
+  phantom.exit(1);
+};
+
 if (system.args.length < 3 || system.args.length > 5) {
   console.log('Usage: rasterize.js URL filename [paperwidth*paperheight|paperformat] [zoom]');
   console.log('  paper (pdf output) examples: "5in*7.5in", "10cm*20cm", "A4", "Letter"');
