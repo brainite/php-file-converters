@@ -32,8 +32,8 @@ system = require('system'),
 address, output, size;
 
 // Reference: https://stackoverflow.com/questions/16854788/phantomjs-webpage-timeout
-// Add resource timeout to avoid a permanent hang.
-page.settings.resourceTimeout = 10000; // ms
+// Add resource timeout to avoid a permanent hang. It applies to each individual resource.
+page.settings.resourceTimeout = 5000; // ms
 page.onResourceTimeout = function(e) {
   console.log(e.errorCode);   // it'll probably be 408 
   console.log(e.errorString); // it'll probably be 'Network timeout on resource'
@@ -74,6 +74,10 @@ if (system.args.length < 3 || system.args.length > 5) {
     page.zoomFactor = system.args[4];
   }
   page.open(address, function (status) {
+    window.setTimeout(function () {
+      console.log("Page took too long to load");
+      phantom.exit(1);
+    }, 10000);
     if (status !== 'success') {
       console.log('Unable to load the address!');
       phantom.exit();
