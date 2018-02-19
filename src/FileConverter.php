@@ -194,6 +194,20 @@ class FileConverter {
   }
 
   public function getEngines($convert_path, $configuration_overrides = NULL, $confirm_available = TRUE) {
+    // Normalize certain file extensions.
+    $normalize = array(
+      'htm' => 'html',
+      'jpeg' => 'jpg',
+    );
+    $tmp = explode('->', $convert_path);
+    foreach ($tmp as &$k) {
+      if (isset($normalize[$k])) {
+        $k = $normalize[$k];
+      }
+    }
+    $convert_path = implode('->', $tmp);
+    unset($k);
+
     // Select a converter.
     $force_id = NULL;
     $engines = array();
