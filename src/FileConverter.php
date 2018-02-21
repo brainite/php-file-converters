@@ -168,6 +168,10 @@ class FileConverter {
     return $destination;
   }
 
+  public function getSetting($key) {
+    return $this->settings[$key];
+  }
+
   public function getSettings() {
     return $this->settings;
   }
@@ -251,7 +255,7 @@ class FileConverter {
         }
         if (isset($configuration_overrides)
           && is_array($configuration_overrides)) {
-          $configuration = array_merge($configuration, $configuration_overrides);
+          $configuration = array_replace($configuration, $configuration_overrides);
         }
         $engine = $this->getEngine($convert_path, $configuration);
         if (!$confirm_available || $engine->isAvailable()) {
@@ -259,6 +263,13 @@ class FileConverter {
         }
         else {
           $this->missing_engines[$conf_id] = $engine;
+        }
+
+        // Stop if the engine is marked as #final
+        // This is similar to setConverter('a->b', 'force_id'),
+        //   except that it might not be the first engine tried.
+        if (isset($configuration['#final'])) {
+          break(2);
         }
       }
     }
