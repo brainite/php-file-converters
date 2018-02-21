@@ -16,7 +16,7 @@
     "require":{
         "drush/drush":"7.*",
         "ensepar/html2pdf":"dev-master",
-        "mpdf/mpdf":"v5.7.1",
+        "mpdf/mpdf":"^5.7",
         "php":">=5.5",
         "symfony/console":"2.4.*",
         "wittiws/htmlawed":"dev-master",
