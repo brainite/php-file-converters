@@ -128,12 +128,19 @@ abstract class EngineBase {
 
     // Convert the string.
     file_put_contents($s_path, $source);
-    $this->convertFile($s_path, $d_path);
-    $destination = file_get_contents($d_path);
+    try {
+      $this->convertFile($s_path, $d_path);
+      $destination = file_get_contents($d_path);
 
-    // Remove the files.
-    unlink($s_path);
-    unlink($d_path);
+      // Remove the files.
+      unlink($s_path);
+      unlink($d_path);
+    } catch (\Exception $e) {
+      // Remove the files.
+      unlink($s_path);
+      unlink($d_path);
+      throw $e;
+    }
 
     return $this;
   }
@@ -267,11 +274,23 @@ abstract class EngineBase {
       return $cache[$command];
     }
 
-    // Look in the bin folder (symlinks work fine).
+    // Look in the bin folder for FileConverter-provided bins (symlinks work fine).
     $bin = realpath(__DIR__ . '/../../bin/' . $command);
     if ($bin !== FALSE && is_executable($bin)) {
       $cache[$command] = $bin;
       return $bin;
+    }
+
+    // Look for overrides to the env_path
+    $dirs = $this->converter->getSetting('env_path');
+    if (isset($dirs) && strlen($dirs) > 1) {
+      foreach (explode(':', $dirs) as $dir) {
+        $bin = realpath("$dir/$command");
+        if ($bin !== FALSE && is_executable($bin)) {
+          $cache[$command] = $bin;
+          return $bin;
+        }
+      }
     }
 
     // Use the which/where command to locate the binary.

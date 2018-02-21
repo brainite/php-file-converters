@@ -16,7 +16,7 @@ class ConfigurationDefaults extends ConfigurationBase {
   }
 
   public function __construct(&$settings) {
-    $settings = array(
+    $settings = array_replace(array(
       // Ubuntu 12.04 LTS:
       //   /tmp
       //   Linux
@@ -28,7 +28,9 @@ class ConfigurationDefaults extends ConfigurationBase {
       'temp_dir' => sys_get_temp_dir(),
       'operating_system' => php_uname('s'),
       'operating_system_version' => php_uname('r'),
-    );
+      // Override the default $PATH environmental variable.
+      'env_path' => NULL,
+    ), (array) $settings);
 
     // Attempt to get better OS information.
     // lsb_release is available on Ubun
@@ -36,8 +38,8 @@ class ConfigurationDefaults extends ConfigurationBase {
       $lsb = trim(`which lsb_release`);
       if ($lsb !== '') {
         $lsb = escapeshellarg($lsb);
-        $settings['operating_system'] = trim(`$lsb        -is`);
-        $settings['operating_system_version'] = trim(`$lsb        -rs`);
+        $settings['operating_system'] = trim(`$lsb          -is`);
+        $settings['operating_system_version'] = trim(`$lsb          -rs`);
       }
     }
     elseif ($settings['operating_system'] === 'Windows NT') {
