@@ -16,6 +16,7 @@
 namespace FileConverter;
 use FileConverter\Configuration\ConfigurationDefaults;
 use FileConverter\Configuration\ConfigurationOverride;
+use FileConverter\Util\FileInfo;
 
 /**
  * The controlling FileConverter class.
@@ -150,8 +151,12 @@ class FileConverter {
 
   public function convertFile($source, $destination, $convert_path = NULL) {
     if (!isset($convert_path)) {
-      $convert_path = pathinfo($source, PATHINFO_EXTENSION) . '->'
-        . pathinfo($destination, PATHINFO_EXTENSION);
+      $source_ext = strtolower(trim(pathinfo($source, PATHINFO_EXTENSION)));
+      if ($source_ext === '' && is_file($source)) {
+        $source_ext = FileInfo::detectNormalExtension($source);
+      }
+      $destination_ext = pathinfo($destination, PATHINFO_EXTENSION);
+      $convert_path = $source_ext . '->' . $destination_ext;
     }
     $this->convert('file', $convert_path, $source, $destination);
     return $this;
