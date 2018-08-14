@@ -274,6 +274,17 @@ abstract class EngineBase {
       return $cache[$command];
     }
 
+    // Look at manual aliases.
+    $alias = $this->converter->getCommandAlias($command);
+    if (isset($alias)) {
+      $path = realpath($alias);
+      if ($path === FALSE) {
+        $path = NULL;
+      }
+      $cache[$command] = $path;
+      return $path;
+    }
+
     // Look in the bin folder for FileConverter-provided bins (symlinks work fine).
     $bin = realpath(__DIR__ . '/../../bin/' . $command);
     if ($bin !== FALSE && is_executable($bin)) {

@@ -40,7 +40,9 @@ class FileConverter {
   }
 
   protected $configurations = array();
-  protected $settings = array();
+  protected $settings = array(
+    'alias' => array(),
+  );
   protected $missing_engines = array();
   protected $previous_engines = array();
   protected $conversion_depth = 0;
@@ -167,6 +169,13 @@ class FileConverter {
     return $this;
   }
 
+  public function getCommandAlias($command) {
+    if (isset($this->settings['alias'][$command])) {
+      return $this->settings['alias'][$command];
+    }
+    return NULL;
+  }
+
   public function getConvertedString($source, $convert_path = 'null->null') {
     $destination = '';
     $this->convertString($source, $destination, $convert_path);
@@ -274,7 +283,7 @@ class FileConverter {
         // This is similar to setConverter('a->b', 'force_id'),
         //   except that it might not be the first engine tried.
         if (isset($configuration['#final'])) {
-          break(2);
+          break (2);
         }
       }
     }
@@ -331,6 +340,10 @@ class FileConverter {
       $destination = $source;
     }
     return $this->convert('file', "$ext->$ext", $source, $destination);
+  }
+
+  public function &setCommandAlias($alias, $path) {
+    $this->settings['alias'][$alias] = $path;
   }
 
   public function &setConverter($convert_path = 'null->null', $configuration = 'null:default') {
