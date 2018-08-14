@@ -74,6 +74,11 @@ class WkHtmlToPdf extends EngineBase {
       'mode' => Shell::SHELL_ARG_BOOL_DBL,
     ),
     array(
+      'name' => 'footer-spacing',
+      'description' => 'Spacing between footer and content in mm (default 0)',
+      'mode' => Shell::SHELL_ARG_BOOL_DBL,
+    ),
+    array(
       'name' => 'footer-font-size',
       'description' => 'Set footer font size (default 12)',
       'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
