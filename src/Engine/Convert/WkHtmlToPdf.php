@@ -68,6 +68,36 @@ class WkHtmlToPdf extends EngineBase {
       'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
       'default' => '10mm',
     ),
+    array(
+      'name' => 'footer-line',
+      'description' => 'Display line above the footer',
+      'mode' => Shell::SHELL_ARG_BOOL_DBL,
+    ),
+    array(
+      'name' => 'footer-font-size',
+      'description' => 'Set footer font size (default 12)',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
+    ),
+    array(
+      'name' => 'footer-html',
+      'description' => 'Adds a html footer (must provide URL, not HTML)',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
+    ),
+    array(
+      'name' => 'footer-left',
+      'description' => 'Left aligned footer text',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
+    ),
+    array(
+      'name' => 'footer-center',
+      'description' => 'Centered footer text',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
+    ),
+    array(
+      'name' => 'footer-right',
+      'description' => 'Right aligned footer text',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL_NOEQUAL,
+    ),
   );
 
   public function getConvertFileShell($source, &$destination) {
@@ -105,14 +135,7 @@ class WkHtmlToPdf extends EngineBase {
   }
 
   public function isAvailable() {
-    $bin = realpath(__DIR__ . '/../../../../../bin');
-    if (is_dir($bin) && is_file("$bin/wkhtmltopdf-0.11.0rc1-amd64")) {
-      $this->cmd = "$bin/wkhtmltopdf-0.11.0rc1-amd64";
-    }
-    else {
-      $this->cmd = $this->shellWhich('wkhtmltopdf');
-    }
-
+    $this->cmd = $this->shellWhich('wkhtmltopdf');
     return isset($this->cmd);
   }
 }
