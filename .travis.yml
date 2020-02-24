@@ -1,12 +1,17 @@
 language: php
-php:
-  - hhvm
-  - 5.6
-  - 5.5
-before_install:
-  - composer install
-sudo: false
 matrix:
+  include:
+    - php: 5.6
+      env: PHPUNITVER=5.7
+    - php: 7.1
+      env: PHPUNITVER=5.7
+    - php: hhvm
+      env: PHPUNITVER=5.7 HHVM=true
   allow_failures:
     - php: hhvm
 
+before_install:
+  - composer install
+  - if [ $PHPUNITVER"x" != "x" ]; then mkdir -p ./vendor/bin; curl -sSfL -o ./vendor/bin/phpunit https://phar.phpunit.de/phpunit-$PHPUNITVER.phar; chmod u+x ./vendor/bin/phpunit; fi
+  
+sudo: false
