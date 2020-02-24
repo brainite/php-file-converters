@@ -6,80 +6,31 @@ PHP File Converters provides a unified interface to various tools that PHP devel
 
 ## Engines Currently Supported
 
-<ol><li>
-		Convert Engines
-		<ol><li>
-				<div>
-					AbiWord</div>
-			</li>
-			<li>
-				<div>
-					Catdoc</div>
-			</li>
-			<li>
-				<div>
-					Docverter</div>
-			</li>
-			<li>
-				<div>
-					GhostScript</div>
-			</li>
-			<li>
-				<div>
-					Htmldoc</div>
-			</li>
-			<li>
-				<div>
-					ImageMagick</div>
-			</li>
-			<li>
-				<div>
-					LibreOffice</div>
-			</li>
-			<li>
-				<div>
-					Pandoc</div>
-			</li>
-			<li>
-				<div>
-					PhantomJs</div>
-			</li>
-			<li>
-				<div>
-					Ted</div>
-			</li>
-			<li>
-				<div>
-					Unoconv</div>
-			</li>
-			<li>
-				<div>
-					Unrtf</div>
-			</li>
-			<li>
-				<div>
-					WkHtmlToPdf</div>
-			</li>
-			<li>
-				<div>
-					Xhtml2Pdf</div>
-			</li>
-		</ol></li>
-	<li>
-		Optimize Engines
-		<ol><li>
-				JpegOptim</li>
-			<li>
-				Pdftk</li>
-		</ol></li>
-	<li>
-		ReplaceString
-		<ol><li>
-				Native (custom for PFC!)</li>
-		</ol></li>
-	<li>
-		... and more are coming soon ...</li>
-</ol>
+### Convert Engines
+
+- AbiWord
+- Catdoc
+- Docverter
+- GhostScript
+- Htmldoc
+- ImageMagick
+- LibreOffice
+- Pandoc
+- PhantomJs
+- Ted
+- Unoconv
+- Unrtf
+- WkHtmlToPdf
+- Xhtml2Pdf
+
+### Optimize Engines
+
+- JpegOptim
+- Pdftk
+
+### ReplaceString
+
+- Native (custom for FileConverter!)
 
 ## Getting Started
 
@@ -95,13 +46,17 @@ PHP File Converters provides a unified interface to various tools that PHP devel
 
 ### PHP Example with Composer Autoload
 
-<pre class="brush:php">
-&lt;?php
+```php
+<?php
 $fc = \Witti\FileConverter\FileConverter::factory();
-$fc-&gt;convertFile($source, $destination);</pre>
-<h3>
-	CLI: STDIN/STDOUT</h3>
-<p>Use a hyphen to indicate STDIN (for input) or STDOUT (for output).</p>
-<pre class="brush:bash">
-prompt&gt; echo "## hi ##" | fileconverter - - --conversion=md:html
-&lt;h2 id="hi"&gt;hi&lt;/h2&gt;</pre>
+$fc->convertFile($source, $destination);
+```
+
+### CLI: STDIN/STDOUT
+
+Use a hyphen to indicate STDIN (for input) or STDOUT (for output).
+
+```bash
+prompt> echo "## hi ##" | fileconverter - - --conversion=md:html
+<h2 id="hi">hi</h2>
+```
