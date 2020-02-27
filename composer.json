@@ -1,11 +1,11 @@
 {
-    "name":"wittiws/php-file-converters",
+    "name":"brainite/php-file-converters",
     "type":"library",
     "description":"Standardized file converter library.",
     "keywords":[
         "converter"
     ],
-    "homepage":"http://www.witti.ws/project/php-file-converters",
+    "homepage":"http://www.brainite.org/php-file-converters/",
     "license":"MIT",
     "authors":[
         {
@@ -19,10 +19,10 @@
         "mpdf/mpdf":"^5.7",
         "php":">=5.5",
         "symfony/console":"2.4.*",
-        "wittiws/htmlawed":"dev-master",
+        "brainite/htmlawed":"dev-master",
         "wittiws/phpquery":"dev-master",
-        "wittiws/quipxml":"dev-master",
-        "wittiws/splash":"dev-master",
+        "brainite/quipxml":"dev-master",
+        "brainite/splash":"dev-master",
         "zendframework/zend-mail":"2.7.*"
     },
     "autoload":{
