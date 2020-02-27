@@ -1,10 +1,70 @@
-PHP File Converters
-===================
+---
+title: FileConverter
+---
+
+# PHP File Converters
 
 [![Build Status](https://travis-ci.org/brainite/php-file-converters.png?branch=master)](https://travis-ci.org/brainite/php-file-converters)
 
-This PSR-4 library provides a unified interface for various file conversion utilities. For installation instructions, visit the project home page at http://www.witti.ws/project/php-file-converters.
+This PSR-4 library provides a unified interface for various file conversion utilities.
 
+## Engines Currently Supported
+
+### Convert Engines
+
+- AbiWord
+- Catdoc
+- Docverter
+- GhostScript
+- Htmldoc
+- ImageMagick
+- LibreOffice
+- Pandoc
+- PhantomJs
+- Ted
+- Unoconv
+- Unrtf
+- WkHtmlToPdf
+- Xhtml2Pdf
+
+### Optimize Engines
+
+- JpegOptim
+- Pdftk
+
+### ReplaceString
+
+- Native (custom for FileConverter!)
+
+## Getting Started
+
+### Installation
+
+<p>Option 1: Add the "brainite/fileconverter" requirement to your composer.json configuration.</p>
+<p>Option 2: From the command-line, execute: composer create-project brainite/fileconverter</p>
+<p>Option 3: Download the source code from <a href="https://github.com/brainite/php-file-converters">Github</a> and then run `composer update`.</p>
+
+### CLI: Command Line Example
+```bash
+<path>/bin/fileconverter <source> <dest>
+```
+
+### PHP Example with Composer Autoload
+
+```php
+<?php
+$fc = \Witti\FileConverter\FileConverter::factory();
+$fc->convertFile($source, $destination);
+```
+
+### CLI: STDIN/STDOUT
+
+Use a hyphen to indicate STDIN (for input) or STDOUT (for output).
+
+```bash
+prompt> echo "## hi ##" | fileconverter - - --conversion=md:html
+<h2 id="hi">hi</h2>
+```
 
 ## Default Configured Converters
 
