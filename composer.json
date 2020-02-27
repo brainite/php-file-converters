@@ -1,5 +1,5 @@
 {
-    "name":"brainite/php-file-converters",
+    "name":"brainite/fileconverter",
     "type":"library",
     "description":"Standardized file converter library.",
     "keywords":[
