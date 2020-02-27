@@ -1,7 +1,3 @@
----
-title: FileConverter
----
-
 # PHP File Converters
 
 [![Build Status](https://travis-ci.org/brainite/php-file-converters.png?branch=master)](https://travis-ci.org/brainite/php-file-converters)
