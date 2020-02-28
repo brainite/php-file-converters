@@ -19,7 +19,6 @@
         "php":">=5.5",
         "symfony/console":"2.4.*",
         "brainite/htmlawed":"dev-master",
-        "wittiws/phpquery":"dev-master",
         "brainite/quipxml":"dev-master",
         "brainite/splash":"dev-master",
         "zendframework/zend-mail":"2.7.*"

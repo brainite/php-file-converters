@@ -6,7 +6,7 @@ use QuipXml\Quip;
  * This engine relies heavily on QuipXml.
  * @version 0.2
  */
-class FcHtmlWord extends FcHtmlBase {
+class FcHtmlWord extends EngineBase {
   public function convertString($source, &$destination) {
     $source = str_replace("\r\n", "\n", $source);
     $source = str_replace("\r", "\n", $source);
@@ -49,7 +49,6 @@ class FcHtmlWord extends FcHtmlBase {
     }
     $destination = $quip->html();
 
-//     echo $destination;
     return $this;
   }
 
