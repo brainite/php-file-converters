@@ -49,8 +49,17 @@ class FileConverter {
   protected $replacements = array(
     'string' => array(),
   );
+  protected $logs = array();
   public function __construct() {
     $this->configurations[] = new ConfigurationDefaults($this->settings);
+  }
+
+  public function &addLog($title, $data) {
+    $this->logs[] = array(
+      'title' => $title,
+      'data' => $data,
+    );
+    return $this;
   }
 
   public function convert($type = 'string', $convert_path = 'null->null', $source = '', &$destination = NULL) {
@@ -310,6 +319,10 @@ class FileConverter {
     }
 
     return $engines;
+  }
+
+  public function getLogs() {
+    return $this->logs;
   }
 
   public function getMissingEngines() {

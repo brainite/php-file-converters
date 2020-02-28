@@ -10,12 +10,6 @@
 
 namespace FileConverter;
 
-if (!function_exists('drush_print')) {
-  function drush_print($msg, $indent = 0) {
-    echo str_repeat(' ', $indent) . $msg . "\n";
-  }
-}
-
 class FileConverterTests {
   static public function factory($root = NULL) {
     return new FileConverterTests($root);
@@ -28,6 +22,10 @@ class FileConverterTests {
     if (isset($root) && is_dir($root)) {
       $this->root = realpath($root);
     }
+  }
+
+  static public function _print($msg, $indent = 0) {
+    echo str_repeat(' ', $indent) . $msg . "\n";
   }
 
   /**
@@ -53,14 +51,14 @@ class FileConverterTests {
     $tmp = $fc->getSettings();
     $os_suffix = '-' . $tmp['operating_system'] . '_'
       . $tmp['operating_system_version'];
-    drush_print("OS: " . substr($os_suffix, 1));
+    self::_print("OS: " . substr($os_suffix, 1));
     //     $results_base = strtoupper('RESULTS' . $os_suffix);
     $os_suffix .= '-VERSIONPLACEHOLDER' . '.';
 
     // Load the version MD5s.
     $md5s_path = realpath($root . '/version_md5.json');
     if (!$md5s_path) {
-      drush_print("Invalid path to tests. 'version_md5.json' was not found.");
+      self::_print("Invalid path to tests. 'version_md5.json' was not found.");
       return;
     }
     $md5s = json_decode(file_get_contents($md5s_path), TRUE);
@@ -76,14 +74,14 @@ class FileConverterTests {
       if ($filter[0] !== '' && $filter[0] !== $test_basename) {
         continue;
       }
-      drush_print("TEST: " . $test_basename);
-      drush_print($conf['title'], 6);
+      self::_print("TEST: " . $test_basename);
+      self::_print($conf['title'], 6);
 
       foreach ($conf['tests'] as $subtest => $subtest_conf) {
         if ($filter[1] !== '' && $filter[1] !== $subtest) {
           continue;
         }
-        drush_print("TITLE: " . $subtest_conf['title'], 2);
+        self::_print("TITLE: " . $subtest_conf['title'], 2);
 
         // Create the FileConverter object.
         $fc = \FileConverter\FileConverter::factory(FALSE);
@@ -97,7 +95,7 @@ class FileConverterTests {
           . DIRECTORY_SEPARATOR . $subtest;
         $s_paths = glob($tmp . '.*');
         if (empty($s_paths)) {
-          drush_print("NO TEST FILE FOUND: $subtest", 4);
+          self::_print("NO TEST FILE FOUND: $subtest", 4);
           continue;
         }
         $s_path = array_shift($s_paths);
@@ -105,14 +103,14 @@ class FileConverterTests {
           if (!empty($this->filter_converters) && !in_array($test_id, $this->filter_converters)) {
             continue;
           }
-          drush_print("CONVERSION: " . $test_id, 4);
+          self::_print("CONVERSION: " . $test_id, 4);
 
           // Do the basic conversion.
           $d_path = str_replace('%', $s_path . "-$test_id", $test_conf['destination']);
           $d_path .= $os_suffix . pathinfo($d_path, PATHINFO_EXTENSION);
 
-          // drush_print("SRC:  " . $s_path, 4);
-          // drush_print("DEST: " . $d_path, 4);
+          // self::_print("SRC:  " . $s_path, 4);
+          // self::_print("DEST: " . $d_path, 4);
           if (is_array($test_conf['engines'])) {
             foreach ($test_conf['engines'] as $engine_path => $engine_conf) {
               $fc->setConverter($engine_path, $engine_conf);
@@ -130,7 +128,7 @@ class FileConverterTests {
               continue;
             }
             $time = microtime(TRUE) - $time;
-            drush_print("TIME: " . round($time, 3) . ' seconds', 6);
+            self::_print("TIME: " . round($time, 3) . ' seconds', 6);
           }
           if (!is_file($d_path)) {
             continue;
@@ -155,7 +153,7 @@ class FileConverterTests {
           $s_thumb = NULL;
           $fc_der = \FileConverter\FileConverter::factory(FALSE);
           foreach ($conf['derivatives'] as $der_id => $der_conf) {
-            drush_print("DERIVATIVE: " . $der_id, 6);
+            self::_print("DERIVATIVE: " . $der_id, 6);
             $d_der = str_replace('%', $s_der . "-$der_id", $der_conf['destination']);
             foreach ($der_conf['engines'] as $engine_path => $engine_conf) {
               $fc_der->setConverter($engine_path, $engine_conf);
@@ -171,7 +169,7 @@ class FileConverterTests {
           if (isset($s_thumb)) {
             $fc_thumb = \FileConverter\FileConverter::factory(FALSE);
             foreach ($thumb_sizes as $thumb_size => $thumb_create) {
-              drush_print("THUMB: " . $thumb_size, 6);
+              self::_print("THUMB: " . $thumb_size, 6);
               $d_thumb = $s_thumb . "-$thumb_size.jpg";
               if ($thumb_create) {
                 $fc_thumb->setConverter('jpg->jpg', array(
@@ -182,7 +180,7 @@ class FileConverterTests {
                   $fc_thumb->convertFile($s_thumb, $d_thumb);
                   $fc_thumb->optimizeFile($d_thumb);
                 } catch (\Exception $e) {
-                  drush_print("Thumbnail error: " . $e->getMessage(), 6);
+                  self::_print("Thumbnail error: " . $e->getMessage(), 6);
                 }
               }
               elseif (is_file($d_thumb)) {

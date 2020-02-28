@@ -82,15 +82,8 @@ class Pdftk extends EngineBase {
     }
 
     // Clean up and finalize files.
-    if (function_exists('drush_get_context')
-      && drush_get_context('DRUSH_VERBOSE')) {
-      drush_print(dt('PDFTK InfoKey: !bool', array(
-        '!bool' => var_export($infoKey, 1),
-      )));
-      drush_print(dt('PDFTK remove_meta: !bool', array(
-        '!bool' => var_export($remove_meta, 1),
-      )));
-    }
+    $this->converter->addLog('PDFTK InfoKey', $infoKey);
+    $this->converter->addLog('PDFTK remove_meta', $remove_meta);
     if ($remove_meta) {
       $temp = $this->getTempFile('pdf');
       $fp = fopen($cleaned, 'r');
