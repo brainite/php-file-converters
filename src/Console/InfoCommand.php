@@ -11,7 +11,7 @@ class InfoCommand extends \Symfony\Component\Console\Command\Command {
     $this->setName('info');
     $this->setDescription('List supported converters and extensions');
     $this->setDefinition(array(
-      new InputArgument('info_type', InputArgument::OPTIONAL, 'Type of info request (converters|convert-paths|extension-table)'),
+      new InputArgument('info_type', InputArgument::OPTIONAL, 'Type of info request (converters|convert-paths|defaults|extension-table)'),
     ));
   }
 
