@@ -90,6 +90,9 @@ class InfoCommand extends \Symfony\Component\Console\Command\Command {
                 if (!isset($rows[$to])) {
                   $rows[$to] = array();
                 }
+                if (!isset($rows[$from][$to])) {
+                  $rows[$from][$to] = 0;
+                }
                 $rows[$from][$to] += sizeof($converters);
               }
             }
