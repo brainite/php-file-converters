@@ -38,8 +38,8 @@ class ConfigurationDefaults extends ConfigurationBase {
       $lsb = trim(`which lsb_release`);
       if ($lsb !== '') {
         $lsb = escapeshellarg($lsb);
-        $settings['operating_system'] = trim(`$lsb          -is`);
-        $settings['operating_system_version'] = trim(`$lsb          -rs`);
+        $settings['operating_system'] = trim(`$lsb           -is`);
+        $settings['operating_system_version'] = trim(`$lsb           -rs`);
       }
     }
     elseif ($settings['operating_system'] === 'Windows NT') {
@@ -66,6 +66,11 @@ class ConfigurationDefaults extends ConfigurationBase {
       'html->eml' => array(
         'nativearchive:default' => array(
           '#engine' => 'Convert\\NativeArchive',
+        ),
+      ),
+      'msg->eml' => array(
+        'msgconvert:default' => array(
+          '#engine' => 'Convert\\MsgConvert',
         ),
       ),
       'html->pdf' => array(
