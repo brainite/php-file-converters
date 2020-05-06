@@ -15,6 +15,7 @@ This PSR-4 library provides a unified interface for various file conversion util
 - Htmldoc
 - ImageMagick
 - LibreOffice
+- MsgConvert
 - Pandoc
 - PhantomJs
 - Ted
