@@ -45,7 +45,7 @@ class InfoCommand extends \Symfony\Component\Console\Command\Command {
             $items[$convert_path]['#title'] = $convert_path;
             foreach ($converters as $id => $converter) {
               $engine = preg_replace('@^.*\\\\@', '', $converter['#engine']);
-              if ($converter['chain']) {
+              if (isset($converter['chain']) && $converter['chain']) {
                 $engine .= ' ' . $converter['chain'];
               }
               $item = sprintf('%- 28s %s', $id, $engine);
@@ -133,7 +133,7 @@ class InfoCommand extends \Symfony\Component\Console\Command\Command {
     foreach ($items as $id => $item) {
       $output->writeln($item['#title']);
       foreach ($item as $k => $v) {
-        if ($k{0} !== '#') {
+        if (is_string($k) && $k{0} !== '#') {
           if (is_array($v)) {
             $output->writeln('   ' . $v['#title']);
             foreach ($v as $k1 => $v1) {
