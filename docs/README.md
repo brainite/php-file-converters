@@ -49,7 +49,7 @@ This PSR-4 library provides a unified interface for various file conversion util
 
 ```php
 <?php
-$fc = \Witti\FileConverter\FileConverter::factory();
+$fc = \Brainite\FileConverter\FileConverter::factory();
 $fc->convertFile($source, $destination);
 ```
 
