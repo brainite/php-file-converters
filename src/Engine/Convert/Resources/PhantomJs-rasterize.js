@@ -31,6 +31,8 @@ var page = require('webpage').create(),
 system = require('system'),
 address, output, size;
 
+page.settings.userAgent = "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.41 Safari/535.1";
+
 // Reference: https://stackoverflow.com/questions/16854788/phantomjs-webpage-timeout
 // Add resource timeout to avoid a permanent hang. It applies to each individual resource.
 page.settings.resourceTimeout = 5000; // ms
