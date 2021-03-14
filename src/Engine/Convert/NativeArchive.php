@@ -29,10 +29,17 @@ class NativeArchive extends EngineBase {
 
       // Load the HTML body.
       $html = file_get_contents($source);
-      $html = preg_replace_callback('@(?<a>\s+src=")(?<src>[^"]+)(?<b>")@si', function ($matches) use (&$parts) {
+      $html = preg_replace_callback('@(?<a>\s+src=")(?<src>[^"]+)(?<b>")@si', function ($matches) use (&$parts, $source) {
         // Mangle the src attribute.
         $src = $matches['src'];
         if (strpos($src, '://') === FALSE && !preg_match('@^/|\.\.@s', $src)) {
+          // Attempt to find the src
+          $test = dirname(realpath($source)) . DIRECTORY_SEPARATOR . $src;
+          if (is_file($test)) {
+            $src = $test;
+          }
+
+          // Add the file, if found.
           if (is_file($src)) {
             $cid = 'imageid' . sizeof($parts);
             $ext = strtolower(pathinfo($src, PATHINFO_EXTENSION));
