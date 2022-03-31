@@ -49,8 +49,9 @@ class Pdftk extends EngineBase {
       $this->cmd,
       $source,
       'dump_data',
-      Shell::arg('2>&1 |', Shell::SHELL_SAFE),
-      Shell::arg("sed 's/Value: .*/Value:/' > ", Shell::SHELL_SAFE),
+      Shell::arg(' 2>&1 |', Shell::SHELL_SAFE),
+      Shell::arg(" grep -va '^(pdftk Warning|Bookmark(Begin|Title|Level|Page))' | ", Shell::SHELL_SAFE),
+      Shell::arg(" sed 's/Value: .*/Value:/' > ", Shell::SHELL_SAFE),
       $empty,
     ));
 
@@ -73,6 +74,7 @@ class Pdftk extends EngineBase {
         // /ID [<e8c87bb7a19df73c042da3b2a01dc7ff> <e8c87bb7a19df73c042da3b2a01dc7ff>]
         $cmd[] = Shell::arg(" | grep -va '^\\/ID \\[' ", Shell::SHELL_SAFE);
       }
+      $cmd[] = Shell::arg(" | grep -va '^(pdftk Warning|Bookmark(Begin|Title|Level|Page))' ", Shell::SHELL_SAFE);
       $cmd[] = Shell::arg('>', Shell::SHELL_SAFE);
       $cmd[] = $cleaned;
       $this->shell($cmd);
