@@ -125,7 +125,7 @@ class InfoCommand extends \Symfony\Component\Console\Command\Command {
 
       default:
         $output->writeln("Usage: fileconverter info [converters|convert-paths|extension-table]");
-        return;
+        return 0;
     }
 
     // Sort and display the items.
@@ -148,6 +148,8 @@ class InfoCommand extends \Symfony\Component\Console\Command\Command {
         }
       }
     }
+
+    return 0;
   }
 
 }

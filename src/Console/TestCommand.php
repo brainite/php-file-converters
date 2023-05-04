@@ -22,12 +22,12 @@ class TestCommand extends \Symfony\Component\Console\Command\Command {
     $path_to_tests = $input->getArgument('path_to_tests');
     if (!isset($path_to_tests)) {
       $output->writeln("USAGE: fileconverter tests <path_to_tests>");
-      return;
+      return 0;
     }
     $root = realpath(getcwd() . '/' . $path_to_tests);
     if (!$root || !$path_to_tests || !is_dir($root)) {
       $output->writeln("Unable to locate tests.");
-      return;
+      return 1;
     }
 
     try {
@@ -38,6 +38,8 @@ class TestCommand extends \Symfony\Component\Console\Command\Command {
     } catch (\Exception $e) {
       $output->writeln($e->getMessage());
     }
+
+    return 0;
   }
 
 }

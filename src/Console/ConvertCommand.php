@@ -47,7 +47,7 @@ class ConvertCommand extends \Symfony\Component\Console\Command\Command {
       }
       else {
         $output->writeln("USAGE: fileconverter 'source.ext1' 'destination.ext2'");
-        return;
+        return 0;
       }
     }
 
@@ -69,7 +69,7 @@ class ConvertCommand extends \Symfony\Component\Console\Command\Command {
       if (!isset($force_conversion)) {
         $output->writeln("Error: When using stdin, you must explicitly define conversion.");
         $output->writeln("Usage: fileconverter - output.dat --conversion=misc:dat");
-        return;
+        return 1;
       }
       $stdin = TRUE;
       $source = $fc->getEngine(NULL, NULL)->getTempFile($force_conversion[0]);
@@ -92,7 +92,7 @@ class ConvertCommand extends \Symfony\Component\Console\Command\Command {
         }
         else {
           $output->writeln("Error: Unable to locate source file: $source");
-          return;
+          return 1;
         }
       }
     }
@@ -101,7 +101,7 @@ class ConvertCommand extends \Symfony\Component\Console\Command\Command {
         if (!isset($force_conversion)) {
           $output->writeln("Error: When using stdout, you must explicitly define conversion.");
           $output->writeln("Usage: fileconverter input.dat - --conversion=misc:dat");
-          return;
+          return 1;
         }
         $stdout = TRUE;
         $destination = $fc->getEngine(NULL, NULL)->getTempFile($force_conversion[1]);
@@ -129,7 +129,7 @@ class ConvertCommand extends \Symfony\Component\Console\Command\Command {
         $fc->convertFile($is_remote ? $source : realpath($source), $destination, $convert_path);
       } catch (\Exception $e) {
         $output->writeln($e->getMessage());
-        return;
+        return 1;
       }
     }
 
@@ -163,6 +163,8 @@ class ConvertCommand extends \Symfony\Component\Console\Command\Command {
       readfile($destination);
       unlink($destination);
     }
+
+    return 0;
   }
 
 }
