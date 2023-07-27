@@ -17,7 +17,7 @@ use FileConverter\Engine\EngineBase;
  * @version 0.1
  */
 class ReplaceStringNative extends EngineBase {
-  public function convertString(&$source, &$destination) {
+  public function convertString($source, &$destination) {
     $replacements = array();
     if (isset($this->configuration['replacements'])
       && is_array($this->configuration['replacements'])) {
@@ -48,9 +48,15 @@ class ReplaceStringNative extends EngineBase {
             chr(151) => '\\emdash',
           ));
           // Decode three byte unicode characters
-          $v = preg_replace("/([\340-\357])([\200-\277])([\200-\277])/e", "'\\u'.((ord('\\1')-224)*4096 + (ord('\\2')-128)*64 + (ord('\\3')-128)).'?'", $v);
+          $v = preg_replace_callback("/([\340-\357])([\200-\277])([\200-\277])/", function ($m) {
+            return '\u'
+              . ((ord($m[1]) - 224) * 4096 + (ord($m[2]) - 128) * 64
+                + (ord($m[3]) - 128)) . '?';
+          }, $v);
           // Decode two byte unicode characters
-          $v = preg_replace("/([\300-\337])([\200-\277])/e", "'\\u'.((ord('\\1')-192)*64+(ord('\\2')-128)).'?'", $v);
+          $v = preg_replace_callback("/([\300-\337])([\200-\277])/", function ($m) {
+            return '\\u' . ((ord($m[1]) - 192) * 64 + (ord($m[2]) - 128)) . '?';
+          }, $v);
           // Decode any other non-ASCII characters (\177 hex = 127 dec)
           while (preg_match('/[^\00-\177]/', $v, $arr)) {
             $v = str_replace($arr[0], "\'" . dechex(ord($arr[0])), $v);
