@@ -25,12 +25,15 @@ class ConfigurationDefaults extends ConfigurationBase {
       //   C:\Users\USERNA~1\AppData\Local\Temp\3\
       //   Windows NT
       //   6.1
-      'temp_dir' => sys_get_temp_dir(),
+      'temp_dir' => sys_get_temp_dir() . '/fileconverter',
       'operating_system' => php_uname('s'),
       'operating_system_version' => php_uname('r'),
       // Override the default $PATH environmental variable.
       'env_path' => NULL,
     ), (array) $settings);
+    if (!is_dir($this->settings['temp_dir'])) {
+      @mkdir($this->settings['temp_dir'], 0755, TRUE);
+    }
 
     // Attempt to get better OS information.
     // lsb_release is available on Ubun
