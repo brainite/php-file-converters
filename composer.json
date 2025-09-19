@@ -14,7 +14,6 @@
         }
     ],
     "require":{
-        "ensepar/html2pdf":"dev-master",
         "mpdf/mpdf":"^5.7",
         "php":"^7.2 || ^8.0",
         "symfony/console":"*",
@@ -23,6 +22,7 @@
         "brainite/splash":"dev-master"
     },
     "suggest":{
+        "ensepar/html2pdf":"dev-master",
         "zendframework/zend-mail":"Allow for parsing email files."
     },
     "autoload":{
