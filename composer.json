@@ -20,8 +20,10 @@
         "symfony/console":"*",
         "brainite/htmlawed":"dev-master",
         "brainite/quipxml":"^0.3.1",
-        "brainite/splash":"dev-master",
-        "zendframework/zend-mail":"2.7.*"
+        "brainite/splash":"dev-master"
+    },
+    "suggest":{
+        "zendframework/zend-mail":"Allow for parsing email files."
     },
     "autoload":{
         "psr-4":{
