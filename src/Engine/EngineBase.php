@@ -135,7 +135,8 @@ abstract class EngineBase {
       // Remove the files.
       unlink($s_path);
       unlink($d_path);
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       // Remove the files.
       unlink($s_path);
       unlink($d_path);
@@ -253,7 +254,7 @@ abstract class EngineBase {
     $this->converter->addLog("Shell", $cmd);
 
     // Get the output. Concat the stderr info, if required.
-    $output = trim(shell_exec($cmd));
+    $output = trim(shell_exec($cmd) ?? '');
     if (isset($stderr) && is_file($stderr)) {
       if ($output !== '') {
         $output .= "\n";

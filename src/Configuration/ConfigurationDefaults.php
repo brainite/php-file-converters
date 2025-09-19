@@ -31,8 +31,8 @@ class ConfigurationDefaults extends ConfigurationBase {
       // Override the default $PATH environmental variable.
       'env_path' => NULL,
     ), (array) $settings);
-    if (!is_dir($this->settings['temp_dir'])) {
-      @mkdir($this->settings['temp_dir'], 0755, TRUE);
+    if (!is_dir($settings['temp_dir'])) {
+      @mkdir($settings['temp_dir'], 0755, TRUE);
     }
 
     // Attempt to get better OS information.

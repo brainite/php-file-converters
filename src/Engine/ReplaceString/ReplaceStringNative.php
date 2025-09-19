@@ -93,7 +93,7 @@ class ReplaceStringNative extends EngineBase {
         ));
 
         foreach ($replacements as $search => $replace) {
-          $first_char = $search{0};
+          $first_char = $search[0];
           $basic_escape($first_char);
           $regex_escape($search);
 

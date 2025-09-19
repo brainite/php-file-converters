@@ -112,7 +112,8 @@ class FileConverter {
                 $engine->$convert($source, $tmp_d);
                 $this->previous_engines[] = $engine;
                 break;
-              } catch (\Exception $e) {
+              }
+              catch (\Exception $e) {
               }
             }
             $source = $tmp_d;
@@ -148,7 +149,8 @@ class FileConverter {
           chmod($destination, $file_stat['mode']);
         }
         return $this;
-      } catch (\Exception $e) {
+      }
+      catch (\Exception $e) {
         $errors[] = $e->getMessage();
       }
     }
@@ -208,7 +210,7 @@ class FileConverter {
       return new Engine\Invalid($this, $convert_path, $this->settings, $configuration);
     }
     $engine_id = $configuration['#engine'];
-    if ($engine_id{0} !== '\\') {
+    if ($engine_id[0] !== '\\') {
       $class = '\FileConverter\Engine\\' . $engine_id;
       if (class_exists($class)) {
         return new $class($this, $convert_path, $this->settings, $configuration);
@@ -357,6 +359,7 @@ class FileConverter {
 
   public function &setCommandAlias($alias, $path) {
     $this->settings['alias'][$alias] = $path;
+    return $this;
   }
 
   public function &setConverter($convert_path = 'null->null', $configuration = 'null:default') {
