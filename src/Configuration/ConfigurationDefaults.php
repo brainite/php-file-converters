@@ -83,6 +83,9 @@ class ConfigurationDefaults extends ConfigurationBase {
         'wkhtmltopdf:default' => array(
           '#engine' => 'Convert\\WkHtmlToPdf',
         ),
+        'weasyprint:default' => array(
+          '#engine' => 'Convert\\WeasyPrint',
+        ),
         'xhtml2pdf:default' => array(
           '#engine' => 'Convert\\Xhtml2Pdf',
         ),
