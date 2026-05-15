@@ -16,6 +16,13 @@ class LibreOffice extends EngineBase {
   protected $cmd_source_safe = FALSE;
 
   public function getConvertFileShell($source, &$destination) {
+    // Build the --convert-to value, appending an explicit filter name when the
+    // 'convert-to' configuration key is set (e.g. 'convert-to' => 'MS Word 2007 XML').
+    $convertTo = $this->conversion[1];
+    if (!empty($this->configuration['convert-to'])) {
+      $convertTo .= ':' . $this->configuration['convert-to'];
+    }
+
     // Attempt to initialize and override registrymodifications.xcu
     if (!is_dir($this->settings['temp_dir']) . '/libreoffice') {
       // Run a basic conversion to attempt to init the system.
@@ -26,7 +33,7 @@ class LibreOffice extends EngineBase {
         $this->cmd,
         '--headless',
         '--convert-to',
-        $this->conversion[1],
+        $convertTo,
         '--outdir',
         $this->settings['temp_dir'],
         $tmp
@@ -49,7 +56,7 @@ class LibreOffice extends EngineBase {
       $this->cmd,
       '--headless',
       '--convert-to',
-      $this->conversion[1],
+      $convertTo,
       '--outdir',
       $this->settings['temp_dir'],
       $source
