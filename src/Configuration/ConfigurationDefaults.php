@@ -124,6 +124,15 @@ class ConfigurationDefaults extends ConfigurationBase {
           '#engine' => 'Convert\\Pandoc',
         ),
       ),
+      'docx->html' => array(
+        'pandoc:default' => array(
+          '#engine' => 'Convert\\Pandoc',
+          'from' => 'docx',
+          'to' => 'html5',
+          // Word's Heading 1 becomes <h2>, leaving <h1> to the page title.
+          'shift-heading-level-by' => 1,
+        ),
+      ),
       '(jpg|png|gif|svg|tiff|wmf)->(jpg|png|gif|svg|tiff|wmf)' => array(
         'imagemagick:default' => array(
           '#engine' => 'Convert\\ImageMagick',

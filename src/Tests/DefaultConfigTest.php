@@ -56,7 +56,18 @@ class DefaultConfigTest extends \PHPUnit_Framework_TestCase {
             'chain' => 'rtf->ps->pdf',
           ),
         )
-      )
+      ),
+      array(
+        'docx->html',
+        array(
+          'FileConverter\Engine\Convert\Pandoc' => array(
+            '#engine' => 'Convert\\Pandoc',
+            'from' => 'docx',
+            'to' => 'html5',
+            'shift-heading-level-by' => 1,
+          ),
+        ),
+      ),
     );
   }
 
