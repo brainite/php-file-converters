@@ -18,7 +18,7 @@ class TestCommand extends \Symfony\Component\Console\Command\Command {
     ));
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output, $mode = NULL) {
+  protected function execute(InputInterface $input, OutputInterface $output, $mode = NULL): int {
     $path_to_tests = $input->getArgument('path_to_tests');
     if (!isset($path_to_tests)) {
       $output->writeln("USAGE: fileconverter tests <path_to_tests>");

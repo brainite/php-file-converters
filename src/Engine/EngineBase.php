@@ -36,9 +36,9 @@ abstract class EngineBase {
 
   public function __construct(FileConverter &$converter, $convert_path, $settings, $configuration) {
     $this->converter =& $converter;
-    $this->conversion = explode('->', strtolower($convert_path), 2);
+    $this->conversion = explode('->', strtolower((string) $convert_path), 2);
     if (!isset($this->conversion[1])) {
-      $this->conversion[1] = preg_replace('@^.*[~]@s', '', $convert_path);
+      $this->conversion[1] = preg_replace('@^.*[~]@s', '', (string) $convert_path);
     }
     $this->settings = $settings;
     $this->configuration = $configuration;

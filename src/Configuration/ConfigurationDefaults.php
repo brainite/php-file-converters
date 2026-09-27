@@ -38,11 +38,11 @@ class ConfigurationDefaults extends ConfigurationBase {
     // Attempt to get better OS information.
     // lsb_release is available on Ubun
     if ($settings['operating_system'] === 'Linux') {
-      $lsb = trim(`which lsb_release`);
+      $lsb = trim((string) `which lsb_release`);
       if ($lsb !== '') {
         $lsb = escapeshellarg($lsb);
-        $settings['operating_system'] = trim(`$lsb           -is`);
-        $settings['operating_system_version'] = trim(`$lsb           -rs`);
+        $settings['operating_system'] = trim((string) `$lsb           -is`);
+        $settings['operating_system_version'] = trim((string) `$lsb           -rs`);
       }
     }
     elseif ($settings['operating_system'] === 'Windows NT') {

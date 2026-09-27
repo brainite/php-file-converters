@@ -36,7 +36,7 @@ class NativeSlideshow extends EngineBase {
       'items' => array(),
     );
     foreach ($this->configuration as $k => $v) {
-      if ($k{0} !== '#') {
+      if ($k[0] !== '#') {
         $slideshow[$k] = $v;
       }
     }

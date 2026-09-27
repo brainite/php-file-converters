@@ -35,6 +35,12 @@ This PSR-4 library provides a unified interface for various file conversion util
 
 ## Getting Started
 
+### Requirements
+
+- PHP 8.3 or later (since v0.2.0).
+- The command-line tool behind each engine you use, e.g. `pandoc` for Pandoc; Pandoc needs LaTeX (`pdflatex`) only to write PDF.
+- mPDF 8.2 or later (`composer require mpdf/mpdf`) only for the Mpdf html->pdf engine; it is suggested rather than required.
+
 ### Installation
 
 <p>Option 1: Add the "brainite/fileconverter" requirement to your composer.json configuration.</p>

@@ -14,14 +14,17 @@
         }
     ],
     "require":{
-        "mpdf/mpdf":"^5.7",
-        "php":"^7.2 || ^8.0",
+        "php":">=8.3",
         "symfony/console":"*",
         "brainite/htmlawed":"dev-master",
         "brainite/quipxml":"^0.3.1",
         "brainite/splash":"dev-master"
     },
+    "require-dev":{
+        "phpunit/phpunit":"^9.6 || ^10"
+    },
     "suggest":{
+        "mpdf/mpdf":"Enables the Mpdf html->pdf engine (^8.2).",
         "ensepar/html2pdf":"dev-master",
         "zendframework/zend-mail":"Allow for parsing email files."
     },
