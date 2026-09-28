@@ -36,7 +36,7 @@ class ConvertCommand extends \Symfony\Component\Console\Command\Command {
     $this->setHelp($help);
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output, $mode = NULL) {
+  protected function execute(InputInterface $input, OutputInterface $output, $mode = NULL): int {
     // Require the arguments.
     $source = $input->getArgument('source', NULL);
     $destination = $input->getArgument('destination', '');
@@ -54,7 +54,7 @@ class ConvertCommand extends \Symfony\Component\Console\Command\Command {
     // Normalize the file paths.
     $fc = FileConverter::factory();
     $stdin = $stdout = FALSE;
-    $force_conversion = trim($input->getOption('conversion', ''));
+    $force_conversion = trim((string) $input->getOption('conversion', ''));
     $is_remote = FALSE;
     if (preg_match('@^(.*):(.*)$@', $force_conversion, $arr)) {
       $force_conversion = array(
@@ -96,7 +96,7 @@ class ConvertCommand extends \Symfony\Component\Console\Command\Command {
         }
       }
     }
-    if ($destination{0} !== '/') {
+    if ($destination[0] !== '/') {
       if ($destination === '-') {
         if (!isset($force_conversion)) {
           $output->writeln("Error: When using stdout, you must explicitly define conversion.");

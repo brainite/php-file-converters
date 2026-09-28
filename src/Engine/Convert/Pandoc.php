@@ -29,6 +29,16 @@ class Pandoc extends EngineBase {
       'description' => 'Pandoc user data directory, defaults to $HOME/.pandoc',
       'mode' => Shell::SHELL_ARG_BASIC_DBL,
     ),
+    array(
+      'name' => 'extract-media',
+      'description' => 'Directory to extract embedded images into (Pandoc writes <dir>/media/...)',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL,
+    ),
+    array(
+      'name' => 'shift-heading-level-by',
+      'description' => 'Integer added to every heading level (e.g., 1 makes a Heading 1 an <h2>)',
+      'mode' => Shell::SHELL_ARG_BASIC_DBL,
+    ),
   );
   public function getConvertFileShell($source, &$destination) {
     return array(
@@ -58,10 +68,8 @@ class Pandoc extends EngineBase {
   }
 
   public function getVersionInfo() {
-    $latex = basename($this->cmd['latex']);
     $info = array(
       'pandoc' => 'UNKNOWN',
-      $latex => 'UNKNOWN',
     );
     $v = $this->shell(array(
       $this->cmd['pandoc'],
@@ -70,21 +78,41 @@ class Pandoc extends EngineBase {
     if (preg_match("@pandoc ([\d\.]+)@s", $v, $arr)) {
       $info['pandoc'] = $arr[1];
     }
-    $v = $this->shell(array(
-      $this->cmd['latex'],
-      '-v'
-    ));
-    if (preg_match("@pdfTeX ([\d\.\-]+)@s", $v, $arr)) {
-      $info[$latex] = $arr[1];
+    if (isset($this->cmd['latex'])) {
+      $latex = basename($this->cmd['latex']);
+      $info[$latex] = 'UNKNOWN';
+      $v = $this->shell(array(
+        $this->cmd['latex'],
+        '-v'
+      ));
+      if (preg_match("@pdfTeX ([\d\.\-]+)@s", $v, $arr)) {
+        $info[$latex] = $arr[1];
+      }
     }
     return $info;
   }
 
+  /**
+   * Pandoc needs LaTeX only to write a PDF.
+   * Every other destination (e.g., docx->html) needs the pandoc binary alone.
+   */
   public function isAvailable() {
     $this->cmd = array(
       'pandoc' => $this->shellWhich('pandoc'),
-      'latex' => $this->shellWhich('pdflatex'),
+      'latex' => NULL,
     );
-    return isset($this->cmd['pandoc']) && isset($this->cmd['latex']);
+    if ($this->isLatexRequired()) {
+      $this->cmd['latex'] = $this->shellWhich('pdflatex');
+      return isset($this->cmd['pandoc']) && isset($this->cmd['latex']);
+    }
+    return isset($this->cmd['pandoc']);
+  }
+
+  /**
+   * The engine learns its destination from the convert path it was built for.
+   * @return bool
+   */
+  protected function isLatexRequired() {
+    return (bool) preg_match('@^pdf(/|$)@', $this->getConversion('destination'));
   }
 }

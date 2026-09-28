@@ -15,7 +15,7 @@ class InfoCommand extends \Symfony\Component\Console\Command\Command {
     ));
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output, $mode = NULL) {
+  protected function execute(InputInterface $input, OutputInterface $output, $mode = NULL): int {
     $items = array();
 
     switch ($input->getArgument('info_type', 'converters')) {
@@ -59,7 +59,9 @@ class InfoCommand extends \Symfony\Component\Console\Command\Command {
         $output->writeln("File Converter Default Settings:");
         $fc = FileConverter::factory();
         foreach ($fc->getSettings() as $k => $v) {
-          $items[] = sprintf('% -25s: %s', $k, $v);
+          $items[] = array(
+            '#title' => sprintf('% -25s: %s', $k, is_array($v) ? json_encode($v) : $v),
+          );
         }
         break;
 
@@ -133,11 +135,11 @@ class InfoCommand extends \Symfony\Component\Console\Command\Command {
     foreach ($items as $id => $item) {
       $output->writeln($item['#title']);
       foreach ($item as $k => $v) {
-        if (is_string($k) && $k{0} !== '#') {
+        if (is_string($k) && $k[0] !== '#') {
           if (is_array($v)) {
             $output->writeln('   ' . $v['#title']);
             foreach ($v as $k1 => $v1) {
-              if ($k1{0} !== '#') {
+              if ($k1[0] !== '#') {
                 $output->writeln('      ' . $v1);
               }
             }

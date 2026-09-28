@@ -14,13 +14,13 @@ use FileConverter\Util\Shell;
 class Mpdf extends EngineBase {
   public function convertFile($source, $destination) {
     $html = file_get_contents($source);
-    $mpdf = new \mPDF();
+    $mpdf = new \Mpdf\Mpdf();
     $mpdf->WriteHTML($html);
     $destination = $mpdf->Output($destination, 'F');
   }
 
   public function convertString($source, &$destination) {
-    $mpdf = new \mPDF();
+    $mpdf = new \Mpdf\Mpdf();
     $mpdf->WriteHTML($source);
     $destination = $mpdf->Output('', 'S');
   }
@@ -34,7 +34,7 @@ class Mpdf extends EngineBase {
       case 'Ubuntu':
         $help['os'] = 'confirmed on Ubuntu 12.04';
         $help['notes'] = array(
-          'composer update',
+          'composer require mpdf/mpdf',
         );
         return $help;
     }
@@ -44,12 +44,12 @@ class Mpdf extends EngineBase {
 
   public function getVersionInfo() {
     return array(
-      'mpdf' => mPDF_VERSION,
+      'mpdf' => \Mpdf\Mpdf::VERSION,
     );
   }
 
   public function isAvailable() {
-    return (class_exists('mPDF'));
+    return (class_exists('Mpdf\Mpdf'));
   }
 
 }

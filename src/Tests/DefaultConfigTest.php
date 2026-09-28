@@ -10,7 +10,7 @@
 
 namespace FileConverter\Tests;
 
-class DefaultConfigTest extends \PHPUnit_Framework_TestCase {
+class DefaultConfigTest extends \PHPUnit\Framework\TestCase {
   /**
    * @dataProvider getConfigurationDefaults
    */
@@ -26,7 +26,7 @@ class DefaultConfigTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals(json_encode($test), json_encode($expected));
   }
 
-  public function getConfigurationDefaults() {
+  public static function getConfigurationDefaults() {
     return array(
       array(
         'pdf->jpg',
@@ -56,7 +56,18 @@ class DefaultConfigTest extends \PHPUnit_Framework_TestCase {
             'chain' => 'rtf->ps->pdf',
           ),
         )
-      )
+      ),
+      array(
+        'docx->html',
+        array(
+          'FileConverter\Engine\Convert\Pandoc' => array(
+            '#engine' => 'Convert\\Pandoc',
+            'from' => 'docx',
+            'to' => 'html5',
+            'shift-heading-level-by' => 1,
+          ),
+        ),
+      ),
     );
   }
 
