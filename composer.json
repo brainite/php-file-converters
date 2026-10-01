@@ -17,7 +17,7 @@
         "php":">=8.3",
         "symfony/console":"*",
         "brainite/htmlawed":"dev-master",
-        "brainite/quipxml":"^0.4",
+        "brainite/quipxml":"^0.4 || ^1.0",
         "brainite/splash":"dev-master"
     },
     "require-dev":{
