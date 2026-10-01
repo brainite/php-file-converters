@@ -46,7 +46,7 @@ class NativeMeta extends EngineBase {
           // Detect the title.
           // ppt/slides/slide1.xml
           $xml_slide = Quip::load($pptx->getFromName($file));
-          $title = $xml_slide->xpath("//p:sp//p:ph[@type='title' or @type='ctrTitle']")->xpath('../../..')->html();
+          $title = $xml_slide->qxpath("//p:sp//p:ph[@type='title' or @type='ctrTitle']")->qxpath('../../..')->html();
           // http://www.datypic.com/sc/ooxml/e-a_br-1.html
           $title = preg_replace('@<a:br[^>]*>@s', "\n", $title);
           $title = trim(strip_tags($title));
@@ -56,7 +56,7 @@ class NativeMeta extends EngineBase {
           // ppt/slides/_rels/slide1.xml.rels
           // The 'Relationship' tag name does not work in this xpath for unknown reasons.
           $xml_rels = Quip::load($pptx->getFromName("ppt/slides/_rels/slide$number.xml.rels"));
-          $note_id = $xml_rels->xpath("//*[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesSlide']")->eq(0)['Target'];
+          $note_id = $xml_rels->qxpath("//*[@Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesSlide']")->eq(0)['Target'];
 
           // Load the notes from the connected XML.
           // ../notesSlides/notesSlide1.xml

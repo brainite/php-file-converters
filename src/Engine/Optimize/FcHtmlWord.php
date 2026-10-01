@@ -17,18 +17,18 @@ class FcHtmlWord extends EngineBase {
       $found = TRUE;
       while ($found) {
         $found = FALSE;
-        $quip->xpath("//span[matches(@class, '(SpellE|GramE)'")->unwrap();
+        $quip->qxpath("//span[matches(@class, '(SpellE|GramE)'")->unwrap();
       }
 
       // Remove references to external resource files.
-      $quip->xpath("//link[@rel = 'themeData']")->remove();
-      $quip->xpath("//link[@rel = 'colorSchemeMapping']")->remove();
-      $quip->xpath("//link[@rel = 'File-List']")->remove();
-//       $quip->xpath("//meta[@http-equiv = 'Content-Type']")->not(':first')->remove();
-      $quip->xpath("//meta[@name]")->remove();
+      $quip->qxpath("//link[@rel = 'themeData']")->remove();
+      $quip->qxpath("//link[@rel = 'colorSchemeMapping']")->remove();
+      $quip->qxpath("//link[@rel = 'File-List']")->remove();
+//       $quip->qxpath("//meta[@http-equiv = 'Content-Type']")->not(':first')->remove();
+      $quip->qxpath("//meta[@name]")->remove();
 
       // Iterate through <style> tags and remove mso-* properties
-      foreach ($quip->xpath('//style') as $style_node) {
+      foreach ($quip->qxpath('//style') as $style_node) {
         $style = $style_node->html();
         $prev = '';
         while ($prev !== $style) {
